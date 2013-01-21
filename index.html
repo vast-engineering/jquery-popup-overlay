@@ -76,48 +76,50 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Title</title>
+  <meta charset="utf-8">
+  <title>Title</title>
 
-    <!-- Include jquery -->
-    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <!-- Include jquery -->
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 
-    <!-- Include jQuery Popup Overlay -->
-    <script src="jquery.popupoverlay.js"></script>
-</head>
+  <!-- Include jQuery Popup Overlay -->
+  <script src="jquery.popupoverlay.js"></script>
 
-<style>
-/* Add these styles once per website */
-.popup_background {
+  <style>
+  /* Add these styles once per website */
+  .popup_background {
     z-index: 2000; /* any number */
-}
-.popup_wrapper {
+  }
+  .popup_wrapper {
     z-index: 2001; /* any number + 1 */
-}
-/* Add inline-block support for IE7 */
-.popup_align,
-.popup_content {
+  }
+  /* Add inline-block support for IE7 */
+  .popup_align,
+  .popup_content {
     *display: inline;
     *zoom: 1;
-}
-</style>
+  }
+  </style>
+</head>
+<body>
+  <!-- Add a button which will open the modal -->
+  <button class="my_modal_open">Open modal</button>
 
-<!-- Add a button which will open the modal -->
-<button class="my_modal_open">Open modal</button>
+  <!-- Add content to modal -->
+  <div id="my_modal">
+    ...modal content...
+    <!-- ...and optionally a button to close the modal -->
+    <button class="my_modal-close">Close</button>
+  </div>
 
-<!-- Add content to modal -->
-<div id="my_modal">
-  ...modal content...
-  <!-- ...and optionally a button to close the modal -->
-  <button class="my_modal-close">Close</button>
-</div>
-
-<!-- Add javascript to make it work -->
-<script>
-  $(function() {
-    $('#my_modal').popup();
-  });
-</script>
+  <!-- Add javascript to make it work -->
+  <script>
+    $(function() {
+      $('#my_modal').popup();
+    });
+  </script>
+</body>
+</html>
 {% endhighlight %}
 
         <h2 class="v_title">Options</h2>
