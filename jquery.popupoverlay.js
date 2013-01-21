@@ -33,7 +33,7 @@
 				vertical: 'center',
 				escape: true,
 				blur: true,
-				fade: 'fast',
+				fade: 250,
 				opensufix: '_open',
 				closesufix: '_close',
 				keepfocus: true,
@@ -84,32 +84,6 @@
 				}
 
 				/**
-				 * Create background div and append to the top or bottom of the body tag
-				 */
-				if ((options.background) && (!$('#' + el.id + '_background').length)) {
-
-					// Append instead of prepend if possible
-					var popupback = '<div id="' + el.id + '_background" class="popup_background"></div>';
-					// if (((document.readyState === 'interactive') || (document.readyState === 'complete')) && !($.browser.msie && parseFloat($.browser.version) < 8)) {
-					// 	$body.append(popupback);
-					// } else {
-					$body.prepend(popupback);
-					// }
-
-					$('#' + el.id + '_background').css({
-						backgroundColor: options.color,
-						opacity: options.opacity,
-						position: 'fixed',
-						top: '0',
-						right: '0',
-						bottom: '0',
-						left: '0',
-						display: 'none'
-					});
-
-				}
-
-				/**
 				 * Hide popups that aren't already hidden with CSS and move it to the top or bottom of the <body> tag
 				 */
 				$el.css({
@@ -121,6 +95,32 @@
 				// } else {
 				$body.prepend(el);
 				// }
+
+                /**
+                 * Create background div and append to the top or bottom of the body tag
+                 */
+                if ((options.background) && (!$('#' + el.id + '_background').length)) {
+
+                    // Append instead of prepend if possible
+                    var popupback = '<div id="' + el.id + '_background" class="popup_background"></div>';
+                    // if (((document.readyState === 'interactive') || (document.readyState === 'complete')) && !($.browser.msie && parseFloat($.browser.version) < 8)) {
+                    //  $body.append(popupback);
+                    // } else {
+                    $body.prepend(popupback);
+                    // }
+
+                    $('#' + el.id + '_background').css({
+                        backgroundColor: options.color,
+                        opacity: options.opacity,
+                        position: 'fixed',
+                        top: '0',
+                        right: '0',
+                        bottom: '0',
+                        left: '0',
+                        display: 'none'
+                    });
+
+                }
 
 				/**
 				 * Positioning overlay
@@ -165,7 +165,6 @@
 						$el.css('vertical-align', 'bottom');
 					} else if (options.vertical == 'top') {
 						$el.css('vertical-align', 'top');
-						console.log('1');
 					}
 
 					$newel = $el;

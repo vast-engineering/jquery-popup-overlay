@@ -1,0 +1,335 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jQuery Popup Overlay</title>
+    <meta name="description" content="jQuery plugin for displaying responsive and accessible modal overlays and tooltips.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/pygments.css">
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="jquery.popupoverlay.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <section>
+
+        <div class="page-header">
+            <h1>jQuery Popup Overlay</h1>
+            <p>jQuery plugin for displaying responsive and accessible modal overlays and tooltips.</p>
+        </div>
+
+        <h2>Demo</h2>
+
+        <p>
+            <button class="my_modal_open btn btn-large btn-success">Open modal</button>
+            <button class="my_tooltip_open btn btn-large btn-success">Open tooltip</button>
+        </p>
+
+        <div id="my_modal" class="well" style="display:none;margin:1em;">
+            <a href="#" class="my_modal_close" style="float:right;padding:0 0.4em;">×</a>
+            <h4>Modal overlay example</h4>
+            <p>Try to change the width and height of browser window, or to rotate your tablet device, and also try to navigate with <kbd>Tab</kbd> key.</p>
+            <p>You can close the dialog by pressing the <kbd>Esc</kbd> key, or by clicking on the background outside the content area, or by clicking on the Close button.</p>
+            <p>If you don't want to show the outline around the container when focused, you can remove it with <code>.overlay {outline: none}.</code></p>
+            <form>
+                <button class="btn btn-alert my_modal_close">Close</button>
+            </form>
+        </div>
+
+        <div id="my_tooltip" class="well">
+            <a href="#" class="my_tooltip_close" style="float:right;padding:0 0.4em;">×</a>
+            <h4>Tooltip example</h4>
+            <p>Tooltip content will be centered.</p>
+            <p>You can set the offset by changing the margins in CSS.</p>
+        </div>
+
+
+        <h2>Features</h2>
+
+        <dl>
+            <dt>Positioned with CSS only</dt>
+                <dd>Overlays are positioned with CSS, without any JavaScript offset calculations,
+                 enabling you to set flexible width and height to the overlay.</dd>
+            <dt>Suitable for responsive web design</dt>
+                <dd>Overlays will adapt the screen orientation and size if you set min-width
+                 and max-width correctly. It's fully customizable via CSS and media-queries.</dd>
+            <dt>Keyboard friendly</dt>
+                <dd>Modal overlays are keyboard accessible using <kbd>Tab</kbd> key.</dd>
+            <dt>Always on center, always visible</dt>
+                <dd>Position of the overlay is fixed at the center of the screen but if
+                 the height of the overlay exceeds the visible area – vertical scrolling
+                 will be automatically enabled to prevent the off-screen content from being unreachable.</dd>
+            <dt>Device agnostic</dt>
+                <dd>Works well on desktops, tablets, most modern phones and other devices.</dd>
+        </dl>
+
+        <h2>Basic Usage</h2>
+
+{% highlight html %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Title</title>
+
+    <!-- Include jquery -->
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+
+    <!-- Include jQuery Popup Overlay -->
+    <script src="jquery.popupoverlay.js"></script>
+</head>
+
+<style>
+/* Add these styles once per website */
+.popup_background {
+    z-index: 2000; /* any number */
+}
+.popup_wrapper {
+    z-index: 2001; /* any number + 1 */
+}
+/* Add inline-block support for IE7 */
+.popup_align,
+.popup_content {
+    *display: inline;
+    *zoom: 1;
+}
+</style>
+
+<!-- Add a button which will open the modal -->
+<button class="my_modal_open">Open modal</button>
+
+<!-- Add content to modal -->
+<div id="my_modal">
+  ...modal content...
+  <!-- ...and optionally a button to close the modal -->
+  <button class="my_modal-close">Close</button>
+</div>
+
+<!-- Add javascript to make it work -->
+<script>
+  $(function() {
+    $('#my_modal').modal();
+  });
+</script>
+{% endhighlight %}
+
+        <h2 class="v_title">Options</h2>
+
+        <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>type</th>
+            <th>default</th>
+            <th>description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>type</td>
+            <td>overlay | tooltip</td>
+            <td>'overlay'</td>
+            <td>popup type</td>
+        </tr>
+        <tr>
+            <td>action</td>
+            <td>hover | click | focus | mouseover</td>
+            <td>'click'</td>
+            <td>trigger event</td>
+        </tr>
+        <tr>
+            <td>horizontal</td>
+            <td>center | left | right</td>
+            <td>'center'</td>
+            <td>horizontal position</td>
+        </tr>
+        <tr>
+            <td>vertical</td>
+            <td>center | top | bottom</td>
+            <td>'center'</td>
+            <td>vertical position</td>
+        </tr>
+        <tr>
+            <td>background</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>show of hide the background</td>
+        </tr>
+        <tr>
+            <td>color</td>
+            <td>hex color</td>
+            <td>'#000'</td>
+            <td>background color</td>
+        </tr>
+        <tr>
+            <td>opacity</td>
+            <td>float</td>
+            <td>0.4</td>
+            <td>background opacity</td>
+        </tr>
+        <tr>
+            <td>fade</td>
+            <td>number</td>
+            <td>250</td>
+            <td>display the matched elements by fading them in and out (use `false` to disable)</td>
+        </tr>
+        <tr>
+            <td>keepfocus</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>automatically focus Close Link when is opened, and focus Open Link when it's closed</td>
+        </tr>
+        <tr>
+            <td>escape</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>close the modal with Esc key</td>
+        </tr>
+        <tr>
+            <td>blur</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>closes the modal when clicked outside of it</td>
+        </tr>
+        <tr>
+            <td>autoopen</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>open modal as soon as the plugin function is called</td>
+        </tr>
+        <tr>
+            <td>autozindex</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>automatically set highest z-index to popup (this will parse the whole DOM first time it loads, so use this option only if you must – prefer CSS for setting z-index values)</td>
+        </tr>
+        <tr>
+            <td>onopen</td>
+            <td>function</td>
+            <td>null</td>
+            <td>callback function which will execute when the popup is opened</td>
+        </tr>
+        <tr>
+            <td>onclose</td>
+            <td>function</td>
+            <td>null</td>
+            <td>callback function which will execute when the popup is closed</td>
+        </tr>
+       <tr>
+            <td>beforeopen</td>
+            <td>function</td>
+            <td>null</td>
+            <td>callback function which will execute before the popup is opened</td>
+        </tr>
+        <tr>
+            <td>reposition</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>popup reposition method – useful for repositioning overlays on callbacks after the popup contents change, to avoid content getting out of the screen</td>
+        </tr>
+        </tbody>
+        </table>
+
+        <h2>Browser Support</h2>
+
+        <p>All modern browsers including <abbr title="Internet Explorer 7 and later">IE7+</abbr>.</p>
+
+
+        <h2>Roadmap</h2>
+
+        <ul>
+            <li>Add <a href="http://www.w3.org/TR/wai-aria-practices/#dialog_modal">WAI ARIA Roles</a> for  <a href="https://groups.google.com/forum/#!topic/jquery-a11y/O1mqNdB9ex8">better accessibility</a>.</li>
+            <li>Add more examples.</li>
+            <li>Add CSS arrows to examples.</li>
+            <li>Replace jQuery fadeIn/fadeOut animations with CSS3 transitions and transforms.</li>
+            <li>Test older phones because they don't play well with position:fixed.</li>
+            <li>Test touch-screens.</li>
+            <li>Implement different logic for loading popups (i.e. remove outoopen and action parameters).</li>
+            <li>Fix bug with multiple opening links.</li>
+            <li>http://plugins.jquery.com/docs/publish/</li>
+        </ul>
+
+        <h2>Download</h2>
+        <p>
+            <a href="#" class="btn btn-primary btn-success btn-large"><i class="icon-download-alt"></i> Download</a>
+            <a href="#" class="btn btn-large"><i class="icon-github"></i> View project on GitHub</a>
+        </p>
+
+        <div class="alert alert-block">
+            <p><b>NOTICE:</b> For simple tooltips, using pure CSS instead of this plugin might be a better solution.<p>
+            <p>
+                Inline <span class="css_tooltip"><a href="#" class="btn">example</a> <span class="css_tooltip_content" aria-hidden="true">CSS tooltip content.</span></span>.
+            </p>
+            <p>
+                Form example:<br />
+                <span class="css_tooltip">
+                    <input id="test123" type="text" placeholder="Hover me" />
+                    <span class="css_tooltip_content css_tooltip_content2" aria-hidden="true">CSS tooltip content.</span>
+                </span>
+            </p>
+        </div>
+
+    </section>
+
+</div><!-- .container -->
+
+<script>
+$(document).ready(function() {
+
+    $('.my_modal_open').click(function(){
+        $('#my_modal').popup({
+            'autoopen': true
+        });
+    });
+
+    $('#my_tooltip').popup({
+        type: 'tooltip',
+        autozindex: true,
+        horizontal: 'center',
+        vertical: 'top'
+    });
+
+});
+</script>
+<style>
+/* CSS Tooltip */
+.css_tooltip {
+    position: relative;
+}
+.css_tooltip_content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 30px;
+    left: -40px;
+    background: #fff;
+    width: 10em;
+    padding: 2px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    transition: all 0.4s;
+}
+.css_tooltip_content2 { 
+    left: 225px;
+    bottom: auto;
+}
+.css_tooltip:hover .css_tooltip_content {
+    visibility: visible;
+    opacity: 1;
+}
+</style>
+
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Jekyll server configuration
+auto: true # auto-compile
+pygments: true # enable Pygments Syntax Highlighting
+
+# Permalnks structure
+# permalink: /year/month/day/title.html
+# permalink: /title.html
