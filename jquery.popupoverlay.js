@@ -462,6 +462,9 @@
             init(this);
         });
 
+        //return reference to hide popup
+        return hidePopUp;
+
     }; // fn.popup
 
 })(jQuery);
