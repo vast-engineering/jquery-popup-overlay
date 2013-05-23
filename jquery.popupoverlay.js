@@ -183,7 +183,7 @@
                  */
                 if (options.action == 'click') {
                     // open
-                    $(triggerelement).click(function(e) {
+                    $(triggerelement).live('click', function(e) {
                         if ($el.is(':hidden')) {
                             var or = $(this).attr('data-popup-order');
                             dopopup(el, or);
