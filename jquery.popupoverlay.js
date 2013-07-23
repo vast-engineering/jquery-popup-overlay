@@ -1,10 +1,10 @@
 /**
  * jQuery Popup Overlay
  *
- * @version 1.4.0
+ * @version 1.4.3
  * @requires jQuery v1.7.1+
  * @link http://vast-eng.github.com/jquery-popup-overlay/
- * @author Ivan Lazarevic
+ * @author Ivan Lazarevic, Vladimir Siljkovic, Branko Sekulic, Marko Jankovic
  */
 
 ;(function($) {
@@ -244,10 +244,25 @@
                  * Z-index calculation
                  */
                 if (options.autozindex === true) {
-                    var maxZIndex = Math.max(0, Math.max.apply(null, $.map($.makeArray(document.getElementsByTagName("*")), function(v) {
-                        return parseFloat($(v).css("z-index")) || null;
-                    })));
-                    level[el.id] = maxZIndex;
+                    var elements = document.getElementsByTagName("*"),
+						len = elements.length,
+						maxZIndex = 0;
+
+					for(var i=0; i<len; i++){
+
+						var elementZIndex = $(elements[i]).css("z-index");
+
+						if(elementZIndex !== "auto"){
+
+							elementZIndex = parseInt(elementZIndex);
+
+							if(maxZIndex < elementZIndex){
+								maxZIndex = elementZIndex;
+							}
+						}
+					}
+
+					level[el.id] = maxZIndex;
 
                     // add z-index to the wrapper
                     if (level[el.id] > 0) {
