@@ -245,25 +245,25 @@
                  */
                 if (options.autozindex === true) {
                     var elements = document.getElementsByTagName("*"),
-						len = elements.length,
-						maxZIndex = 0;
+				        len = elements.length,
+				        maxZIndex = 0;
 
-					for(var i=0; i<len; i++){
+                    for(var i=0; i<len; i++){
+                    	
+                    	var elementZIndex = $(elements[i]).css("z-index");
+                    	
+                        if(elementZIndex !== "auto"){
 
-						var elementZIndex = $(elements[i]).css("z-index");
-
-						if(elementZIndex !== "auto"){
-
-							elementZIndex = parseInt(elementZIndex);
-
-							if(maxZIndex < elementZIndex){
-								maxZIndex = elementZIndex;
-							}
-						}
-					}
-
-					level[el.id] = maxZIndex;
-
+                          elementZIndex = parseInt(elementZIndex);
+                          
+                          if(maxZIndex < elementZIndex){
+                            maxZIndex = elementZIndex;
+                          }
+                        }
+                    }
+                    
+                    level[el.id] = maxZIndex;
+                    
                     // add z-index to the wrapper
                     if (level[el.id] > 0) {
                         $el.css({
