@@ -109,7 +109,7 @@
   <div id="my_modal">
     ...modal content...
     <!-- ...and optionally a button to close the modal -->
-    <button class="my_modal-close">Close</button>
+    <button class="my_modal_close">Close</button>
   </div>
 
   <!-- Add javascript to make it work -->
@@ -213,13 +213,13 @@
             <td>automatically set highest z-index to popup (this will parse the whole DOM first time it loads, so use this option only if you must – prefer CSS for setting z-index values)</td>
         </tr>
         <tr>
-            <td>onopen</td>
+            <td>onOpen</td>
             <td>function</td>
             <td>null</td>
             <td>callback function which will execute when the popup is opened</td>
         </tr>
         <tr>
-            <td>onclose</td>
+            <td>onClose</td>
             <td>function</td>
             <td>null</td>
             <td>callback function which will execute when the popup is closed</td>
@@ -287,7 +287,13 @@ $(document).ready(function() {
 
     $('.my_modal_open').click(function(){
         $('#my_modal').popup({
-            'autoopen': true
+            'autoopen': true,
+            onOpen: function() {
+                console.log('onOpen callback event.');
+            },
+            onClose: function() {
+                console.log('onClose callback event.');
+            }
         });
     });
 
