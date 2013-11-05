@@ -1,10 +1,10 @@
 /**
  * jQuery Popup Overlay
  *
- * @version 1.4.0
+ * @version 1.4.3
  * @requires jQuery v1.7.1+
  * @link http://vast-eng.github.com/jquery-popup-overlay/
- * @author Ivan Lazarevic
+ * @author Ivan Lazarevic, Vladimir Siljkovic, Branko Sekulic, Marko Jankovic
  */
 
 ;(function($) {
@@ -183,7 +183,7 @@
                  */
                 if (options.action == 'click') {
                     // open
-                    $(triggerelement).click(function(e) {
+                    $(triggerelement).on('click', function(e) {
                         if ($el.is(':hidden')) {
                             var or = $(this).attr('data-popup-order');
                             dopopup(el, or);
@@ -244,11 +244,26 @@
                  * Z-index calculation
                  */
                 if (options.autozindex === true) {
-                    var maxZIndex = Math.max(0, Math.max.apply(null, $.map($.makeArray(document.getElementsByTagName("*")), function(v) {
-                        return parseFloat($(v).css("z-index")) || null;
-                    })));
-                    level[el.id] = maxZIndex;
+                    var elements = document.getElementsByTagName("*"),
+                        len = elements.length,
+                        maxZIndex = 0;
 
+                    for(var i=0; i<len; i++){
+                        
+                        var elementZIndex = $(elements[i]).css("z-index");
+                        
+                        if(elementZIndex !== "auto"){
+
+                          elementZIndex = parseInt(elementZIndex);
+                          
+                          if(maxZIndex < elementZIndex){
+                            maxZIndex = elementZIndex;
+                          }
+                        }
+                    }
+                    
+                    level[el.id] = maxZIndex;
+                    
                     // add z-index to the wrapper
                     if (level[el.id] > 0) {
                         $el.css({
@@ -334,6 +349,12 @@
                     };
 
                 }
+
+                // Fix issue with iPad keyboard that breaks the position of the popup in Safari
+                // https://github.com/vast-eng/jquery-popup-overlay/issues/4
+                setTimeout(function() {
+                    window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
+                }, 0);
 
                 /**
                  * onOpen Callback
@@ -461,6 +482,9 @@
         this.each(function() {
             init(this);
         });
+
+        //return reference to hide popup
+        return hidePopUp;
 
     }; // fn.popup
 
