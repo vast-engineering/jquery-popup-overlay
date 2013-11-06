@@ -213,13 +213,13 @@
             <td>automatically set highest z-index to popup (this will parse the whole DOM first time it loads, so use this option only if you must – prefer CSS for setting z-index values)</td>
         </tr>
         <tr>
-            <td>onOpen</td>
+            <td>onopen</td>
             <td>function</td>
             <td>null</td>
             <td>callback function which will execute when the popup is opened</td>
         </tr>
         <tr>
-            <td>onClose</td>
+            <td>onclose</td>
             <td>function</td>
             <td>null</td>
             <td>callback function which will execute when the popup is closed</td>
@@ -288,11 +288,11 @@ $(document).ready(function() {
     $('.my_modal_open').click(function(){
         $('#my_modal').popup({
             'autoopen': true,
-            onOpen: function() {
-                console.log('onOpen callback event.');
+            onopen: function() {
+                console.log('onopen callback event.');
             },
-            onClose: function() {
-                console.log('onClose callback event.');
+            onclose: function() {
+                console.log('onclose callback event.');
             }
         });
     });

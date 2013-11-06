@@ -1,10 +1,9 @@
 /**
  * jQuery Popup Overlay
  *
- * @version 1.4.3
+ * @version 1.5.0
  * @requires jQuery v1.7.1+
  * @link http://vast-eng.github.com/jquery-popup-overlay/
- * @author Ivan Lazarevic, Vladimir Siljkovic, Branko Sekulic, Marko Jankovic
  */
 
 ;(function($) {
@@ -53,7 +52,7 @@
                 options = $.extend({}, defaults, customoptions);
 
                 /**
-                 * Repositioningtion parameter
+                 * Repositioning parameter
                  */
                 if (options.reposition === true) {
                     // @TODO - not so DRY...
@@ -249,21 +248,21 @@
                         maxZIndex = 0;
 
                     for(var i=0; i<len; i++){
-                        
+
                         var elementZIndex = $(elements[i]).css("z-index");
-                        
+
                         if(elementZIndex !== "auto"){
 
                           elementZIndex = parseInt(elementZIndex);
-                          
+
                           if(maxZIndex < elementZIndex){
                             maxZIndex = elementZIndex;
                           }
                         }
                     }
-                    
+
                     level[el.id] = maxZIndex;
-                    
+
                     // add z-index to the wrapper
                     if (level[el.id] > 0) {
                         $el.css({
@@ -300,7 +299,7 @@
                 var clickplace = order;
 
                 /**
-                 * beforeopen Callback
+                 * beforeopen callback
                  */
                 callback(options.beforeopen, clickplace);
 
@@ -357,9 +356,9 @@
                 }, 0);
 
                 /**
-                 * onOpen Callback
+                 * onopen callback
                  */
-                callback(options.onOpen, clickplace);
+                callback(options.onopen, clickplace);
 
                 /**
                  * Close popup on blur
@@ -461,9 +460,9 @@
                 }
 
                 /**
-                 * onClose callback
+                 * onclose callback
                  */
-                callback(options.onClose, lastclicked[el.id]);
+                callback(options.onclose, lastclicked[el.id]);
             };
 
         /**
