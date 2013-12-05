@@ -1,7 +1,7 @@
 /**
  * jQuery Popup Overlay
  *
- * @version 1.5.0
+ * @version 1.5.1
  * @requires jQuery v1.7.1+
  * @link http://vast-eng.github.com/jquery-popup-overlay/
  */
@@ -41,7 +41,6 @@
             };
 
         var init = function(el) {
-
                 if(!$(el).attr('id')){
                     $(el).attr('id', 'j-popup-' + parseInt(Math.random() * 100000000));
                 }
@@ -301,7 +300,7 @@
                 /**
                  * beforeopen callback
                  */
-                callback(options.beforeopen, clickplace);
+                callback(el, options.beforeopen, clickplace);
 
                 // remember last clicked place
                 lastclicked[el.id] = clickplace;
@@ -358,7 +357,7 @@
                 /**
                  * onopen callback
                  */
-                callback(options.onopen, clickplace);
+                callback(el, options.onopen, clickplace);
 
                 /**
                  * Close popup on blur
@@ -424,7 +423,6 @@
                 }
 
             };
-
         /**
          * Hide popup
          *
@@ -462,17 +460,18 @@
                 /**
                  * onclose callback
                  */
-                callback(options.onclose, lastclicked[el.id]);
+                callback(el, options.onclose, lastclicked[el.id]);
             };
 
         /**
          * Callbacks calls
          *
+         * @param el - popup element
          * @param func - callback function
          * @param clickplace
          */
-        var callback = function(func, clickplace) {
-                var cp = $('.' + $el.attr('id') + options.opensufix + '[data-popup-order="' + clickplace + '"]');
+        var callback = function(el, func, clickplace) {
+                var cp = $('.' + el.id + options.opensufix + '[data-popup-order="' + clickplace + '"]');
                 if (typeof func == 'function') {
                     func(cp);
                 }
