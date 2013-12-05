@@ -1,1 +1,0 @@
-Github Pages (gh-pages) branch for hosting the [demo](http://vast-eng.github.com/jquery-popup-overlay/).
