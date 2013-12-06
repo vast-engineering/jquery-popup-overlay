@@ -38,12 +38,11 @@
 
         <p>
             <a class="basic_open btn btn-success" href="#basic">Basic</a>
-            <a class="fade_open btn btn-success" href="fade">Fade</a>
-            <a class="fadeandscale_open btn btn-success" href="fadeandscale">Fade &amp; scale</a>
+            <a class="fade_open btn btn-success" href="#fade">Fade</a>
+            <a class="fadeandscale_open btn btn-success" href="#fadeandscale">Fade &amp; scale</a>
             <button class="slidein_open btn btn-success">Slide in</button>
             <button class="standalone_open btn btn-success">Stand alone</button>
             <a href="#my_tooltip" class="my_tooltip_open btn btn-success">Tooltip</a>
-            <button class="tooltiphover_open btn btn-success">Tooltip hover</button>
             <button class="fall_open btn btn-success">Callback events</button>
         </p>
 
@@ -210,7 +209,7 @@
             <td>keepfocus</td>
             <td>boolean</td>
             <td>true</td>
-            <td>Lock keyboard focus inside of popup. Recommended to be enabled. Disable if you are showing tooltips on hover.</td>
+            <td>Lock keyboard focus inside of popup. Recommended to be enabled.</td>
         </tr>
         <tr>
             <td>focuselement</td>
@@ -340,7 +339,10 @@
 
         <h3>Defaults</h3>
         <p>Default values for options and events can be modified:</p>
-        <pre class="prettyprint"><code>$.fn.popup.defaults.transition = 'all 0.3s';</code></pre>
+<pre class="prettyprint">
+<code>$.fn.popup.defaults.transition = 'all 0.3s';
+$.fn.popup.defaults.pagecontainer = '.container';
+</code></pre>
 
 
         <h3>Methods</h3>
@@ -412,6 +414,16 @@
 
 
 
+<!-- Set defaults -->
+<script>
+$(document).ready(function () {
+    $.fn.popup.defaults.pagecontainer = '.container'
+});
+</script>
+
+
+
+
 
 
 
@@ -447,13 +459,13 @@ $(document).ready(function () {
 <!-- Fade -->
 
 <div id="fade" class="well">
-    <h4>Basic fade example</h4>
+    <h4>Fade example</h4>
 <pre class="prettyprint">
 <code>$('#fade').popup({
   transition: 'all 0.3s'
 });</code>
 </pre>
-    <p>Or you can set the transitions directly in CSS:</p>
+    <p>Or you can set transitions directly in CSS:</p>
 <pre class="prettyprint"><code>$('#fade').popup();</code></pre>
 <pre class="prettyprint"><code>#fade,
 #fade_wrapper,
@@ -464,6 +476,7 @@ $(document).ready(function () {
 }
 </code>
 </pre>
+    <button class="fade_close fadeandscale_open btn btn-default">Next example</button>
     <button class="fade_close btn btn-default">Close</button>
 </div>
 
@@ -488,7 +501,7 @@ $(document).ready(function () {
 <!-- Fade & scale -->
 
 <div id="fadeandscale" class="well">
-    <h4>Fade &amp; Scale</h4>
+    <h4>Fade &amp; scale example</h4>
 <pre class="prettyprint">
 <code>$('#fade').popup({
   transition: 'all 0.3s'
@@ -508,6 +521,7 @@ $(document).ready(function () {
             transform: scale(1);
 }</code>
 </pre>
+    <button class="fadeandscale_close slidein_open btn btn-default">Next example</button>
     <button class="fadeandscale_close btn btn-default">Close</button>
 </div>
 
@@ -548,7 +562,7 @@ $(document).ready(function () {
 <!-- Slide in -->
 
 <div id="slidein" class="well">
-<h4>Slide in</h4>
+<h4>Slide in example</h4>
 <pre class="prettyprint">
 <code>$('#slidein').popup({
     outline: true, // optional
@@ -582,7 +596,8 @@ $(document).ready(function () {
 }
 </code>
 </pre>
-    <button class="slidein_close btn btn-alert">Close</button>
+    <button class="slidein_close standalone_open btn btn-default">Next example</button>
+    <button class="slidein_close btn btn-default">Close</button>
 </div>
 
 <script>
@@ -726,46 +741,6 @@ $(document).ready(function () {
 
 
 
-<!-- Tooltip hover -->
-
-<div id="tooltiphover" class="well">
-    <h4>Tooltip hover example</h4>
-    <p>Tooltip content will be positioned relative to the opening link.</p>
-</div>
-
-<script>
-$(document).ready(function () {
-
-    $('#tooltiphover').popup({
-        type: 'tooltip',
-        keepfocus: false,
-        escape: false,
-        blur: false,
-        vertical: 'top',
-        autozindex: true
-    });
-
-    $('.tooltiphover_open').hover(
-        function() {
-            $('#tooltiphover').popup('show');
-        }, function() {
-            $('#tooltiphover').popup('hide');
-        }
-    );
-});
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -793,7 +768,7 @@ $(document).ready(function () {
     });
 </code>
 </pre>
-    <button class="fall_close btn btn-alert">Close</button>
+    <button class="fall_close btn btn-default">Close</button>
 </div>
 
 <script>
