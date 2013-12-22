@@ -125,6 +125,10 @@
                     left: 0
                 });
 
+                if (options.backgroundclass) {
+                    $background.addClass(options.backgroundclass);
+                }
+
                 if (options.setzindex && !options.autozindex) {
                     $background.css('z-index', '2000');
                 }
@@ -222,7 +226,7 @@
                 methods._init(el);
             }
             $el.attr('data-popup-initialized', 'true');
-
+            
             var $body = $('body');
             var options = $el.data('popupoptions');
             var $wrapper = $('#' + el.id + '_wrapper');
