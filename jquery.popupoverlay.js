@@ -208,6 +208,18 @@
             } else {
                 $wrapper.hide();
             }
+
+            // Bind callbacks
+            if (typeof options.beforeopen == 'function')
+                $el.on("jquery-popup-overlay.beforeopen", options.beforeopen)
+            if (typeof options.onopen == 'function')
+                $el.on("jquery-popup-overlay.onopen", options.onopen)
+            if (typeof options.onclose == 'function')
+                $el.on("jquery-popup-overlay.onclose", options.onclose)
+            if (typeof options.opentransitionend == 'function')
+                $el.on("jquery-popup-overlay.opentransitionend", options.opentransitionend)
+            if (typeof options.closetransitionend == 'function')
+                $el.on("jquery-popup-overlay.closetransitionend", options.closetransitionend)
         },
 
         /**
@@ -233,7 +245,7 @@
             var $background = $('#' + el.id + '_background');
 
             // `beforeopen` callback event
-            callback(el, ordinal, options.beforeopen);
+            callback(el, ordinal, "beforeopen");
 
             // Remember last clicked place
             lastclicked[el.id] = ordinal;
@@ -408,10 +420,10 @@
             $el.attr('aria-hidden', false);
 
             $wrapper.one('transitionend', function() {
-                callback(el, ordinal, options.opentransitionend);
+                callback(el, ordinal, "opentransitionend");
             });
 
-            callback(el, ordinal, options.onopen);
+            callback(el, ordinal, "onopen");
         },
 
         /**
@@ -502,7 +514,7 @@
                 }
 
                 if (!options.notransitiondetach) {
-                    callback(el, lastclicked[el.id], options.closetransitionend);
+                    callback(el, lastclicked[el.id], "closetransitionend");
                 }
             });
 
@@ -521,7 +533,7 @@
             $el.attr('aria-hidden', true);
 
             // `onclose` callback event
-            callback(el, lastclicked[el.id], options.onclose);
+            callback(el, lastclicked[el.id], "onclose");
         },
 
         /**
@@ -615,14 +627,12 @@
      *
      * @param {object} el - popup instance DOM node
      * @param {number} ordinal - order number of an `open` element
-     * @param {function} func - callback function
+     * @param {string} event - event name
      */
-    var callback = function (el, ordinal, func) {
+    var callback = function (el, ordinal, event) {
         var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
         var elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
-        if (typeof func == 'function') {
-            func(elementclicked);
-        }
+        $(el).trigger("jquery-popup-overlay." + event, [elementclicked]);
     };
 
     /**
