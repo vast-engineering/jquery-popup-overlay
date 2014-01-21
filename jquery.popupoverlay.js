@@ -3,7 +3,7 @@
  *
  * @version 1.6.0
  * @requires jQuery v1.7.1+
- * @link http://vast-eng.github.com/jquery-popup-overlay/
+ * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
 (function ($) {
 
