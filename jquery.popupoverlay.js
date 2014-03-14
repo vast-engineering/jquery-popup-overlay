@@ -84,6 +84,22 @@
                 overflow: 'auto'
             });
 
+            $wrapper.on('mousedown',function(e){
+                if($wrapper.is(e.target)){
+                    e.stopPropagation();
+                }
+            });
+            $wrapper.on('click',function(e){
+                if($wrapper.is(e.target)){
+                    e.stopPropagation();
+                }
+            });
+            $wrapper.on('mouseup',function(e){
+                if($wrapper.is(e.target)){
+                    e.stopPropagation();
+                }
+            });
+
             $el.css({
                 opacity: 0,
                 visibility: 'hidden',
@@ -241,7 +257,7 @@
                 $wrapper.show();
             }
 
-            setTimeout(function() {
+            this.overlay_open_timer = setTimeout(function() {
                 $wrapper.css({
                     visibility: 'visible',
                     opacity: 1
@@ -416,7 +432,7 @@
          * @param {object} el - popup instance DOM node
          */
         hide: function (el) {
-
+            if(this.overlay_open_timer) clearTimeout(this.overlay_open_timer);
             var $body = $('body');
             var $el = $(el);
             var options = $el.data('popupoptions');
