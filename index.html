@@ -270,6 +270,29 @@
             </td>
         </tr>
         <tr>
+            <td>triggerevent</td>
+            <td>event</td>
+            <td></td>
+            <td>
+                <p>Passes an event that triggered the popup.</p>
+                <p class="text-muted"><small>Useful for tooltips showing on mouseover:</small></p>
+<pre class="prettyprint">
+<code>$('.my_popup_open').on({
+    mouseenter: function(event) {
+        $('#my_popup').popup({
+            triggerevent: event,
+            autoopen: true,
+            type: 'tooltip'
+        });
+    },
+    mouseleave: function() {
+        $('#my_popup').popup('hide');
+    }
+});</code>
+</pre>
+            </td>
+        </tr>
+        <tr>
             <td colspan="4">
                 <p>Example:</p>
 <pre class="prettyprint">

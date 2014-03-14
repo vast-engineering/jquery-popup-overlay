@@ -1,7 +1,7 @@
 /*!
  * jQuery Popup Overlay
  *
- * @version 1.6.0
+ * @version 1.6.1
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
@@ -555,8 +555,16 @@
                 $wrapper.css({
                     'position': 'absolute'
                 });
-                var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
-                var $elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
+
+                var $elementclicked;
+                if (options.triggerevent) {
+                    $elementclicked = $(options.triggerevent.target);
+                } else if (options.openelement) {
+                    $elementclicked = $(options.openelement).filter('[data-popup-ordinal="' + ordinal + '"]');
+                } else {
+                    $elementclicked = $('.' + el.id + opensuffix + '[data-popup-ordinal="' + ordinal + '"]');
+                }
+
                 var linkOffset = $elementclicked.offset();
 
                 // Horizontal position for tooltip
@@ -681,6 +689,7 @@
         openelement: null,
         closeelement: null,
         transition: null,
+        triggerevent: null,
         notransitiondetach: false,
         beforeopen: function(){},
         onclose: function(){},
