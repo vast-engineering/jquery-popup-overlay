@@ -37,9 +37,7 @@
                 }
 
                 if (options.autoopen) {
-                    setTimeout(function() {
-                        methods.show(el, 0);
-                    }, 0);
+                    methods.show(el, 0);
                 }
             },
 
@@ -188,10 +186,7 @@
                         var ord = $(this).data('popup-ordinal');
 
                         // Show element when clicked on `open` link.
-                        // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
-                        setTimeout(function() {
-                            methods.show(el, ord);
-                        }, 0);
+                        methods.show(el, ord);
 
                         e.preventDefault();
                     }
@@ -258,15 +253,13 @@
                     $wrapper.show();
                 }
 
-                setTimeout(function() {
-                    $wrapper.css({
-                        visibility: 'visible',
-                        opacity: 1
-                    });
+                $wrapper.css({
+                    visibility: 'visible',
+                    opacity: 1
+                });
 
-                    $('html').addClass('popup_visible').addClass('popup_visible_' + el.id);
-                    $el.addClass('popup_content_visible');
-                }, 20);
+                $('html').addClass('popup_visible').addClass('popup_visible_' + el.id);
+                $el.addClass('popup_content_visible');
 
 
                 $el.css({
@@ -284,29 +277,28 @@
                     visibleScrollLocks++;
                 }
 
-                setTimeout(function () {
-                    // Set event handlers
-                    if(!onevisible) {
-                        if (options.keepfocus) {
-                            $(document).on('focusin', focushandler)
-                        };
+                // Set event handlers
+                if (!onevisible) {
+                    if (options.keepfocus) {
+                        $(document).on('focusin', focushandler)
+                    }
+                    ;
 
-                        if (options.blur) {
-                            $(document).on('click', blurhandler);
-                        }
-
-                        if (options.escape) {
-                            $(document).on('keydown', escapehandler);
-                        }
+                    if (options.blur) {
+                        $(document).on('click', blurhandler);
                     }
 
-                    // Set plugin state
-                    if (!onevisible) {
-                        onevisible = true;
-                    } else {
-                        oneormorevisible = true;
+                    if (options.escape) {
+                        $(document).on('keydown', escapehandler);
                     }
-                }, 0);
+                }
+
+                // Set plugin state
+                if (!onevisible) {
+                    onevisible = true;
+                } else {
+                    oneormorevisible = true;
+                }
 
                 $el.data('popup-visible', true);
 
@@ -320,12 +312,9 @@
                         'opacity': options.opacity
                     });
 
-                    // Fix IE8 issue with background not appearing
-                    setTimeout(function() {
-                        $background.css({
-                            'opacity': options.opacity
-                        });
-                    }, 0);
+                    $background.css({
+                        'opacity': options.opacity
+                    });
                 }
 
                 // Remember which element had focus before opening a popup
@@ -338,15 +327,11 @@
                     $el.attr('tabindex', -1);
 
                     // Focus popup or user specified element.
-                    // Initial timeout of 50ms is set to give some time to popup to show after clicking on
-                    // `open` element, and after animation is complete to prevent background scrolling.
-                    setTimeout(function() {
-                        if (options.focuselement) {
-                            $(options.focuselement).focus();
-                        } else {
-                            $el.focus();
-                        }
-                    }, options.focusdelay);
+                    if (options.focuselement) {
+                        $(options.focuselement).focus();
+                    } else {
+                        $el.focus();
+                    }
 
                     // Handler for keyboard focus
                     focushandler = function(event) {
@@ -457,12 +442,10 @@
                 // Re-enable scrolling of background layer
                 if (options.scrolllock && --visibleScrollLocks <= 0) {
 
-                    setTimeout(function() {
-                        $body.css({
-                            overflow: 'visible',
-                            'margin-right': bodymarginright
-                        });
-                    }, 10); // 10ms added for CSS transition in Firefox which doesn't like overflow:auto
+                    $body.css({
+                        overflow: 'visible',
+                        'margin-right': bodymarginright
+                    });
                 }
 
                 // Unbind blur handler
@@ -476,11 +459,9 @@
                     $(document).off('focusin', focushandler);
 
                     // Focus back on saved element
-                    setTimeout(function() {
-                        if ($(focusedelementbeforepopup).is(':visible')) {
-                            focusedelementbeforepopup.focus();
-                        }
-                    }, 0);
+                    if ($(focusedelementbeforepopup).is(':visible')) {
+                        focusedelementbeforepopup.focus();
+                    }
                 }
 
                 // Unbind ESC key handler
@@ -560,9 +541,7 @@
                 if ($el.data('popup-visible')) {
                     methods.hide(el);
                 } else {
-                    setTimeout(function() {
-                        methods.show(el, ordinal);
-                    }, 0);
+                    methods.show(el, ordinal);
                 }
             },
 
