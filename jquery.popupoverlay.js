@@ -91,7 +91,7 @@
             });
 
             if (options.setzindex && !options.autozindex) {
-                $wrapper.css('z-index', '2001');
+                $wrapper.css('z-index', '100001');
             }
 
             if (!options.outline) {
@@ -126,7 +126,7 @@
                 });
 
                 if (options.setzindex && !options.autozindex) {
-                    $background.css('z-index', '2000');
+                    $background.css('z-index', '100000');
                 }
 
                 if (options.transition) {
