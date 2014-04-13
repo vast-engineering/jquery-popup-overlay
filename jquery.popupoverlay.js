@@ -80,9 +80,12 @@
             $wrapper.css({
                 opacity: 0,
                 visibility: 'hidden',
-                position: 'absolute',
-                overflow: 'auto'
+                position: 'absolute'
             });
+
+            if (options.type == 'overlay') {
+                $wrapper.css({overflow: 'auto'});
+            }
 
             $el.css({
                 opacity: 0,
