@@ -1,7 +1,7 @@
 /*!
  * jQuery Popup Overlay
  *
- * @version 1.6.1
+ * @version 1.6.2
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
@@ -11,16 +11,11 @@
     var options = {};
     var zindexvalues = [];
     var lastclicked = [];
-    var onevisible = false;
-    var oneormorevisible = false;
     var scrollbarwidth;
-    var focushandler = null;
-    var blurhandler = null;
-    var escapehandler = null;
     var bodymarginright = null;
     var opensuffix = '_open';
     var closesuffix = '_close';
-    var focusedelementbeforepopup = null;
+    var stack = [];
 
     var methods = {
 
@@ -66,7 +61,7 @@
             }
 
             if (!$el.attr('id')) {
-                $el.attr('id', 'j-popup-' + parseInt(Math.random() * 100000000));
+                $el.attr('id', 'j-popup-' + parseInt((Math.random() * 100000000), 10));
             }
 
             $el.addClass('popup_content');
@@ -181,7 +176,7 @@
                 $el.attr('aria-labelledby', $(openelement).attr('id'));
             }
 
-            $(document).on('click', openelement, function (e) {
+            $(document).on('click', openelement, function (event) {
                 if (!($el.data('popup-visible'))) {
                     var ord = $(this).data('popup-ordinal');
 
@@ -191,15 +186,8 @@
                         methods.show(el, ord);
                     }, 0);
 
-                    e.preventDefault();
+                    event.preventDefault();
                 }
-            });
-
-            // Handler: `close` element
-            var closeelement = (options.closeelement) ? options.closeelement : ('.' + el.id + closesuffix);
-            $(document).on('click', closeelement, function (e) {
-                methods.hide(el);
-                e.preventDefault();
             });
 
             if (options.detach) {
@@ -237,6 +225,50 @@
             // Remember last clicked place
             lastclicked[el.id] = ordinal;
 
+            // Add popup id to popup stack
+            stack.push(el.id);
+
+            // Calculating maximum z-index
+            if (options.autozindex) {
+
+                var elements = document.getElementsByTagName('*');
+                var len = elements.length;
+                var maxzindex = 0;
+
+                for(var i=0; i<len; i++){
+
+                    var elementzindex = $(elements[i]).css('z-index');
+
+                    if(elementzindex !== 'auto'){
+
+                      elementzindex = parseInt(elementzindex, 10);
+
+                      if(maxzindex < elementzindex){
+                        maxzindex = elementzindex;
+                      }
+                    }
+                }
+
+                zindexvalues[el.id] = maxzindex;
+
+                // Add z-index to the background
+                if (options.background) {
+                    if (zindexvalues[el.id] > 0) {
+                        $('#' + el.id + '_background').css({
+                            zIndex: (zindexvalues[el.id] + 1)
+                        });
+                    }
+                }
+
+                // Add z-index to the wrapper
+                if (zindexvalues[el.id] > 0) {
+                    $wrapper.css({
+                        zIndex: (zindexvalues[el.id] + 2)
+                    });
+                }
+
+            }
+
             if (options.detach) {
                 $wrapper.prepend(el);
                 $el.show();
@@ -260,43 +292,6 @@
                 'opacity': 1
             });
 
-            // Disable background layer scrolling when popup is opened
-            if (options.scrolllock) {
-                $body.css('overflow', 'hidden');
-                if ($body.height() > $window.height()) {
-                    $body.css('margin-right', bodymarginright + scrollbarwidth);
-                }
-            }
-
-            setTimeout(function () {
-                // Set event handlers
-                if(!onevisible) {
-                    if (options.keepfocus) {
-                        $(document).on('focusin', focushandler)
-                    };
-
-                    if (options.blur) {
-                        $(document).on('click', blurhandler);
-                    }
-
-                    if (options.escape) {
-                        $(document).on('keydown', escapehandler);
-                    }
-                }
-
-                // Set plugin state
-                if (!onevisible) {
-                    onevisible = true;
-                } else {
-                    oneormorevisible = true;
-                }
-            }, 0);
-
-            $el.data('popup-visible', true);
-
-            // Position popup
-            methods.reposition(el, ordinal);
-
             // Show background
             if (options.background) {
                 $background.css({
@@ -312,12 +307,24 @@
                 }, 0);
             }
 
+            // Disable background layer scrolling when popup is opened
+            if (options.scrolllock) {
+                $body.css('overflow', 'hidden');
+                if ($body.height() > $window.height()) {
+                    $body.css('margin-right', bodymarginright + scrollbarwidth);
+                }
+            }
+
+            $el.data('popup-visible', true);
+
+            // Position popup
+            methods.reposition(el, ordinal);
+
             // Remember which element had focus before opening a popup
-            focusedelementbeforepopup = document.activeElement;
+            $el.data('focusedelementbeforepopup', document.activeElement);
 
             // Handler: Keep focus inside dialog box
             if (options.keepfocus) {
-
                 // Make holder div focusable
                 $el.attr('tabindex', -1);
 
@@ -325,79 +332,15 @@
                 // Initial timeout of 50ms is set to give some time to popup to show after clicking on
                 // `open` element, and after animation is complete to prevent background scrolling.
                 setTimeout(function() {
-                    if (options.focuselement) {
+                    if (options.focuselement === 'closebutton') {
+                        $('#' + el.id + ' .' + el.id + closesuffix + ':first').focus();
+                    } else if (options.focuselement) {
                         $(options.focuselement).focus();
                     } else {
                         $el.focus();
                     }
                 }, options.focusdelay);
 
-                // Handler for keyboard focus
-                focushandler = function(event) {
-                    var dialog = document.getElementById(el.id);
-                    if (!dialog.contains(event.target)) {
-                        event.stopPropagation();
-                        dialog.focus();
-                    }
-                };
-            }
-
-            // Calculating maximum z-index
-            if (options.autozindex) {
-
-                var elements = document.getElementsByTagName('*');
-                var len = elements.length;
-                var maxzindex = 0;
-
-                for(var i=0; i<len; i++){
-
-                    var elementzindex = $(elements[i]).css('z-index');
-
-                    if(elementzindex !== 'auto'){
-
-                      elementzindex = parseInt(elementzindex);
-
-                      if(maxzindex < elementzindex){
-                        maxzindex = elementzindex;
-                      }
-                    }
-                }
-
-                zindexvalues[el.id] = maxzindex;
-
-                // Add z-index to the wrapper
-                if (zindexvalues[el.id] > 0) {
-                    $wrapper.css({
-                        zIndex: (zindexvalues[el.id] + 2)
-                    });
-                }
-
-                // Add z-index to the background
-                if (options.background) {
-                    if (zindexvalues[el.id] > 0) {
-                        $('#' + el.id + '_background').css({
-                            zIndex: (zindexvalues[el.id] + 1)
-                        });
-                    }
-                }
-            }
-
-            // Handler: Hide popup if clicked outside of it
-            if (options.blur) {
-                blurhandler = function (e) {
-                    if (!$(e.target).parents().andSelf().is('#' + el.id)) {
-                        methods.hide(el);
-                    }
-                };
-            }
-
-            // Handler: Close popup on ESC key
-            if (options.escape) {
-                escapehandler = function (e) {
-                    if (e.keyCode == 27 && $el.data('popup-visible')) {
-                        methods.hide(el);
-                    }
-                };
             }
 
             // Hide main content from screen readers
@@ -428,13 +371,14 @@
 
             $el.data('popup-visible', false);
 
-            if (oneormorevisible) {
-                $('html').removeClass('popup_visible_' + el.id);
-                oneormorevisible = false;
-            } else {
+            if (stack.length === 1) {
                 $('html').removeClass('popup_visible').removeClass('popup_visible_' + el.id);
-                onevisible = false;
+            } else {
+                $('html').removeClass('popup_visible_' + el.id);
             }
+
+            // Remove last opened popup from the stack
+            stack.pop();
 
             $el.removeClass('popup_content_visible');
 
@@ -448,27 +392,13 @@
                 }, 10); // 10ms added for CSS transition in Firefox which doesn't like overflow:auto
             }
 
-            // Unbind blur handler
-            if (options.blur) {
-                $(document).off('click', blurhandler);
-            }
-
             if (options.keepfocus) {
-
-                // Unbind focus handler
-                $(document).off('focusin', focushandler);
-
                 // Focus back on saved element
                 setTimeout(function() {
-                    if ($(focusedelementbeforepopup).is(':visible')) {
-                        focusedelementbeforepopup.focus();
+                    if ($($el.data('focusedelementbeforepopup')).is(':visible')) {
+                        $el.data('focusedelementbeforepopup').focus();
                     }
                 }, 0);
-            }
-
-            // Unbind ESC key handler
-            if (options.escape) {
-                $(document).off('keydown', escapehandler);
             }
 
             // Hide popup
@@ -631,6 +561,59 @@
             func(elementclicked);
         }
     };
+
+    // Hide popup if ESC key is pressed
+    $(document).on('keydown', function (event) {
+        if(stack.length) {
+            var elementId = stack[stack.length - 1];
+            var el = document.getElementById(elementId);
+
+            if ($(el).data('popupoptions').escape && event.keyCode == 27 && $(el).data('popup-visible')) {
+                methods.hide(el);
+            }
+        }
+    });
+
+    // Hide popup if clicked outside of it
+    $(document).on('click', function (event) {
+        if(stack.length) {
+            var elementId = stack[stack.length - 1];
+            var el = document.getElementById(elementId);
+
+            if ($(el).data('popupoptions').blur && !$(event.target).parents().andSelf().is('#' + elementId) && $(el).data('popup-visible') && event.which !== 2) {
+                methods.hide(el);
+            }
+        }
+    });
+
+    // Hide popup if `close` element is clicked
+    $(document).on('click', function (event) {
+        if(stack.length) {
+            var elementId = stack[stack.length - 1];
+            var el = document.getElementById(elementId);
+            var closingelement = ($(el).data('popupoptions').closeelement) ? $(el).data('popupoptions').closeelement : ('.' + elementId + closesuffix);
+
+            if($(event.target).parents().andSelf().is(closingelement)) {
+                event.preventDefault();
+                methods.hide(el);
+            }
+        }
+    });
+
+    // Keep keyboard focus inside of popup
+    $(document).on('focusin', function(event) {
+        if(stack.length) {
+            var elementId = stack[stack.length - 1];
+            var el = document.getElementById(elementId);
+
+            if ($(el).data('popupoptions').keepfocus) {
+                if (!el.contains(event.target)) {
+                    event.stopPropagation();
+                    el.focus();
+                }
+            }
+        }
+    });
 
     /**
      * Plugin API
