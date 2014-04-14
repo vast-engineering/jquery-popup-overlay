@@ -582,6 +582,10 @@
 
             if ($(el).data('popupoptions').blur && !$(event.target).parents().andSelf().is('#' + elementId) && $(el).data('popup-visible') && event.which !== 2) {
                 methods.hide(el);
+
+                if ($(el).data('popupoptions').type === 'overlay') {
+                    event.preventDefault(); // iPad...
+                }
             }
         }
     });
