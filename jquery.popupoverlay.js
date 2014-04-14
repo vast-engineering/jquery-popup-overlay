@@ -1,7 +1,7 @@
 /*!
  * jQuery Popup Overlay
  *
- * @version 1.6.2
+ * @version 1.6.3
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
@@ -575,7 +575,7 @@
     });
 
     // Hide popup if clicked outside of it
-    $(document).on('click', function (event) {
+    $(document).on('click touchstart', function (event) {
         if(stack.length) {
             var elementId = stack[stack.length - 1];
             var el = document.getElementById(elementId);
