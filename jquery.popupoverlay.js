@@ -190,11 +190,8 @@ var $window = $(window),
 
             openelements =  $(options.openelement ? options.openelement : '.' + el.id + opensuffix);
             closeelements =  $(options.closeelement ? options.closeelement : '.' + el.id + closesuffix);
-            console.log(options);
             if(options.blur){
-                console.log('on ajoute');
                 closeelements = closeelements.add($wrapper);
-                console.log(closeelements);
             }
             
             closeelements.each(function (i, item) {
