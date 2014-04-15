@@ -88,6 +88,7 @@
             <button class="initialism slidein_open btn btn-success">Slide in</button>
             <button class="initialism standalone_open btn btn-success">Stand alone</button>
             <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success">Tooltip</a>
+            <a class="initialism active_bg_open btn btn-success" href="#active_bg">Active background</a>
             <button class="initialism fall_open btn btn-success">Callback events</button>
         </p>
 
@@ -190,6 +191,13 @@
             <td>true</td>
             <td>Enables background cover.<br />
                 <small  class="text-muted">Disabled for tooltips.</small></td>
+        </tr>
+        <tr>
+            <td>backgroundactive</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Disable background cover and keep background elements active.<br />
+                <small  class="text-muted">Implies background, blur and scrolllock to false</small></td>
         </tr>
         <tr>
             <td>color</td>
@@ -799,6 +807,22 @@ $(document).ready(function () {
 
 
 
+<!-- Active background -->
+
+<div id="active_bg" class="well" style="max-width:44em;">
+    <h4>Active background example</h4>
+    <p>You can click on any element at the background : they still active and won't close the popup.</p>
+    <p>You can close the dialog by pressing the <kbd>Esc</kbd> key, or by clicking on the Close button.</p>
+    <button class="active_bg_close btn btn-default">Close</button>
+</div>
+
+<script>
+$(document).ready(function () {
+  $('#active_bg').popup({
+    backgroundactive:true
+  });
+});
+</script>
 
 
 
