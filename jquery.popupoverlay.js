@@ -7,18 +7,45 @@
  */
 (function ($) {
 
-    var $window = $(window);
-    var options = {};
-    var zindexvalues = [];
-    var lastclicked = [];
-    var scrollbarwidth;
-    var bodymarginright = null;
-    var opensuffix = '_open';
-    var closesuffix = '_close';
-    var stack = [];
-
-    var methods = {
-
+var $window = $(window),
+    options = {},
+    zindexvalues = [],
+    lastclicked = [],
+    scrollbarwidth,
+    bodymarginright = null,
+    opensuffix = '_open',
+    closesuffix = '_close',
+    stack = [],
+    handler_show = function (event) {
+        if(event.which !== 2){
+            event.preventDefault();
+            var ord = $(this).data('popup-ordinal'),
+                $el = $('#'+$(this).data('popup-opening-id'));
+            if (!($el.data('popup-visible'))) {
+                // Show element when clicked on `open` link.
+                // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
+                setTimeout(function() {
+                    methods.show($el.get(0), ord);
+                }, 0);
+            }
+        }
+    },
+    handler_close = function (event) {
+        //for wrapper, only perform close action on direct click on it.
+        if(event.which !== 2 && (!$(this).hasClass('popup_wrapper') || event.target == this)){
+            event.preventDefault();
+            var ord = $(this).data('popup-ordinal'),
+                $el = $('#'+$(this).data('popup-closing-id'));
+            if ($el.data('popup-visible')) {
+                // Hide element when clicked on `close` link or wrapper
+                // setTimeout is to allow `open` method to finish (for issues with multiple tooltips)
+                setTimeout(function() {
+                    methods.hide($el.get(0));
+                }, 0);
+            }
+        }
+    },
+    methods = {
         _init: function (el) {
             var $el = $(el);
             var options = $el.data('popupoptions');
@@ -38,9 +65,12 @@
         },
 
         _initonce: function (el) {
-            var $body = $('body');
-            var $wrapper;
-            var options = $el.data('popupoptions');
+            var $body = $('body'),
+                $el = $(el),
+                $wrapper,
+                options = $el.data('popupoptions'),
+                openelements,
+                closeelements;
             bodymarginright = parseInt($body.css('margin-right'), 10);
 
             if (options.type == 'tooltip') {
@@ -50,8 +80,7 @@
 
             if (options.scrolllock) {
                 // Calculate the browser's scrollbar width dynamically
-                var parent;
-                var child;
+                var parent, child;
                 if (typeof scrollbarwidth === 'undefined') {
                     parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body');
                     child = parent.children();
@@ -106,9 +135,7 @@
 
             if ((options.background) && (!$('#' + el.id + '_background').length)) {
 
-                var popupbackground = '<div id="' + el.id + '_background" class="popup_background"></div>';
-
-                $body.prepend(popupbackground);
+                $body.prepend('<div id="' + el.id + '_background" class="popup_background"></div>');
 
                 var $background = $('#' + el.id + '_background');
 
@@ -161,34 +188,36 @@
             // Add WAI ARIA role to announce dialog to screen readers
             $el.attr('role', 'dialog');
 
-            var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
-
-            $(openelement).each(function (i, item) {
+            openelements =  $(options.openelement ? options.openelement : '.' + el.id + opensuffix);
+            closeelements =  $(options.closeelement ? options.closeelement : '.' + el.id + closesuffix);
+            console.log(options);
+            if(options.blur){
+                console.log('on ajoute');
+                closeelements = closeelements.add($wrapper);
+                console.log(closeelements);
+            }
+            
+            closeelements.each(function (i, item) {
+                $(item).attr('data-popup-closing-id', el.id);
+            });
+            openelements.each(function (i, item) {
+                $(item).attr('data-popup-opening-id', el.id);
                 $(item).attr('data-popup-ordinal', i);
 
                 if (!$(item).attr('id')) {
                     $(item).attr('id', 'open_' + parseInt((Math.random() * 100000000), 10));
                 }
             });
+            
 
             // Set aria-labelledby (if aria-label or aria-labelledby is not set in html)
             if (!($el.attr('aria-labelledby') || $el.attr('aria-label'))) {
-                $el.attr('aria-labelledby', $(openelement).attr('id'));
+                $el.attr('aria-labelledby', openelements.attr('id'));
             }
 
-            $(document).on('click', openelement, function (event) {
-                if (!($el.data('popup-visible'))) {
-                    var ord = $(this).data('popup-ordinal');
-
-                    // Show element when clicked on `open` link.
-                    // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
-                    setTimeout(function() {
-                        methods.show(el, ord);
-                    }, 0);
-
-                    event.preventDefault();
-                }
-            });
+            openelements.on('click', handler_show);
+            closeelements.on('click touchstart', handler_close);
+            
 
             if (options.detach) {
                 $el.hide().detach();
@@ -545,7 +574,7 @@
             }
         }
 
-    };
+    },
 
     /**
      * Callback event calls
@@ -554,7 +583,7 @@
      * @param {number} ordinal - order number of an `open` element
      * @param {function} func - callback function
      */
-    var callback = function (el, ordinal, func) {
+    callback = function (el, ordinal, func) {
         var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
         var elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
         if (typeof func == 'function') {
@@ -569,36 +598,6 @@
             var el = document.getElementById(elementId);
 
             if ($(el).data('popupoptions').escape && event.keyCode == 27 && $(el).data('popup-visible')) {
-                methods.hide(el);
-            }
-        }
-    });
-
-    // Hide popup if clicked outside of it
-    $(document).on('click touchstart', function (event) {
-        if(stack.length) {
-            var elementId = stack[stack.length - 1];
-            var el = document.getElementById(elementId);
-
-            if ($(el).data('popupoptions').blur && !$(event.target).parents().andSelf().is('#' + elementId) && $(el).data('popup-visible') && event.which !== 2) {
-                methods.hide(el);
-
-                if ($(el).data('popupoptions').type === 'overlay') {
-                    event.preventDefault(); // iPad...
-                }
-            }
-        }
-    });
-
-    // Hide popup if `close` element is clicked
-    $(document).on('click', function (event) {
-        if(stack.length) {
-            var elementId = stack[stack.length - 1];
-            var el = document.getElementById(elementId);
-            var closingelement = ($(el).data('popupoptions').closeelement) ? $(el).data('popupoptions').closeelement : ('.' + elementId + closesuffix);
-
-            if($(event.target).parents().andSelf().is(closingelement)) {
-                event.preventDefault();
                 methods.hide(el);
             }
         }
