@@ -38,13 +38,20 @@
         },
 
         _initonce: function (el) {
-            var $body = $('body');
-            var $wrapper;
-            var options = $el.data('popupoptions');
+            var $body = $('body'),
+                $wrapper,
+                options = $el.data('popupoptions'),
+                css;
             bodymarginright = parseInt($body.css('margin-right'), 10);
 
             if (options.type == 'tooltip') {
                 options.background = false;
+                options.scrolllock = false;
+            }
+            
+            if (options.backgroundactive) {
+                options.background = false;
+                options.blur = false;
                 options.scrolllock = false;
             }
 
@@ -139,15 +146,20 @@
                     verticalAlign: 'middle'
                 });
 
-                $wrapper.css({
+                css = {
                     position: 'fixed',
                     top: 0,
                     right: 0,
                     left: 0,
                     bottom: 0,
                     textAlign: 'center'
-                });
-
+                }
+                if(options.backgroundactive){
+                    css.position = 'relative';
+                    css.height = '0px';
+                    css.overflow = 'visible';
+                }
+                $wrapper.css(css);
                 // CSS vertical align helper
                 $wrapper.append('<div class="popup_align" />');
 
@@ -286,6 +298,18 @@
                 $el.addClass('popup_content_visible');
             }, 20);
 
+            if(options.backgroundactive){
+                //calculates the vertical align
+                $el.css({
+                    top:(
+                        $(window).height() - (
+                            $el.get(0).offsetHeight +
+                            parseInt($el.css('margin-top')) +
+                            parseInt($el.css('margin-bottom'))
+                        )
+                    )/2 +'px',
+                });
+            }
 
             $el.css({
                 'visibility': 'visible',
@@ -659,6 +683,7 @@
         type: 'overlay',
         autoopen: false,
         background: true,
+        backgroundactive: false,
         color: 'black',
         opacity: '0.5',
         horizontal: 'center',
