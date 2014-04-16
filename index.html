@@ -3,11 +3,16 @@
 <head>
     <meta charset="utf-8">
     <title>jQuery Popup Overlay</title>
+
+    <!-- Force latest IE, Google Chrome Frame for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <meta name="description" content="jQuery plugin for responsive and accessible modal windows and tooltips." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
+
 
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=fontawesome">
@@ -85,7 +90,7 @@
             <a class="initialism basic_open btn btn-success" href="#basic">Basic</a>
             <a class="initialism fade_open btn btn-success" href="#fade">Fade</a>
             <a class="initialism fadeandscale_open btn btn-success" href="#fadeandscale">Fade &amp; scale</a>
-            <button class="initialism slidein_open btn btn-success">Slide in</button>
+            <button class="initialism slide_open btn btn-success">Slide</button>
             <button class="initialism standalone_open btn btn-success">Stand alone</button>
             <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success">Tooltip</a>
             <a class="initialism active_bg_open btn btn-success" href="#active_bg">Active background</a>
@@ -128,6 +133,7 @@
 
   &lt;!-- Add content to the popup --&gt;
   &lt;div id="my_popup"&gt;
+
     ...popup content...
 
     &lt;!-- Add an optional button to close the popup --&gt;
@@ -299,7 +305,6 @@
             <td>false</td>
             <td>
                 <p>Removes popup element from the DOM after closing transition.</p>
-                <p class="text-muted"><small>If you are not using transitions but want to remove popup from DOM after closing, as a temporary solution you can use `notransitiondetach` instead of `detach`.</small></p>
             </td>
         </tr>
         <tr>
@@ -320,7 +325,7 @@
             <td></td>
             <td>
                 <p>Sets CSS transition when showing and hiding a popup.</p>
-                <p class="text-muted"><small>Use this if you don't need different transition for background, and if you don't need to transition only selected properties. Otherwise set transitions in CSS.</small></p>
+                <p class="text-muted"><small>Use this if you don't need separate transition for background or if you need to transition only selected properties – otherwise set custom transitions in CSS.</small></p>
                 <p class="text-muted"><small>Simple fade effect <code>$('#my_popup').popup({transition: 'all 0.3s'})</code> is equivalent to <code>#my_popup, #my_popup_wrapper, #my_popup_background {transition: all 0.3s;}</code></small></p>
                 <p class="text-muted"><small>Setting fade effect for all popups on the site: <code>$.fn.popup.defaults.transition = 'all 0.3s';</code> is equivalent to <code>.popup_content, .popup_wrapper, .popup_background {transition: all 0.3s;}</code></small></p>
             </td>
@@ -418,7 +423,7 @@
         </table>
 
         <h3>Defaults</h3>
-        
+
         <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -450,7 +455,7 @@ $.fn.popup.defaults.pagecontainer = '.container';
         <tbody>
         <tr>
             <td>.popup(options)</td>
-            <td><p>Activates your content as a popup. Accepts an optional options <code>object.</code></p>
+            <td><p>Activates your content as a popup. Accepts an optional options <code>object</code>.</p>
 <pre class="prettyprint">
 <code>$('#my_popup').popup({
   background: false
@@ -604,7 +609,7 @@ $(document).ready(function () {
   transform: scale(1);
 }</code>
 </pre>
-    <button class="fadeandscale_close slidein_open btn btn-default">Next example</button>
+    <button class="fadeandscale_close slide_open btn btn-default">Next example</button>
     <button class="fadeandscale_close btn btn-default">Close</button>
 </div>
 
@@ -644,40 +649,40 @@ $(document).ready(function () {
 
 <!-- Slide in -->
 
-<div id="slidein" class="well">
+<div id="slide" class="well">
 <h4>Slide in example</h4>
 <pre class="prettyprint">
-<code>$('#slidein').popup({
+<code>$('#slide').popup({
   outline: true, // optional
-  focusdelay: 300, // optional
+  focusdelay: 400, // optional
   vertical: 'top' //optional
 });
 </code>
 </pre>
 <pre class="prettyprint">
-<code>#slidein_background {
-  transition: all 0.3s 0.2s;
+<code>#slide_background {
+  transition: all 0.3s 0.3s;
 }
-#slidein,
-#slidein_wrapper {
+#slide,
+#slide_wrapper {
   transition: all 0.3s ease-out;
 }
-#slidein {
+#slide {
   transform: translateX(0) translateY(-40%);
 }
-.popup_visible #slidein {
+.popup_visible #slide {
   transform: translateX(0) translateY(0);
 }
 </code>
 </pre>
-    <button class="slidein_close btn btn-default">Close</button>
+    <button class="slide_close btn btn-default">Close</button>
 </div>
 
 <script>
 $(document).ready(function () {
 
-    $('#slidein').popup({
-        focusdelay: 300,
+    $('#slide').popup({
+        focusdelay: 400,
         outline: true,
         vertical: 'top'
     });
@@ -686,24 +691,24 @@ $(document).ready(function () {
 </script>
 
 <style>
-#slidein_background {
-    -webkit-transition: all 0.3s 0.2s;
-       -moz-transition: all 0.3s 0.2s;
-            transition: all 0.3s 0.2s;
+#slide_background {
+    -webkit-transition: all 0.3s 0.3s;
+       -moz-transition: all 0.3s 0.3s;
+            transition: all 0.3s 0.3s;
 }
-#slidein,
-#slidein_wrapper {
+#slide,
+#slide_wrapper {
     -webkit-transition: all 0.4s;
        -moz-transition: all 0.4s;
             transition: all 0.4s;
 }
-#slidein {
+#slide {
     -webkit-transform: translateX(0) translateY(-40%);
        -moz-transform: translateX(0) translateY(-40%);
         -ms-transform: translateX(0) translateY(-40%);
             transform: translateX(0) translateY(-40%);
 }
-.popup_visible #slidein {
+.popup_visible #slide {
     -webkit-transform: translateX(0) translateY(0);
        -moz-transform: translateX(0) translateY(0);
         -ms-transform: translateX(0) translateY(0);

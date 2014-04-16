@@ -5,7 +5,7 @@
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
-(function ($) {
+;(function ($) {
 
     var $window = $(window);
     var options = {};
@@ -16,6 +16,7 @@
     var opensuffix = '_open';
     var closesuffix = '_close';
     var stack = [];
+    var transitionSupport = null;
 
     var methods = {
 
@@ -43,6 +44,11 @@
                 options = $el.data('popupoptions'),
                 css;
             bodymarginright = parseInt($body.css('margin-right'), 10);
+            transitionSupport = document.body.style.webkitTransition !== undefined ||
+                                document.body.style.MozTransition !== undefined ||
+                                document.body.style.msTransition !== undefined ||
+                                document.body.style.OTransition !== undefined ||
+                                document.body.style.transition !== undefined;
 
             if (options.type == 'tooltip') {
                 options.background = false;
@@ -153,13 +159,16 @@
                     left: 0,
                     bottom: 0,
                     textAlign: 'center'
-                }
+                };
+
                 if(options.backgroundactive){
                     css.position = 'relative';
-                    css.height = '0px';
+                    css.height = '0';
                     css.overflow = 'visible';
                 }
+
                 $wrapper.css(css);
+
                 // CSS vertical align helper
                 $wrapper.append('<div class="popup_align" />');
 
@@ -298,14 +307,22 @@
                 $el.addClass('popup_content_visible');
             }, 20);
 
+            // Disable background layer scrolling when popup is opened
+            if (options.scrolllock) {
+                $body.css('overflow', 'hidden');
+                if ($body.height() > $window.height()) {
+                    $body.css('margin-right', bodymarginright + scrollbarwidth);
+                }
+            }
+
             if(options.backgroundactive){
                 //calculates the vertical align
                 $el.css({
                     top:(
                         $(window).height() - (
                             $el.get(0).offsetHeight +
-                            parseInt($el.css('margin-top')) +
-                            parseInt($el.css('margin-bottom'))
+                            parseInt($el.css('margin-top'), 10) +
+                            parseInt($el.css('margin-bottom'), 10)
                         )
                     )/2 +'px',
                 });
@@ -329,14 +346,6 @@
                         'opacity': options.opacity
                     });
                 }, 0);
-            }
-
-            // Disable background layer scrolling when popup is opened
-            if (options.scrolllock) {
-                $body.css('overflow', 'hidden');
-                if ($body.height() > $window.height()) {
-                    $body.css('margin-right', bodymarginright + scrollbarwidth);
-                }
             }
 
             $el.data('popup-visible', true);
@@ -373,11 +382,15 @@
             // Reveal popup content to screen readers
             $el.attr('aria-hidden', false);
 
-            $wrapper.one('transitionend', function() {
-                callback(el, ordinal, options.opentransitionend);
-            });
-
             callback(el, ordinal, options.onopen);
+
+            if (transitionSupport) {
+                $wrapper.one('transitionend', function() {
+                    callback(el, ordinal, options.opentransitionend);
+                });
+            } else {
+                callback(el, ordinal, options.opentransitionend);
+            }
         },
 
         /**
@@ -406,16 +419,6 @@
 
             $el.removeClass('popup_content_visible');
 
-            // Re-enable scrolling of background layer
-            if (options.scrolllock) {
-                setTimeout(function() {
-                    $body.css({
-                        overflow: 'visible',
-                        'margin-right': bodymarginright
-                    });
-                }, 10); // 10ms added for CSS transition in Firefox which doesn't like overflow:auto
-            }
-
             if (options.keepfocus) {
                 // Focus back on saved element
                 setTimeout(function() {
@@ -443,30 +446,6 @@
                 });
             }
 
-            // After closing CSS transition is over... (if transition is set and supported)
-            $el.one('transitionend', function(e) {
-
-                if (!($el.data('popup-visible'))) {
-                    if (options.detach) {
-                        $el.hide().detach();
-                    } else {
-                        $wrapper.hide();
-                    }
-                }
-
-                if (!options.notransitiondetach) {
-                    callback(el, lastclicked[el.id], options.closetransitionend);
-                }
-            });
-
-            if (options.notransitiondetach) {
-                if (options.detach) {
-                    $el.hide().detach();
-                } else {
-                    $wrapper.hide();
-                }
-            }
-
             // Reveal main content to screen readers
             $(options.pagecontainer).attr('aria-hidden', false);
 
@@ -475,6 +454,50 @@
 
             // `onclose` callback event
             callback(el, lastclicked[el.id], options.onclose);
+
+            if (transitionSupport) {
+                $el.one('transitionend', function(e) {
+
+                    if (!($el.data('popup-visible'))) {
+                        if (options.detach) {
+                            $el.hide().detach();
+                        } else {
+                            $wrapper.hide();
+                        }
+                    }
+
+                    // Re-enable scrolling of background layer
+                    if (options.scrolllock) {
+                        setTimeout(function() {
+                            $body.css({
+                                overflow: 'visible',
+                                'margin-right': bodymarginright
+                            });
+                        }, 10); // 10ms added for CSS transition in Firefox which doesn't like overflow:auto
+                    }
+
+                    callback(el, lastclicked[el.id], options.closetransitionend);
+                });
+            } else {
+                if (options.detach) {
+                    $el.hide().detach();
+                } else {
+                    $wrapper.hide();
+                }
+
+                // Re-enable scrolling of background layer
+                if (options.scrolllock) {
+                    setTimeout(function() {
+                        $body.css({
+                            overflow: 'visible',
+                            'margin-right': bodymarginright
+                        });
+                    }, 10); // 10ms added for CSS transition in Firefox which doesn't like overflow:auto
+                }
+
+                callback(el, lastclicked[el.id], options.closetransitionend);
+            }
+
         },
 
         /**
@@ -705,12 +728,11 @@
         closeelement: null,
         transition: null,
         triggerevent: null,
-        notransitiondetach: false,
-        beforeopen: function(){},
-        onclose: function(){},
-        onopen: function(){},
-        opentransitionend: function(){},
-        closetransitionend: function(){}
+        beforeopen: null,
+        onclose: null,
+        onopen: null,
+        opentransitionend: null,
+        closetransitionend: null
     };
 
 })(jQuery);
