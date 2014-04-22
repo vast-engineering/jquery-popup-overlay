@@ -536,41 +536,41 @@
                     'position': 'absolute'
                 });
 
-                var $elementclicked;
-                if (options.triggerevent) {
-                    $elementclicked = $(options.triggerevent.target);
+                var $tooltipanchor;
+                if (options.tooltipanchor) {
+                    $tooltipanchor = $(options.tooltipanchor);
                 } else if (options.openelement) {
-                    $elementclicked = $(options.openelement).filter('[data-popup-ordinal="' + ordinal + '"]');
+                    $tooltipanchor = $(options.openelement).filter('[data-popup-ordinal="' + ordinal + '"]');
                 } else {
-                    $elementclicked = $('.' + el.id + opensuffix + '[data-popup-ordinal="' + ordinal + '"]');
+                    $tooltipanchor = $('.' + el.id + opensuffix + '[data-popup-ordinal="' + ordinal + '"]');
                 }
 
-                var linkOffset = $elementclicked.offset();
+                var linkOffset = $tooltipanchor.offset();
 
                 // Horizontal position for tooltip
                 if (options.horizontal == 'right') {
-                    $wrapper.css('left', linkOffset.left + $elementclicked.outerWidth() + options.offsetleft);
+                    $wrapper.css('left', linkOffset.left + $tooltipanchor.outerWidth() + options.offsetleft);
                 } else if (options.horizontal == 'leftedge') {
-                    $wrapper.css('left', linkOffset.left + $elementclicked.outerWidth() - $elementclicked.outerWidth() +  options.offsetleft);
+                    $wrapper.css('left', linkOffset.left + $tooltipanchor.outerWidth() - $tooltipanchor.outerWidth() +  options.offsetleft);
                 } else if (options.horizontal == 'left') {
-                    $wrapper.css('right', $(window).width() - linkOffset.left  - options.offsetleft);
+                    $wrapper.css('right', $window.width() - linkOffset.left  - options.offsetleft);
                 } else if (options.horizontal == 'rightedge') {
-                    $wrapper.css('right', $(window).width()  - linkOffset.left - $elementclicked.outerWidth() - options.offsetleft);
+                    $wrapper.css('right', $window.width()  - linkOffset.left - $tooltipanchor.outerWidth() - options.offsetleft);
                 } else {
-                    $wrapper.css('left', linkOffset.left + ($elementclicked.outerWidth() / 2) - ($el.outerWidth() / 2) - parseFloat($el.css('marginLeft')) + options.offsetleft);
+                    $wrapper.css('left', linkOffset.left + ($tooltipanchor.outerWidth() / 2) - ($el.outerWidth() / 2) - parseFloat($el.css('marginLeft')) + options.offsetleft);
                 }
 
                 // Vertical position for tooltip
                 if (options.vertical == 'bottom') {
-                    $wrapper.css('top', linkOffset.top + $elementclicked.outerHeight() + options.offsettop);
+                    $wrapper.css('top', linkOffset.top + $tooltipanchor.outerHeight() + options.offsettop);
                 } else if (options.vertical == 'bottomedge') {
-                    $wrapper.css('top', linkOffset.top + $elementclicked.outerHeight() - $el.outerHeight() + options.offsettop);
+                    $wrapper.css('top', linkOffset.top + $tooltipanchor.outerHeight() - $el.outerHeight() + options.offsettop);
                 } else if (options.vertical == 'top') {
-                    $wrapper.css('bottom', $(window).height() - linkOffset.top - options.offsettop);
+                    $wrapper.css('bottom', $window.height() - linkOffset.top - options.offsettop);
                 } else if (options.vertical == 'topedge') {
-                    $wrapper.css('bottom', $(window).height() - linkOffset.top - $el.outerHeight() - options.offsettop);
+                    $wrapper.css('bottom', $window.height() - linkOffset.top - $el.outerHeight() - options.offsettop);
                 } else {
-                    $wrapper.css('top', linkOffset.top + ($elementclicked.outerHeight() / 2) - ($el.outerHeight() / 2) - parseFloat($el.css('marginTop')) + options.offsettop);
+                    $wrapper.css('top', linkOffset.top + ($tooltipanchor.outerHeight() / 2) - ($el.outerHeight() / 2) - parseFloat($el.css('marginTop')) + options.offsettop);
                 }
 
             // Overlay type
@@ -727,7 +727,7 @@
         openelement: null,
         closeelement: null,
         transition: null,
-        triggerevent: null,
+        tooltipanchor: null,
         beforeopen: null,
         onclose: null,
         onopen: null,
