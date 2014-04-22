@@ -16,7 +16,8 @@
     var opensuffix = '_open';
     var closesuffix = '_close';
     var stack = [];
-    var transitionSupport = null;
+    var transitionsupport = null;
+    var opentimer;
 
     var methods = {
 
@@ -39,12 +40,13 @@
         },
 
         _initonce: function (el) {
-            var $body = $('body'),
-                $wrapper,
-                options = $el.data('popupoptions'),
-                css;
+            var $body = $('body');
+            var $wrapper;
+            var options = $el.data('popupoptions');
+            var css;
+
             bodymarginright = parseInt($body.css('margin-right'), 10);
-            transitionSupport = document.body.style.webkitTransition !== undefined ||
+            transitionsupport = document.body.style.webkitTransition !== undefined ||
                                 document.body.style.MozTransition !== undefined ||
                                 document.body.style.msTransition !== undefined ||
                                 document.body.style.OTransition !== undefined ||
@@ -54,7 +56,7 @@
                 options.background = false;
                 options.scrolllock = false;
             }
-            
+
             if (options.backgroundactive) {
                 options.background = false;
                 options.blur = false;
@@ -115,13 +117,11 @@
             }
 
             // Hide popup content from screen readers initially
-            $(el).attr('aria-hidden', true);
+            $el.attr('aria-hidden', true);
 
             if ((options.background) && (!$('#' + el.id + '_background').length)) {
 
-                var popupbackground = '<div id="' + el.id + '_background" class="popup_background"></div>';
-
-                $body.prepend(popupbackground);
+                $body.prepend('<div id="' + el.id + '_background" class="popup_background"></div>');
 
                 var $background = $('#' + el.id + '_background');
 
@@ -187,7 +187,7 @@
             $(openelement).each(function (i, item) {
                 $(item).attr('data-popup-ordinal', i);
 
-                if (!$(item).attr('id')) {
+                if (!item.id) {
                     $(item).attr('id', 'open_' + parseInt((Math.random() * 100000000), 10));
                 }
             });
@@ -197,18 +197,21 @@
                 $el.attr('aria-labelledby', $(openelement).attr('id'));
             }
 
+            // Handler: Show popup when clicked on `open` element
             $(document).on('click', openelement, function (event) {
-                if (!($el.data('popup-visible'))) {
-                    var ord = $(this).data('popup-ordinal');
+                event.preventDefault();
 
-                    // Show element when clicked on `open` link.
-                    // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
-                    setTimeout(function() {
-                        methods.show(el, ord);
-                    }, 0);
+                var ord = $(this).data('popup-ordinal');
+                setTimeout(function() { // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
+                    methods.show(el, ord);
+                }, 0);
+            });
 
-                    event.preventDefault();
-                }
+            // Handler: `close` element
+            var closeelement = (options.closeelement) ? options.closeelement : ('.' + el.id + closesuffix);
+            $(document).on('click', closeelement, function (e) {
+                methods.hide(el);
+                e.preventDefault();
             });
 
             if (options.detach) {
@@ -289,7 +292,6 @@
                         zIndex: (zindexvalues[el.id] + 2)
                     });
                 }
-
             }
 
             if (options.detach) {
@@ -299,7 +301,7 @@
                 $wrapper.show();
             }
 
-            setTimeout(function() {
+            opentimer = setTimeout(function() {
                 $wrapper.css({
                     visibility: 'visible',
                     opacity: 1
@@ -307,7 +309,7 @@
 
                 $('html').addClass('popup_visible').addClass('popup_visible_' + el.id);
                 $el.addClass('popup_content_visible');
-            }, 20);
+            }, 20); // 20ms required for opening animation to occur in FF
 
             // Disable background layer scrolling when popup is opened
             if (options.scrolllock) {
@@ -321,7 +323,7 @@
                 //calculates the vertical align
                 $el.css({
                     top:(
-                        $(window).height() - (
+                        $window.height() - (
                             $el.get(0).offsetHeight +
                             parseInt($el.css('margin-top'), 10) +
                             parseInt($el.css('margin-bottom'), 10)
@@ -386,7 +388,7 @@
 
             callback(el, ordinal, options.onopen);
 
-            if (transitionSupport) {
+            if (transitionsupport) {
                 $wrapper.one('transitionend', function() {
                     callback(el, ordinal, options.opentransitionend);
                 });
@@ -401,6 +403,7 @@
          * @param {object} el - popup instance DOM node
          */
         hide: function (el) {
+            if(opentimer) clearTimeout(opentimer);
 
             var $body = $('body');
             var $el = $(el);
@@ -409,6 +412,7 @@
             var $background = $('#' + el.id + '_background');
 
             $el.data('popup-visible', false);
+
 
             if (stack.length === 1) {
                 $('html').removeClass('popup_visible').removeClass('popup_visible_' + el.id);
@@ -457,7 +461,7 @@
             // `onclose` callback event
             callback(el, lastclicked[el.id], options.onclose);
 
-            if (transitionSupport) {
+            if (transitionsupport) {
                 $el.one('transitionend', function(e) {
 
                     if (!($el.data('popup-visible'))) {
@@ -509,7 +513,7 @@
          * @param {number} ordinal - order number of an `open` element
          */
         toggle: function (el, ordinal) {
-            if ($el.data('popup-visible')) {
+            if ($(el).data('popup-visible')) {
                 methods.hide(el);
             } else {
                 setTimeout(function() {
@@ -633,22 +637,8 @@
                 methods.hide(el);
 
                 if ($(el).data('popupoptions').type === 'overlay') {
-                    event.preventDefault(); // iPad...
+                    event.preventDefault(); // iOS will trigger click on the links below the overlay when clicked on the overlay if we don't prevent default action
                 }
-            }
-        }
-    });
-
-    // Hide popup if `close` element is clicked
-    $(document).on('click', function (event) {
-        if(stack.length) {
-            var elementId = stack[stack.length - 1];
-            var el = document.getElementById(elementId);
-            var closingelement = ($(el).data('popupoptions').closeelement) ? $(el).data('popupoptions').closeelement : ('.' + elementId + closesuffix);
-
-            if($(event.target).parents().andSelf().is(closingelement)) {
-                event.preventDefault();
-                methods.hide(el);
             }
         }
     });
