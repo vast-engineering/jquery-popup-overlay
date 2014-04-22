@@ -40,6 +40,7 @@
         },
 
         _initonce: function (el) {
+            var $el = $(el);
             var $body = $('body');
             var $wrapper;
             var options = $el.data('popupoptions');
