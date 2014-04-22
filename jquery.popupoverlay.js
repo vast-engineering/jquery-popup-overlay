@@ -247,7 +247,9 @@
             lastclicked[el.id] = ordinal;
 
             // Add popup id to popup stack
-            stack.push(el.id);
+            setTimeout(function() {
+                stack.push(el.id);
+            }, 0);
 
             // Calculating maximum z-index
             if (options.autozindex) {
