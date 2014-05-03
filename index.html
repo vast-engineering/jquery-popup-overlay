@@ -65,18 +65,6 @@
         letter-spacing: 1px;
         font-size: 12px;
     }
-    #viewport_image {
-        padding: 2vmin;
-        background: white;
-    }
-    #viewport_image #viewport_image_holder {
-
-    }
-    #viewport_image #viewport_image_holder img {
-        max-height: 92vh;
-        max-width: 94vw;
-    }
-
 
     </style>
 </head>
@@ -111,7 +99,7 @@
             <a class="initialism active_bg_open btn btn-success" href="#active_bg">Active background</a>
             <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success" id="my_tooltip_open">Tooltip</a>
             <button class="initialism fall_open btn btn-success">Callback events</button>
-            <a class="initialism viewport_image_open btn btn-success" href="#basic">Viewport Image</a>
+            <button class="initialism other_open btn btn-success">&hellip;</button>
         </p>
 
         <h2>Features</h2>
@@ -811,31 +799,6 @@ $(document).ready(function () {
 
 
 
-<!-- Tooltip -->
-
-<div id="my_tooltip" class="well">
-    <a href="#" class="my_tooltip_close" style="float:right;padding:0 0.4em;">×</a>
-    <h4>Tooltip example</h4>
-    <p>Tooltip content will be positioned relative to the opening link.</p>
-</div>
-
-<script>
-$(document).ready(function () {
-
-    $('#my_tooltip').popup({
-        type: 'tooltip',
-        vertical: 'top',
-        transition: '0.3s all 0.1s',
-        tooltipanchor: $('#my_tooltip_open')
-    });
-
-
-});
-</script>
-
-
-
-
 
 <!-- Active background -->
 
@@ -856,6 +819,30 @@ $(document).ready(function () {
 </script>
 
 
+
+
+<!-- Tooltip -->
+
+<div id="my_tooltip" class="well">
+    <a href="#" class="my_tooltip_close" style="float:right;padding:0 0.4em;">×</a>
+    <h4>Tooltip example</h4>
+    <p>Tooltip content will be positioned relative to the opening link.</p>
+    <button class="my_tooltip_close fall_open btn btn-default">Next example</button>
+    <button class="my_tooltip_close btn btn-default">Close</button>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    $('#my_tooltip').popup({
+        type: 'tooltip',
+        vertical: 'top',
+        transition: '0.3s all 0.1s',
+        tooltipanchor: $('#my_tooltip_open')
+    });
+
+});
+</script>
 
 
 
@@ -883,6 +870,7 @@ $(document).ready(function () {
     });
 </code>
 </pre>
+    <button class="fall_close other_open btn btn-default">Next example</button>
     <button class="fall_close btn btn-default">Close</button>
 </div>
 
@@ -949,17 +937,19 @@ $(document).ready(function () {
 
 
 
-<!-- Viewport Image -->
+<!-- Other examples -->
 
-<div id="viewport_image">
-    <div id="viewport_image_holder">
-        <img src="http://foundwalls.com/wallpapers/2013/02/Autumn-wilderness-1080x1920.jpg" alt="" />
-    </div>
+<div id="other" class="well" style="max-width:44em; min-width: 30em;">
+    <h4>Other examples:</h4>
+    <ul>
+        <li><a target="_blank" href="http://jsbin.com/makajini/1/edit">Viewport Image</a></li>
+    </ul>
+    <button class="other_close btn btn-default">Close</button>
 </div>
 
 <script>
 $(document).ready(function () {
-  $('#viewport_image').popup();
+  $('#other').popup();
 });
 </script>
 
