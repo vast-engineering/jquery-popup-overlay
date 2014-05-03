@@ -70,7 +70,7 @@
     <div class="container">
         <div class="page-header col-md-10 col-md-offset-1">
             <h1>jQuery Popup Overlay</h1>
-            <p>jQuery plugin for responsive and accessible modal windows and tooltips.</p>
+            <p>jQuery plugin for responsive and accessible modal windows and tooltips</p>
             <p class="h1">
                 <a href="https://github.com/vast-engineering/jquery-popup-overlay/archive/gh-pages.zip" class="btn btn-primary btn-success btn-lg"><span class="fontawesome-download-alt"></span> Download</a>
                 <a href="https://github.com/vast-engineering/jquery-popup-overlay" class="btn btn-lg btn-default"><span class="fontawesome-github"></span> View project on GitHub</a>
@@ -92,8 +92,8 @@
             <a class="initialism fadeandscale_open btn btn-success" href="#fadeandscale">Fade &amp; scale</a>
             <button class="initialism slide_open btn btn-success">Slide</button>
             <button class="initialism standalone_open btn btn-success">Stand alone</button>
-            <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success">Tooltip</a>
             <a class="initialism active_bg_open btn btn-success" href="#active_bg">Active background</a>
+            <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success" id="my_tooltip_open">Tooltip</a>
             <button class="initialism fall_open btn btn-success">Callback events</button>
         </p>
 
@@ -275,7 +275,7 @@
         </tr>
         <tr>
             <td>focuselement</td>
-            <td>boolean</td>
+            <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>'#<i>{popup_id}</i>'</td>
             <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element <code>#my_popup</code> will recieve the initial focus.</td>
         </tr>
@@ -290,7 +290,7 @@
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td></td>
             <td><p>Sets a page container (to help screen reader users). Page container should be the element that surrounds all the content on the page (e.g. '.container' in the case of this very page).</p>
-                <p class="text-muted"><small>It's highly recommended that you set the page container to help some screen readers read the modal dialog correctly. When the popup is visible, <code>aria-hidden="true"</code> is set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. You can set `pagecontainer` once per website (e.g. <code>$.fn.popup.defaults.pagecontainer = '.container'</code>).</small></p></td>
+                <p class="text-muted"><small>It's highly recommended that you set the page container to help some screen readers read the modal dialog correctly. Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. You can set `pagecontainer` once per website (e.g. <code>$.fn.popup.defaults.pagecontainer = '.container'</code>).</small></p></td>
         </tr>
         <tr>
             <td>outline</td>
@@ -325,23 +325,23 @@
             <td></td>
             <td>
                 <p>Sets CSS transition when showing and hiding a popup.</p>
-                <p class="text-muted"><small>Use this if you don't need separate transition for background or if you need to transition only selected properties – otherwise set custom transitions in CSS.</small></p>
+                <p class="text-muted"><small>Use this if you don't need separate transition for background, or different transition for opening and closing the popup, or if you need to transition only selected properties – otherwise set custom transitions directly in CSS.</small></p>
                 <p class="text-muted"><small>Simple fade effect <code>$('#my_popup').popup({transition: 'all 0.3s'})</code> is equivalent to <code>#my_popup, #my_popup_wrapper, #my_popup_background {transition: all 0.3s;}</code></small></p>
                 <p class="text-muted"><small>Setting fade effect for all popups on the site: <code>$.fn.popup.defaults.transition = 'all 0.3s';</code> is equivalent to <code>.popup_content, .popup_wrapper, .popup_background {transition: all 0.3s;}</code></small></p>
             </td>
         </tr>
         <tr>
-            <td>triggerevent</td>
-            <td>event</td>
+            <td>tooltipanchor</td>
+            <td>object <br /><small class="text-muted"><i>JQuery or DOM object</i></small></td>
             <td></td>
             <td>
-                <p>Passes an event that triggered the popup.</p>
-                <p class="text-muted"><small>Useful for tooltips showing on mouseover:</small></p>
+                <p>Sets an element to be an anchor for tooltip position.</p>
+                <p class="text-muted"><small>For example, for multiple opening links using the same tooltip on mouseover:</small></p>
 <pre class="prettyprint">
 <code>$('.my_popup_open').on({
     mouseenter: function(event) {
         $('#my_popup').popup({
-            triggerevent: event,
+            tooltipanchor: event.target,
             autoopen: true,
             type: 'tooltip'
         });
@@ -557,7 +557,8 @@ $(document).ready(function () {
     <h4>Fade example</h4>
 <pre class="prettyprint">
 <code>$('#fade').popup({
-  transition: 'all 0.3s'
+  transition: 'all 0.3s',
+  scrolllock: true // optional
 });</code>
 </pre>
     <p>Or you can set transitions directly in CSS:</p>
@@ -578,7 +579,7 @@ $(document).ready(function () {
 
     $('#fade').popup({
       transition: 'all 0.3s',
-      autozindex: true
+      scrolllock: true
     });
 
 });
@@ -675,6 +676,7 @@ $(document).ready(function () {
 }
 </code>
 </pre>
+    <button class="slide_close standalone_open btn btn-default">Next example</button>
     <button class="slide_close btn btn-default">Close</button>
 </div>
 
@@ -727,6 +729,7 @@ $(document).ready(function () {
 <!-- Stand alone -->
 
 <div id="standalone">
+<h4>Stand alone example</h4>
 <pre class="prettyprint">
 <code>$('#standalone').popup({
   color: 'white',
@@ -745,6 +748,8 @@ $(document).ready(function () {
 }
 </code>
 </pre>
+    <button class="standalone_close active_bg_open btn btn-default">Next example</button>
+    <button class="standalone_close btn btn-default">Close</button>
 </div>
 
 
@@ -802,8 +807,11 @@ $(document).ready(function () {
 
     $('#my_tooltip').popup({
         type: 'tooltip',
-        vertical: 'top'
+        vertical: 'top',
+        transition: '0.3s all 0.1s',
+        tooltipanchor: $('#my_tooltip_open')
     });
+
 
 });
 </script>
@@ -818,6 +826,7 @@ $(document).ready(function () {
     <h4>Active background example</h4>
     <p>You can click on any element at the background : they still active and won't close the popup.</p>
     <p>You can close the dialog by pressing the <kbd>Esc</kbd> key, or by clicking on the Close button.</p>
+    <button class="active_bg_close my_tooltip_open btn btn-default">Next example</button>
     <button class="active_bg_close btn btn-default">Close</button>
 </div>
 
