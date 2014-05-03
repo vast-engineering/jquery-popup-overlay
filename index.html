@@ -30,6 +30,9 @@
 
     <!-- Custom styles for the demo page -->
     <style>
+    img {
+        max-width: 100%;
+    }
     .well {
         box-shadow: 0 0 10px rgba(0,0,0,0.3);
         display:none;
@@ -62,6 +65,19 @@
         letter-spacing: 1px;
         font-size: 12px;
     }
+    #viewport_image {
+        padding: 2vmin;
+        background: white;
+    }
+    #viewport_image #viewport_image_holder {
+
+    }
+    #viewport_image #viewport_image_holder img {
+        max-height: 92vh;
+        max-width: 94vw;
+    }
+
+
     </style>
 </head>
 <body>
@@ -95,6 +111,7 @@
             <a class="initialism active_bg_open btn btn-success" href="#active_bg">Active background</a>
             <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success" id="my_tooltip_open">Tooltip</a>
             <button class="initialism fall_open btn btn-success">Callback events</button>
+            <a class="initialism viewport_image_open btn btn-success" href="#basic">Viewport Image</a>
         </p>
 
         <h2>Features</h2>
@@ -926,6 +943,27 @@ $(document).ready(function () {
         transform: translateZ(0px) rotateX(0deg);
     }
 </style>
+
+
+
+
+
+
+<!-- Viewport Image -->
+
+<div id="viewport_image">
+    <div id="viewport_image_holder">
+        <img src="http://foundwalls.com/wallpapers/2013/02/Autumn-wilderness-1080x1920.jpg" alt="" />
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+  $('#viewport_image').popup();
+});
+</script>
+
+
 
 
 
