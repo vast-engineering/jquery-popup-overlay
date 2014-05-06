@@ -462,7 +462,7 @@
             // `onclose` callback event
             callback(el, lastclicked[el.id], options.onclose);
 
-            if (transitionsupport) {
+            if (transitionsupport && $el.css('transition-duration') !== '0s') {
                 $el.one('transitionend', function(e) {
 
                     if (!($el.data('popup-visible'))) {
