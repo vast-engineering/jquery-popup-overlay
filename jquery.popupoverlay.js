@@ -318,7 +318,12 @@
                 }
 
                 // Remember which element had focus before opening a popup
-                focusedelementbeforepopup = document.activeElement;
+                try {
+    	            focusedelementbeforepopup = document.activeElement;
+                }
+            	catch (e) {
+               	    focusedelementbeforepopup = document.body;
+		}
 
                 // Handler: Keep focus inside dialog box
                 if (options.keepfocus) {
