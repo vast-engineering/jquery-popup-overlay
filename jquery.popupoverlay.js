@@ -18,6 +18,7 @@
     var stack = [];
     var transitionsupport = null;
     var opentimer;
+    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
 
     var methods = {
 
@@ -94,8 +95,13 @@
                 position: 'absolute'
             });
 
+            // Make div clickable in iOS
+            if (iOS) {
+                $wrapper.css('cursor', 'pointer');
+            }
+
             if (options.type == 'overlay') {
-                $wrapper.css({overflow: 'auto'});
+                $wrapper.css('overflow','auto');
             }
 
             $el.css({
@@ -155,10 +161,10 @@
 
                 css = {
                     position: 'fixed',
+                    width: '100%',
+                    height: '100%',
                     top: 0,
-                    right: 0,
                     left: 0,
-                    bottom: 0,
                     textAlign: 'center'
                 };
 
@@ -629,7 +635,7 @@
     });
 
     // Hide popup if clicked outside of it
-    $(document).on('click touchstart', function (event) {
+    $(document).on('click', function (event) {
         if(stack.length) {
             var elementId = stack[stack.length - 1];
             var el = document.getElementById(elementId);
