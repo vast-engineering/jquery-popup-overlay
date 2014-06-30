@@ -618,7 +618,7 @@
         var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
         var elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
         if (typeof func == 'function') {
-            func(el, elementclicked);
+            func.call($(el), el, elementclicked);
         }
     };
 
