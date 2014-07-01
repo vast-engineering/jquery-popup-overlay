@@ -1,7 +1,7 @@
 /*!
  * jQuery Popup Overlay
  *
- * @version 1.7.1
+ * @version 1.7.2
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
@@ -204,22 +204,44 @@
                 $el.attr('aria-labelledby', $(openelement).attr('id'));
             }
 
-            // Handler: Show popup when clicked on `open` element
-            $(document).on('click', openelement, function (event) {
-                event.preventDefault();
-
-                var ord = $(this).data('popup-ordinal');
-                setTimeout(function() { // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
-                    methods.show(el, ord);
-                }, 0);
-            });
-
             // Handler: `close` element
             var closeelement = (options.closeelement) ? options.closeelement : ('.' + el.id + closesuffix);
             $(document).on('click', closeelement, function (e) {
                 methods.hide(el);
                 e.preventDefault();
             });
+
+            // Show and hide tooltips on hover
+            if(options.action == 'hover'){
+                options.keepfocus = false;
+
+                // Handler: mouseenter, focusin
+                $(openelement).on('mouseenter focusin', function (event) {
+                    var ord = $(this).data('popup-ordinal');
+                    methods.show(el, ord);
+                });
+
+                // Handler: mouseleave, focusout
+                $(openelement).on('mouseleave focusout', function (event) {
+                    if(!$(event.target).parents().andSelf().is('#' + el.id)) {
+                        console.log($(event.target));
+                        var ord = $(this).data('popup-ordinal');
+                         methods.hide(el, ord);
+                    }
+                });
+
+            } else {
+
+                // Handler: Show popup when clicked on `open` element
+                $(document).on('click', openelement, function (event) {
+                    event.preventDefault();
+
+                    var ord = $(this).data('popup-ordinal');
+                    setTimeout(function() { // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
+                        methods.show(el, ord);
+                    }, 0);
+                });
+            }
 
             if (options.detach) {
                 $el.hide().detach();
