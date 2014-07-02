@@ -1,6 +1,6 @@
 {
   "name": "jquery-popup-overlay",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "Lightweight modal popup overlay for jquery",
   "main": "index.js",
   "scripts": {

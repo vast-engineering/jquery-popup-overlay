@@ -1,7 +1,7 @@
 /*!
  * jQuery Popup Overlay
  *
- * @version 1.7.2
+ * @version 1.7.3
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
