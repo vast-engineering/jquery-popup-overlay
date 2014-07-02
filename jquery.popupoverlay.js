@@ -441,13 +441,17 @@
             if (stack.length === 1) {
                 $('html').removeClass('popup_visible').removeClass('popup_visible_' + el.id);
             } else {
+                if($('html').hasClass('popup_visible_' + el.id)) {
                     $('html').removeClass('popup_visible_' + el.id);
                 }
+            }
 
             // Remove last opened popup from the stack
             stack.pop();
 
+            if($('html').hasClass('popup_content_visible')) {
                 $el.removeClass('popup_content_visible');
+            }
 
             if (options.keepfocus) {
                 // Focus back on saved element
