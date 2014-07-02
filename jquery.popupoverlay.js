@@ -216,18 +216,13 @@
                 options.keepfocus = false;
 
                 // Handler: mouseenter, focusin
-                $(openelement).on('mouseenter focusin', function (event) {
-                    var ord = $(this).data('popup-ordinal');
-                    methods.show(el, ord);
+                $(openelement).on('mouseenter', function (event) {
+                    methods.show(el, $(this).data('popup-ordinal'));
                 });
 
                 // Handler: mouseleave, focusout
-                $(openelement).on('mouseleave focusout', function (event) {
-                    if(!$(event.target).parents().andSelf().is('#' + el.id)) {
-                        console.log($(event.target));
-                        var ord = $(this).data('popup-ordinal');
-                         methods.hide(el, ord);
-                    }
+                $(openelement).on('mouseleave', function (event) {
+                    methods.hide(el);
                 });
 
             } else {
@@ -446,13 +441,13 @@
             if (stack.length === 1) {
                 $('html').removeClass('popup_visible').removeClass('popup_visible_' + el.id);
             } else {
-                $('html').removeClass('popup_visible_' + el.id);
-            }
+                    $('html').removeClass('popup_visible_' + el.id);
+                }
 
             // Remove last opened popup from the stack
             stack.pop();
 
-            $el.removeClass('popup_content_visible');
+                $el.removeClass('popup_content_visible');
 
             if (options.keepfocus) {
                 // Focus back on saved element
