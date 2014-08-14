@@ -1,0 +1,29 @@
+{
+  "name": "jquery-popup-overlay",
+  "main": "index.js",
+  "version": "1.7.3",
+  "homepage": "https://github.com/vast-engineering/jquery-popup-overlay",
+  "authors": [
+    "Vast Engineering https://github.com/orgs/vast-engineering/people"
+  ],
+  "description": "jQuery plugin for responsive and accessible modal windows and tooltips",
+  "moduleType": [
+    "commonjs"
+  ],
+  "keywords": [
+    "jquery",
+    "popup",
+    "responsive",
+    "modal",
+    "tooltips",
+    "plugin"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
