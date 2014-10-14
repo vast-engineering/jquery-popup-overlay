@@ -12,7 +12,7 @@
 	var zindexvalues = [];
 	var lastclicked = [];
 	var scrollbarwidth;
-	var bodymarginright = null;
+	var scrollparentmarginright = null;
 	var opensuffix = '_open';
 	var closesuffix = '_close';
 	var stack = [];
@@ -48,7 +48,7 @@
 				$scrollParent = $(options.scrollparent),
 				css;
 
-			bodymarginright = parseInt($body.css('margin-right'), 10);
+			scrollparentmarginright = parseInt($scrollParent.css('margin-right'), 10);
 			transitionsupport = document.body.style.webkitTransition !== undefined ||
                                 document.body.style.MozTransition !== undefined ||
                                 document.body.style.msTransition !== undefined ||
@@ -340,7 +340,7 @@
 			if (options.scrolllock) {
 				$scrollParent.css('overflow', 'hidden');
 				if ($scrollParent.height() > $window.height()) {
-					$scrollParent.css('margin-right', bodymarginright + scrollbarwidth);
+					$scrollParent.css('margin-right', scrollparentmarginright + scrollbarwidth);
 				}
 			}
 
@@ -506,7 +506,7 @@
 						setTimeout(function () {
 							$scrollParent.css({
 								overflow: 'visible',
-								'margin-right': bodymarginright
+								'margin-right': 0
 							});
 							// Add addition css properties to scroll parent
 							if (options.scrollparenthidecss && options.scrollparenthidecss !== "") {
@@ -529,7 +529,7 @@
 					setTimeout(function () {
 						$scrollParent.css({
 							overflow: 'visible',
-							'margin-right': bodymarginright
+							'margin-right': scrollparentmarginright
 						});
 						// Add addition css properties to scroll parent
 						if (options.scrollparenthidecss && options.scrollparenthidecss !== "") {
