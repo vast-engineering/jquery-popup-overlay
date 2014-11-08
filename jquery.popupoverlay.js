@@ -642,7 +642,7 @@
             var elementId = stack[stack.length - 1];
             var el = document.getElementById(elementId);
 
-            if ($(el).data('popupoptions').escape && event.keyCode == 27 && $(el).data('popup-visible')) {
+            if ($(el).data('popupoptions').escape && event.keyCode == 27) {
                 methods.hide(el);
             }
         }
@@ -662,7 +662,8 @@
             }
 
             // Click outside of popup
-            if ($(el).data('popupoptions').blur && !$(event.target).parents().andSelf().is('#' + elementId) && $(el).data('popup-visible') && event.which !== 2) {
+            if ($(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2) {
+
                 methods.hide(el);
 
                 if ($(el).data('popupoptions').type === 'overlay') {
