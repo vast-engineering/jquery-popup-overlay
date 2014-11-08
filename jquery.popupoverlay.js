@@ -204,13 +204,6 @@
                 $el.attr('aria-labelledby', $(openelement).attr('id'));
             }
 
-            // Handler: `close` element
-            var closeelement = (options.closeelement) ? options.closeelement : ('.' + el.id + closesuffix);
-            $(document).on('click', closeelement, function (e) {
-                methods.hide(el);
-                e.preventDefault();
-            });
-
             // Show and hide tooltips on hover
             if(options.action == 'hover'){
                 options.keepfocus = false;
@@ -655,12 +648,20 @@
         }
     });
 
-    // Hide popup if clicked outside of it
+    // Hide popup on click
     $(document).on('click', function (event) {
         if(stack.length) {
             var elementId = stack[stack.length - 1];
             var el = document.getElementById(elementId);
+            var closeButton = ($(el).data('popupoptions').closeelement) ? $(el).data('popupoptions').closeelement : ('.' + el.id + closesuffix);
 
+            // Click on Close button
+            if ($(event.target).closest(closeButton).length) {
+                event.preventDefault();
+                methods.hide(el);
+            }
+
+            // Click outside of popup
             if ($(el).data('popupoptions').blur && !$(event.target).parents().andSelf().is('#' + elementId) && $(el).data('popup-visible') && event.which !== 2) {
                 methods.hide(el);
 
