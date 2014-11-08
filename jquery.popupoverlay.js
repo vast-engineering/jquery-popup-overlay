@@ -629,6 +629,7 @@
      * @param {function} func - callback function
      */
     var callback = function (el, ordinal, func) {
+        var options = $(el).data('popupoptions');
         var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
         var elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
         if (typeof func == 'function') {
