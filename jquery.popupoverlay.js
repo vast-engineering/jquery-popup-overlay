@@ -458,7 +458,9 @@
 				// Focus back on saved element
 				setTimeout(function () {
 					if ($($el.data('focusedelementbeforepopup')).is(':visible')) {
-						$el.data('focusedelementbeforepopup').focus();
+						if ($el.data('focusedelementbeforepopup') && $el.data('focusedelementbeforepopup').focus) {
+							$el.data('focusedelementbeforepopup').focus();
+						}
 					}
 				}, 0);
 			}
