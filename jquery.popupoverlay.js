@@ -120,7 +120,8 @@
 			}
 
 			if (options.transition) {
-				$el.css('transition', options.transition);
+				$wrapper.css('-webkit-transition', options.transition);
+				$wrapper.css('-moz-transition', options.transition);
 				$wrapper.css('transition', options.transition);
 			}
 
@@ -338,7 +339,11 @@
 
 			// Disable background layer scrolling when popup is opened
 			if (options.scrolllock) {
-				$scrollParent.css('overflow', 'hidden');
+				$scrollParent.css({
+					'overflow': 'hidden',
+					"position": "fixed"
+				});
+
 				if ($scrollParent.height() > $window.height()) {
 					$scrollParent.css('margin-right', scrollparentmarginright + scrollbarwidth);
 				}
@@ -507,8 +512,9 @@
 					if (options.scrolllock) {
 						setTimeout(function () {
 							$scrollParent.css({
-								overflow: 'visible',
-								'margin-right': 0
+								"overflow": 'visible',
+								'margin-right': 0,
+								'position': 'static'
 							});
 							// Add addition css properties to scroll parent
 							if (options.scrollparenthidecss && options.scrollparenthidecss !== "") {
@@ -530,8 +536,9 @@
 				if (options.scrolllock) {
 					setTimeout(function () {
 						$scrollParent.css({
-							overflow: 'visible',
-							'margin-right': scrollparentmarginright
+							"overflow": 'visible',
+							'margin-right': scrollparentmarginright,
+							'position': 'static'
 						});
 						// Add addition css properties to scroll parent
 						if (options.scrollparenthidecss && options.scrollparenthidecss !== "") {
