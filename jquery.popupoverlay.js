@@ -345,7 +345,7 @@
                             parseInt($el.css('margin-top'), 10) +
                             parseInt($el.css('margin-bottom'), 10)
                         )
-                    )/2 +'px',
+                    )/2 +'px'
                 });
             }
 
