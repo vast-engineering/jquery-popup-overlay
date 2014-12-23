@@ -663,8 +663,7 @@
             }
 
             // Click outside of popup
-            if ($(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2) {
-
+            if ($(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2 && $(event.target).is(':visible')) {
                 methods.hide(el);
 
                 if ($(el).data('popupoptions').type === 'overlay') {
