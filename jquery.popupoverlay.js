@@ -325,7 +325,7 @@
                 });
 
                 $('html').addClass('popup_visible').addClass('popup_visible_' + el.id);
-                $el.addClass('popup_content_visible');
+                $wrapper.addClass('popup_wrapper_visible');
             }, 20); // 20ms required for opening animation to occur in FF
 
             // Disable background layer scrolling when popup is opened
@@ -442,8 +442,8 @@
             // Remove last opened popup from the stack
             stack.pop();
 
-            if($('html').hasClass('popup_content_visible')) {
-                $el.removeClass('popup_content_visible');
+            if($wrapper.hasClass('popup_wrapper_visible')) {
+                $wrapper.removeClass('popup_wrapper_visible');
             }
 
             if (options.keepfocus) {
