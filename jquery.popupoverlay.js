@@ -231,6 +231,10 @@
                 });
             }
 
+            if (options.closebutton) {
+                methods.addclosebutton(el);
+            }
+
             if (options.detach) {
                 $el.hide().detach();
             } else {
@@ -617,6 +621,26 @@
                     $el.css('vertical-align', 'middle');
                 }
             }
+        },
+
+        /**
+         * Add-close-button method
+         *
+         * @param {object} el - popup instance DOM node
+         */
+        addclosebutton: function (el) {
+            var genericCloseButton;
+
+            if ($(el).data('popupoptions').closebuttonmarkup) {
+                genericCloseButton = $(options.closebuttonmarkup).addClass(el.id + '_close');
+            } else {
+                genericCloseButton = '<button class="popup_close ' + el.id + '_close" title="Close" aria-label="Close"><span aria-hidden="true">×</span></button>';
+            }
+
+            if ($el.data('popup-initialized')){
+                $el.append(genericCloseButton);
+            }
+
         }
 
     };
@@ -740,6 +764,8 @@
         setzindex: true,
         autozindex: false,
         scrolllock: false,
+        closebutton: false,
+        closebuttonmarkup: null,
         keepfocus: true,
         focuselement: null,
         focusdelay: 50,
