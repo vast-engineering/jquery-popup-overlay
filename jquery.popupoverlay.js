@@ -754,6 +754,13 @@
         });
     };
 
+    // destroy all popups
+    $.fn.popup.destroyall = function () {
+        $('.popup_wrapper').remove();
+        $('.popup_background').remove();
+        stack = [];
+    };
+
     $.fn.popup.defaults = {
         type: 'overlay',
         autoopen: false,
