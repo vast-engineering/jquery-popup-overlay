@@ -43,7 +43,6 @@
         _initonce: function (el) {
             var $el = $(el);
             var $body = $('body');
-            var $wrapper;
             var options = $el.data('popupoptions');
             var css;
 
@@ -83,36 +82,11 @@
 
             $el.addClass('popup_content');
 
-            $body.prepend(el);
-
-            $el.wrap('<div id="' + el.id + '_wrapper" class="popup_wrapper" />');
-
-            $wrapper = $('#' + el.id + '_wrapper');
-
-            $wrapper.css({
-                opacity: 0,
-                visibility: 'hidden',
-                position: 'absolute'
-            });
-
-            // Make div clickable in iOS
-            if (iOS) {
-                $wrapper.css('cursor', 'pointer');
-            }
-
-            if (options.type == 'overlay') {
-                $wrapper.css('overflow','auto');
-            }
-
             $el.css({
                 opacity: 0,
                 visibility: 'hidden',
                 display: 'inline-block'
             });
-
-            if (options.setzindex && !options.autozindex) {
-                $wrapper.css('z-index', '100001');
-            }
 
             if (!options.outline) {
                 $el.css('outline', 'none');
@@ -120,69 +94,16 @@
 
             if (options.transition) {
                 $el.css('transition', options.transition);
-                $wrapper.css('transition', options.transition);
             }
 
             // Hide popup content from screen readers initially
             $el.attr('aria-hidden', true);
-
-            if ((options.background) && (!$('#' + el.id + '_background').length)) {
-
-                $body.prepend('<div id="' + el.id + '_background" class="popup_background"></div>');
-
-                var $background = $('#' + el.id + '_background');
-
-                $background.css({
-                    opacity: 0,
-                    visibility: 'hidden',
-                    backgroundColor: options.color,
-                    position: 'fixed',
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0
-                });
-
-                if (options.setzindex && !options.autozindex) {
-                    $background.css('z-index', '100000');
-                }
-
-                if (options.transition) {
-                    $background.css('transition', options.transition);
-                }
-            }
 
             if (options.type == 'overlay') {
                 $el.css({
                     textAlign: 'left',
                     position: 'relative',
                     verticalAlign: 'middle'
-                });
-
-                css = {
-                    position: 'fixed',
-                    width: '100%',
-                    height: '100%',
-                    top: 0,
-                    left: 0,
-                    textAlign: 'center'
-                };
-
-                if(options.backgroundactive){
-                    css.position = 'relative';
-                    css.height = '0';
-                    css.overflow = 'visible';
-                }
-
-                $wrapper.css(css);
-
-                // CSS vertical align helper
-                $wrapper.append('<div class="popup_align" />');
-
-                $('.popup_align').css({
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    height: '100%'
                 });
             }
 
@@ -261,8 +182,91 @@
 
             var $body = $('body');
             var options = $el.data('popupoptions');
-            var $wrapper = $('#' + el.id + '_wrapper');
             var $background = $('#' + el.id + '_background');
+
+            $body.prepend(el);
+
+            $el.wrap('<div id="' + el.id + '_wrapper" class="popup_wrapper" />');
+
+            $wrapper = $('#' + el.id + '_wrapper');
+
+            $wrapper.css({
+                opacity: 0,
+                visibility: 'hidden',
+                position: 'absolute'
+            });
+
+            // Make div clickable in iOS
+            if (iOS) {
+                $wrapper.css('cursor', 'pointer');
+            }
+
+            if (options.setzindex && !options.autozindex) {
+                $wrapper.css('z-index', '100001');
+            }
+
+            if (options.transition) {
+                $wrapper.css('transition', options.transition);
+            }
+
+            if (options.type == 'overlay') {
+                $wrapper.css('overflow','auto');
+            }
+
+            if (options.type == 'overlay') {
+
+                css = {
+                    position: 'fixed',
+                    width: '100%',
+                    height: '100%',
+                    top: 0,
+                    left: 0,
+                    textAlign: 'center'
+                };
+
+                if(options.backgroundactive){
+                    css.position = 'relative';
+                    css.height = '0';
+                    css.overflow = 'visible';
+                }
+
+                $wrapper.css(css);
+
+                // CSS vertical align helper
+                $wrapper.append('<div class="popup_align" />');
+
+                $('.popup_align').css({
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    height: '100%'
+                });
+            }
+
+            if ((options.background) && (!$('#' + el.id + '_background').length)) {
+
+                $body.prepend('<div id="' + el.id + '_background" class="popup_background"></div>');
+
+                var $background = $('#' + el.id + '_background');
+
+                $background.css({
+                    opacity: 0,
+                    visibility: 'hidden',
+                    backgroundColor: options.color,
+                    position: 'fixed',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                });
+
+                if (options.setzindex && !options.autozindex) {
+                    $background.css('z-index', '100000');
+                }
+
+                if (options.transition) {
+                    $background.css('transition', options.transition);
+                }
+            }
 
             // `beforeopen` callback event
             callback(el, ordinal, options.beforeopen);
@@ -491,7 +495,8 @@
 
                     if (!($el.data('popup-visible'))) {
                         if (options.detach) {
-                            $el.hide().detach();
+                            $wrapper.hide().detach();
+                            $background.hide().detach();
                         } else {
                             $wrapper.hide();
                         }
@@ -511,7 +516,8 @@
                 });
             } else {
                 if (options.detach) {
-                    $el.hide().detach();
+                    $wrapper.hide().detach();
+                    $background.hide().detach();
                 } else {
                     $wrapper.hide();
                 }
@@ -771,7 +777,7 @@
         focusdelay: 50,
         outline: false,
         pagecontainer: null,
-        detach: false,
+        detach: true,
         openelement: null,
         closeelement: null,
         transition: null,
