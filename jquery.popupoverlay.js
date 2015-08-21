@@ -421,9 +421,10 @@
         /**
          * Hide method
          *
-         * @param {object} el - popup instance DOM node
+         * @param object el - popup instance DOM node
+         * @param boolean outerClick - click on the outer content below popup
          */
-        hide: function (el) {
+        hide: function (el, outerClick) {
             if(opentimer) clearTimeout(opentimer);
 
             var $body = $('body');
@@ -450,8 +451,8 @@
                 $wrapper.removeClass('popup_wrapper_visible');
             }
 
-            if (options.keepfocus) {
                 // Focus back on saved element
+            if (options.keepfocus && !outerClick) {
                 setTimeout(function() {
                     if ($($el.data('focusedelementbeforepopup')).is(':visible')) {
                         $el.data('focusedelementbeforepopup').focus();
@@ -680,18 +681,26 @@
             var el = document.getElementById(elementId);
             var closeButton = ($(el).data('popupoptions').closeelement) ? $(el).data('popupoptions').closeelement : ('.' + el.id + closesuffix);
 
-            // Click on Close button
+            // If Close button clicked
             if ($(event.target).closest(closeButton).length) {
                 event.preventDefault();
                 methods.hide(el);
             }
 
-            // Click outside of popup
+            // If clicked outside of popup
             if ($(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2 && $(event.target).is(':visible')) {
+
+                if ($(el).data('popupoptions').background) {
+                    // If clicked on popup cover
                 methods.hide(el);
 
-                if ($(el).data('popupoptions').type === 'overlay') {
-                    event.preventDefault(); // iOS will trigger click on the links below the overlay when clicked on the overlay if we don't prevent default action
+                    // Older iOS/Safari will trigger a click on the elements below the cover,
+                    // when tapping on the cover, so the default action needs to be prevented.
+                    event.preventDefault();
+
+                } else {
+                    // If clicked on outer content
+                    methods.hide(el, true);
                 }
             }
         }
