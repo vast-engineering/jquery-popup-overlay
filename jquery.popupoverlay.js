@@ -19,6 +19,7 @@
     var transitionsupport = null;
     var opentimer;
     var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    var focusableElementsString = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
 
     var methods = {
 
@@ -451,7 +452,7 @@
                 $wrapper.removeClass('popup_wrapper_visible');
             }
 
-                // Focus back on saved element
+            // Focus back on saved element
             if (options.keepfocus && !outerClick) {
                 setTimeout(function() {
                     if ($($el.data('focusedelementbeforepopup')).is(':visible')) {
@@ -692,7 +693,7 @@
 
                 if ($(el).data('popupoptions').background) {
                     // If clicked on popup cover
-                methods.hide(el);
+                    methods.hide(el);
 
                     // Older iOS/Safari will trigger a click on the elements below the cover,
                     // when tapping on the cover, so the default action needs to be prevented.
@@ -707,15 +708,48 @@
     });
 
     // Keep keyboard focus inside of popup
-    $(document).on('focusin', function(event) {
+    $(document).on('keydown', function(event) {
         if(stack.length) {
-            var elementId = stack[stack.length - 1];
-            var el = document.getElementById(elementId);
+            // If tab or shift-tab pressed
+            if (event.which == 9) {
 
-            if ($(el).data('popupoptions').keepfocus) {
-                if (!el.contains(event.target)) {
-                    event.stopPropagation();
-                    el.focus();
+                var elementId = stack[stack.length - 1];
+                var el = document.getElementById(elementId);
+
+                // Get list of all children elements in given object
+                var popupItems = $(el).find('*');
+
+                // Get list of focusable items
+                var focusableItems;
+                focusableItems = popupItems.filter(focusableElementsString).filter(':visible');
+
+                // Get currently focused item
+                var focusedItem;
+                focusedItem = $(':focus');
+
+                // Get the number of focusable items
+                var numberOfFocusableItems;
+                numberOfFocusableItems = focusableItems.length;
+
+                // Get the index of the currently focused item
+                var focusedItemIndex;
+                focusedItemIndex = focusableItems.index(focusedItem);
+
+                if (event.shiftKey) {
+                    // Back tab
+                    // If focused on first item and user preses back-tab, go to the last focusable item
+                    if (focusedItemIndex === 0) {
+                        focusableItems.get(numberOfFocusableItems - 1).focus();
+                        event.preventDefault();
+                    }
+
+                } else {
+                    // Forward tab
+                    // If focused on the last item and user preses tab, go to the first focusable item
+                    if (focusedItemIndex == numberOfFocusableItems - 1) {
+                        focusableItems.get(0).focus();
+                        event.preventDefault();
+                    }
                 }
             }
         }
