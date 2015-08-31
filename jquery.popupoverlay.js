@@ -712,8 +712,6 @@
         if(stack.length && event.which == 9) {
 
             // If tab or shift-tab pressed
-            event.preventDefault();
-
             var elementId = stack[stack.length - 1];
             var el = document.getElementById(elementId);
 
@@ -735,12 +733,14 @@
             // If popup doesn't contain focusable elements, focus popup itself
             if (numberOfFocusableItems === 0) {
                 $(el).focus();
+                event.preventDefault();
             } else {
                 if (event.shiftKey) {
                     // Back tab
                     // If focused on first item and user preses back-tab, go to the last focusable item
                     if (focusedItemIndex === 0) {
                         focusableItems.get(numberOfFocusableItems - 1).focus();
+                        event.preventDefault();
                     }
 
                 } else {
@@ -748,6 +748,7 @@
                     // If focused on the last item and user preses tab, go to the first focusable item
                     if (focusedItemIndex == numberOfFocusableItems - 1) {
                         focusableItems.get(0).focus();
+                        event.preventDefault();
                     }
                 }
             }
