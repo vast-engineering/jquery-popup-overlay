@@ -426,6 +426,14 @@
          * @param boolean outerClick - click on the outer content below popup
          */
         hide: function (el, outerClick) {
+            // Get index of popup ID inside of stack
+            var popupIdIndex = $.inArray(el.id, stack);
+
+            // If popup is not opened, ignore the rest of the function
+            if (popupIdIndex === -1) {
+                return;
+            }
+
             if(opentimer) clearTimeout(opentimer);
 
             var $body = $('body');
@@ -436,7 +444,6 @@
 
             $el.data('popup-visible', false);
 
-
             if (stack.length === 1) {
                 $('html').removeClass('popup_visible').removeClass('popup_visible_' + el.id);
             } else {
@@ -445,8 +452,8 @@
                 }
             }
 
-            // Remove last opened popup from the stack
-            stack.pop();
+            // Remove popup from the stack
+            stack.splice(popupIdIndex, 1);
 
             if($wrapper.hasClass('popup_wrapper_visible')) {
                 $wrapper.removeClass('popup_wrapper_visible');
