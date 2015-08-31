@@ -15,7 +15,7 @@
     var bodymarginright = null;
     var opensuffix = '_open';
     var closesuffix = '_close';
-    var stack = [];
+    var visiblePopupsArray = [];
     var transitionsupport = null;
     var opentimer;
     var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
@@ -271,9 +271,9 @@
             // Remember last clicked place
             lastclicked[el.id] = ordinal;
 
-            // Add popup id to popup stack
+            // Add popup id to visiblePopupsArray
             setTimeout(function() {
-                stack.push(el.id);
+                visiblePopupsArray.push(el.id);
             }, 0);
 
             // Calculating maximum z-index
@@ -426,8 +426,8 @@
          * @param boolean outerClick - click on the outer content below popup
          */
         hide: function (el, outerClick) {
-            // Get index of popup ID inside of stack
-            var popupIdIndex = $.inArray(el.id, stack);
+            // Get index of popup ID inside of visiblePopupsArray
+            var popupIdIndex = $.inArray(el.id, visiblePopupsArray);
 
             // If popup is not opened, ignore the rest of the function
             if (popupIdIndex === -1) {
@@ -444,7 +444,7 @@
 
             $el.data('popup-visible', false);
 
-            if (stack.length === 1) {
+            if (visiblePopupsArray.length === 1) {
                 $('html').removeClass('popup_visible').removeClass('popup_visible_' + el.id);
             } else {
                 if($('html').hasClass('popup_visible_' + el.id)) {
@@ -452,8 +452,8 @@
                 }
             }
 
-            // Remove popup from the stack
-            stack.splice(popupIdIndex, 1);
+            // Remove popup from the visiblePopupsArray
+            visiblePopupsArray.splice(popupIdIndex, 1);
 
             if($wrapper.hasClass('popup_wrapper_visible')) {
                 $wrapper.removeClass('popup_wrapper_visible');
@@ -672,8 +672,8 @@
 
     // Hide popup if ESC key is pressed
     $(document).on('keydown', function (event) {
-        if(stack.length) {
-            var elementId = stack[stack.length - 1];
+        if(visiblePopupsArray.length) {
+            var elementId = visiblePopupsArray[visiblePopupsArray.length - 1];
             var el = document.getElementById(elementId);
 
             if ($(el).data('popupoptions').escape && event.keyCode == 27) {
@@ -684,8 +684,8 @@
 
     // Hide popup on click
     $(document).on('click', function (event) {
-        if(stack.length) {
-            var elementId = stack[stack.length - 1];
+        if(visiblePopupsArray.length) {
+            var elementId = visiblePopupsArray[visiblePopupsArray.length - 1];
             var el = document.getElementById(elementId);
             var closeButton = ($(el).data('popupoptions').closeelement) ? $(el).data('popupoptions').closeelement : ('.' + el.id + closesuffix);
 
@@ -716,10 +716,10 @@
 
     // Keep keyboard focus inside of popup
     $(document).on('keydown', function(event) {
-        if(stack.length && event.which == 9) {
+        if(visiblePopupsArray.length && event.which == 9) {
 
             // If tab or shift-tab pressed
-            var elementId = stack[stack.length - 1];
+            var elementId = visiblePopupsArray[visiblePopupsArray.length - 1];
             var el = document.getElementById(elementId);
 
             // Get list of all children elements in given object
