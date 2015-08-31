@@ -709,38 +709,38 @@
 
     // Keep keyboard focus inside of popup
     $(document).on('keydown', function(event) {
-        if(stack.length) {
+        if(stack.length && event.which == 9) {
+
             // If tab or shift-tab pressed
-            if (event.which == 9) {
+            event.preventDefault();
 
-                var elementId = stack[stack.length - 1];
-                var el = document.getElementById(elementId);
+            var elementId = stack[stack.length - 1];
+            var el = document.getElementById(elementId);
 
-                // Get list of all children elements in given object
-                var popupItems = $(el).find('*');
+            // Get list of all children elements in given object
+            var popupItems = $(el).find('*');
 
-                // Get list of focusable items
-                var focusableItems;
-                focusableItems = popupItems.filter(focusableElementsString).filter(':visible');
+            // Get list of focusable items
+            var focusableItems = popupItems.filter(focusableElementsString).filter(':visible');
 
-                // Get currently focused item
-                var focusedItem;
-                focusedItem = $(':focus');
+            // Get currently focused item
+            var focusedItem = $(':focus');
 
-                // Get the number of focusable items
-                var numberOfFocusableItems;
-                numberOfFocusableItems = focusableItems.length;
+            // Get the number of focusable items
+            var numberOfFocusableItems = focusableItems.length;
 
-                // Get the index of the currently focused item
-                var focusedItemIndex;
-                focusedItemIndex = focusableItems.index(focusedItem);
+            // Get the index of the currently focused item
+            var focusedItemIndex = focusableItems.index(focusedItem);
 
+            // If popup doesn't contain focusable elements, focus popup itself
+            if (numberOfFocusableItems === 0) {
+                $(el).focus();
+            } else {
                 if (event.shiftKey) {
                     // Back tab
                     // If focused on first item and user preses back-tab, go to the last focusable item
                     if (focusedItemIndex === 0) {
                         focusableItems.get(numberOfFocusableItems - 1).focus();
-                        event.preventDefault();
                     }
 
                 } else {
@@ -748,7 +748,6 @@
                     // If focused on the last item and user preses tab, go to the first focusable item
                     if (focusedItemIndex == numberOfFocusableItems - 1) {
                         focusableItems.get(0).focus();
-                        event.preventDefault();
                     }
                 }
             }
