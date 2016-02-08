@@ -417,6 +417,13 @@
             } else {
                 callback(el, ordinal, options.opentransitionend);
             }
+
+            // Handler: Reposition tooltip when window is resized
+            if (options.type == 'tooltip') {
+                $(window).on('resize.' + el.id, function () {
+                    methods.reposition(el, ordinal);
+                });
+            }
         },
 
         /**
@@ -538,6 +545,9 @@
                 callback(el, lastclicked[el.id], options.closetransitionend);
             }
 
+            if (options.type == 'tooltip') {
+                $(window).off('resize.' + el.id);
+            }
         },
 
         /**
