@@ -83,7 +83,8 @@
 
             $el.addClass('popup_content');
 
-            $body.prepend(el);
+            // add element and background to the page
+            this.insert(el, options);
 
             $el.wrap('<div id="' + el.id + '_wrapper" class="popup_wrapper" />');
 
@@ -125,32 +126,6 @@
 
             // Hide popup content from screen readers initially
             $el.attr('aria-hidden', true);
-
-            if ((options.background) && (!$('#' + el.id + '_background').length)) {
-
-                $body.prepend('<div id="' + el.id + '_background" class="popup_background"></div>');
-
-                var $background = $('#' + el.id + '_background');
-
-                $background.css({
-                    opacity: 0,
-                    visibility: 'hidden',
-                    backgroundColor: options.color,
-                    position: 'fixed',
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0
-                });
-
-                if (options.setzindex && !options.autozindex) {
-                    $background.css('z-index', '100000');
-                }
-
-                if (options.transition) {
-                    $background.css('transition', options.transition);
-                }
-            }
 
             if (options.type == 'overlay') {
                 $el.css({
@@ -239,6 +214,91 @@
                 $el.hide().detach();
             } else {
                 $wrapper.hide();
+            }
+        },
+
+        /**
+         * Insert elements to the page DOM
+         *
+         * @param {object} el - popup instance DOM node
+         * @param {object} options - instance options
+         */
+        insert: function (el, options) {
+            var prepend, background;
+
+            prepend = options.prepend || false;
+            background = options.background || false;
+
+            // if prepend === true reverse the (element, background) insert order
+            if (prepend === true) {
+                this.insertElement(el, options);
+
+                if (background) {
+                    this.insertBackground(el, options);
+                }
+            } else {
+                if (background) {
+                    this.insertBackground(el, options);
+                }
+
+                this.insertElement(el, options);
+            }
+        },
+
+        /**
+         * Insert element to the page DOM
+         *
+         * @param {object} el - popup instance DOM node
+         * @param {object} options - instance options
+         */
+        insertElement: function (el, options) {
+            var $body, prepend;
+
+            $body = $('body');
+            prepend = options.prepend || false;
+
+            return prepend === true ? $body.prepend(el) : $body.append(el);
+        },
+
+        /**
+         * Insert popup background to the page DOM
+         *
+         * @param {object} el - popup instance DOM node
+         * @param {object} options - instance options
+         */
+        insertBackground: function (el, options) {
+            var $background, $body;
+
+            $body = $('body');
+
+            if (!$('#' + el.id + '_background').length) {
+
+                if (options.prepend === true) {
+                    $body.prepend('<div id="' + el.id + '_background" class="popup_background"></div>');
+                } else {
+                    $body.append('<div id="' + el.id + '_background" class="popup_background"></div>');
+                }
+
+                $background = $('#' + el.id + '_background');
+
+                $background.css({
+                    opacity: 0,
+                    visibility: 'hidden',
+                    backgroundColor: options.color,
+                    position: 'fixed',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                });
+
+                if (options.setzindex && !options.autozindex) {
+                    $background.css('z-index', '100000');
+                }
+
+                if (options.transition) {
+                    $background.css('transition', options.transition);
+                }
             }
         },
 
