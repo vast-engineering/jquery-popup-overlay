@@ -635,9 +635,11 @@
          * @param {object} el - popup instance DOM node
          */
         addclosebutton: function (el) {
-            var genericCloseButton;
+            var $el, genericCloseButton;
 
-            if ($(el).data('popupoptions').closebuttonmarkup) {
+            $el = $(el);
+
+            if ($el.data('popupoptions').closebuttonmarkup) {
                 genericCloseButton = $(options.closebuttonmarkup).addClass(el.id + '_close');
             } else {
                 genericCloseButton = '<button class="popup_close ' + el.id + '_close" title="Close" aria-label="Close"><span aria-hidden="true">×</span></button>';
