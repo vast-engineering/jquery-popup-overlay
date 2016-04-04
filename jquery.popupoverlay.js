@@ -151,6 +151,8 @@
                 if (options.transition) {
                     $background.css('transition', options.transition);
                 }
+
+                $el.data('popupBackground', $background);
             }
 
             if (options.type == 'overlay') {
@@ -222,14 +224,19 @@
             } else {
 
                 // Handler: Show popup when clicked on `open` element
-                $(document).on('click', openelement, function (event) {
+                var popupClickHandler = function (event) {
                     event.preventDefault();
 
                     var ord = $(this).data('popup-ordinal');
                     setTimeout(function() { // setTimeout is to allow `close` method to finish (for issues with multiple tooltips)
                         methods.show(el, ord);
                     }, 0);
-                });
+                };
+
+                $(document).on('click', openelement, popupClickHandler);
+
+                $el.data('popupOpenelement', openelement);
+                $el.data('popupClickHandler', popupClickHandler);
             }
 
             if (options.closebutton) {
@@ -241,6 +248,36 @@
             } else {
                 $wrapper.hide();
             }
+        },
+
+        /**
+         * Cleans up elements and event listeners
+         *
+         * @param {object} el - popup instance DOM node
+         */
+        destroy: function (el) {
+            var $el = $(el);
+            var options = $el.data('popupoptions');
+            var popupBackground = $el.data('popupBackground');
+            var openelement = $el.data('popupOpenelement');
+            var popupClickHandler = $el.data('popupClickHandler');
+            var $wrapper = $('#' + el.id + '_wrapper');
+
+            // remove background
+            if (popupBackground) {
+                popupBackground.remove();
+            }
+
+            // remove click listener
+            if (popupClickHandler) {
+                $(document).off('click', openelement, popupClickHandler);
+            }
+
+            // remove wrapper
+            $wrapper.remove();
+
+            // remove initialization marker to allow popup to be initialize again
+            $el.data('popup-initialized', false);
         },
 
         /**
