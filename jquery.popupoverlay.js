@@ -656,8 +656,8 @@
                 genericCloseButton = '<button class="popup_close ' + el.id + '_close" title="Close" aria-label="Close"><span aria-hidden="true">×</span></button>';
             }
 
-            if ($el.data('popup-initialized')){
-                $el.append(genericCloseButton);
+            if ($(el).data('popup-initialized')){
+                $(el).append(genericCloseButton);
             }
 
         }
