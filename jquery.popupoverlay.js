@@ -781,7 +781,7 @@
             var $el = $(this);
 
             if (typeof customoptions === 'object') {  // e.g. $('#popup').popup({'color':'blue'})
-                var opt = $.extend({}, $.fn.popup.defaults, customoptions, $el.data('popupoptions'));
+                var opt = $.extend({}, $.fn.popup.defaults, $el.data('popupoptions'), customoptions);
                 $el.data('popupoptions', opt);
                 options = $el.data('popupoptions');
 
