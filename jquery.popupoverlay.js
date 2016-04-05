@@ -170,7 +170,7 @@
                 };
 
                 if(options.backgroundactive){
-                    css.position = 'relative';
+                    css.position = 'absolute';
                     css.height = '0';
                     css.overflow = 'visible';
                 }
