@@ -673,8 +673,11 @@
      */
     var callback = function (el, ordinal, func) {
         var options = $(el).data('popupoptions');
-        var openelement =  (options.openelement) ? options.openelement : ('.' + el.id + opensuffix);
-        var elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
+        var openelement;
+        var elementclicked;
+        if (typeof options === 'undefined') return;
+        openelement =  options.openelement ? options.openelement : ('.' + el.id + opensuffix);
+        elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
         if (typeof func == 'function') {
             func.call($(el), el, elementclicked);
         }
@@ -706,7 +709,7 @@
             }
 
             // If clicked outside of popup
-            if ($(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2 && $(event.target).is(':visible')) {
+            if ($(el).data('popupoptions') && $(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2 && $(event.target).is(':visible')) {
 
                 if ($(el).data('popupoptions').background) {
                     // If clicked on popup cover
