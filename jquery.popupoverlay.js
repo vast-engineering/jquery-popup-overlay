@@ -441,13 +441,19 @@
                 return;
             }
 
-            if(opentimer) clearTimeout(opentimer);
-
             var $body = $('body');
             var $el = $(el);
             var options = $el.data('popupoptions');
             var $wrapper = $('#' + el.id + '_wrapper');
             var $background = $('#' + el.id + '_background');
+
+            // Confirm close
+            if (options.confirmclose && !callback(el, lastclicked[el.id], options.confirmclose)) {
+                // Not confirmed
+                return;
+            }
+
+            if(opentimer) clearTimeout(opentimer);
 
             $el.data('popup-visible', false);
 
@@ -679,7 +685,7 @@
         openelement =  options.openelement ? options.openelement : ('.' + el.id + opensuffix);
         elementclicked = $(openelement + '[data-popup-ordinal="' + ordinal + '"]');
         if (typeof func == 'function') {
-            func.call($(el), el, elementclicked);
+            return func.call($(el), el, elementclicked);
         }
     };
 
@@ -839,6 +845,7 @@
         closeelement: null,
         transition: null,
         tooltipanchor: null,
+        confirmclose: null,
         beforeopen: null,
         onclose: null,
         onopen: null,
