@@ -448,9 +448,19 @@
             var $background = $('#' + el.id + '_background');
 
             // Confirm close
-            if (options.confirmclose && !callback(el, lastclicked[el.id], options.confirmclose)) {
-                // Not confirmed
-                return;
+            if (options.confirmclose) {
+                if (!callback(el, lastclicked[el.id], options.confirmclose)) {
+                    // Not confirmed
+                    return;
+                }
+
+                // During callback execution, visibility of popup(s) could have changed,
+                // so we re-find this popup in visiblePopupsArray.
+                var popupIdIndex = $.inArray(el.id, visiblePopupsArray);
+                if (popupIdIndex === -1) {
+                    // This popup was already hidden, nothing more to do.
+                    return;
+                }
             }
 
             if(opentimer) clearTimeout(opentimer);
