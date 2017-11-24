@@ -59,6 +59,9 @@
                 options.background = false;
                 options.scrolllock = false;
             }
+            if (options.fixedposition) {
+                options.backgroundactive = true;
+            }
 
             if (options.backgroundactive) {
                 options.background = false;
@@ -156,7 +159,7 @@
             if (options.type == 'overlay') {
                 $el.css({
                     textAlign: 'left',
-                    position: 'relative',
+                    position: options.fixedposition ? 'fixed' : 'relative',
                     verticalAlign: 'middle'
                 });
 
@@ -241,6 +244,22 @@
             } else {
                 $wrapper.hide();
             }
+
+            //we save the initial margins
+            $el.data('margins', {
+                top : $el.css('margin-top'),
+                bottom :  $el.css('margin-bottom'),
+                left :  $el.css('margin-left'),
+                right : $el.css('margin-right'),
+            });
+
+            if (options.backgroundactive && 
+                (options.horizontal == 'center' || options.vertical != 'top')) {
+                //we add a resize listner to resize the popup
+                $(window).resize(function() {
+                    methods.show(el, undefined, true);
+                });
+            }
         },
 
         /**
@@ -249,10 +268,11 @@
          * @param {object} el - popup instance DOM node
          * @param {number} ordinal - order number of an `open` element
          */
-        show: function (el, ordinal) {
+        show: function (el, ordinal, resize) {
             var $el = $(el);
 
-            if ($el.data('popup-visible')) return;
+            if ($el.data('popup-visible') && !resize) return;
+            if (!$el.data('popup-visible') && resize) return;
 
             // Initialize if not initialized. Required for: $('#popup').popup('show')
             if (!$el.data('popup-initialized')) {
@@ -343,15 +363,65 @@
 
             if(options.backgroundactive){
                 //calculates the vertical align
-                $el.css({
-                    top:(
-                        $window.height() - (
-                            $el.get(0).offsetHeight +
-                            parseInt($el.css('margin-top'), 10) +
-                            parseInt($el.css('margin-bottom'), 10)
-                        )
-                    )/2 +'px'
-                });
+                if (options.vertical == 'bottom') {
+                    if (options.fixedposition) {
+                        $el.css({
+                            bottom:0
+                        });
+                    } else {
+                       $el.css({
+                        top:(
+                            $window.height() - (
+                                $el.get(0).offsetHeight +
+                                parseInt($el.css('margin-top'), 10) +
+                                parseInt($el.css('margin-bottom'), 10)
+                            )
+                        ) +'px'
+                    }); 
+                    }
+                } else if (options.vertical == 'top') {
+                    $el.css({
+                        top:0
+                    });
+                } else {
+                    $el.css({
+                        top:(
+                            $window.height() - (
+                                $el.get(0).offsetHeight +
+                                parseInt($el.css('margin-top'), 10) +
+                                parseInt($el.css('margin-bottom'), 10)
+                            )
+                        )/2 +'px'
+                    });
+                }
+                if (options.fixedposition) {
+                    if (options.horizontal == "left") {
+                        $el.css({
+                            'left':0
+                        });
+                    } else if (options.horizontal == "right") {
+                        $el.css({
+                            'right':0
+                        });
+                    } else {
+                        //reset before calculate outerWidth
+                        $el.css({
+                            'margin-left' : $el.data('margins').left,
+                            'margin-right' : $el.data('margins').right,
+                            'position': 'relative',
+                            'width':'auto'
+                        });
+                        var outerWidth = $el.outerWidth();
+                        //calculates the left margin to center horizontaly
+                        $el.css({
+                            'margin-left' : -(outerWidth/2) +'px',
+                            'margin-right' : (outerWidth*3/4) +'px',
+                            'left':'50%',
+                            'width' : outerWidth,
+                            'position': 'fixed'
+                        });
+                    }
+                }
             }
 
             $el.css({
@@ -816,6 +886,7 @@
         autoopen: false,
         background: true,
         backgroundactive: false,
+        fixedposition: false,
         color: 'black',
         opacity: '0.5',
         horizontal: 'center',
