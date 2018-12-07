@@ -9,7 +9,8 @@
     "dev": "npm start -- -o",
     "test": "start-server-and-test start http://localhost:8080 test:cypress",
     "test:cypress": "cypress run",
-    "test:watch": "npm start & cypress open"
+    "test:watch": "npm start & cypress open",
+    "lint": "eslint . *.js --ignore-pattern 'index.js'"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   "license": "MIT",
   "devDependencies": {
     "cypress": "^3.1.2",
+    "eslint": "^5.9.0",
     "http-server": "^0.11.1",
     "start-server-and-test": "^1.0.1"
   }
