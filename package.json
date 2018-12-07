@@ -4,7 +4,12 @@
   "description": "Lightweight modal popup overlay for jquery",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "http-server -c-1",
+    "start:ci": "http-server -c-1 --silent",
+    "dev": "npm start -- -o",
+    "test": "start-server-and-test start http://localhost:8080 test:cypress",
+    "test:cypress": "cypress run",
+    "test:watch": "npm start & cypress open"
   },
   "repository": {
     "type": "git",
@@ -17,5 +22,10 @@
     "modal"
   ],
   "author": "Vast",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^3.1.2",
+    "http-server": "^0.11.1",
+    "start-server-and-test": "^1.0.1"
+  }
 }

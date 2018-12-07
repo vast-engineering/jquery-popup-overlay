@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Test Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="../jquery.popupoverlay.js"></script>
+</head>
+<style>
+  .well {
+    display: none;
+  }
+
+  .popup_content {
+    background: white;
+    padding: 10px;
+    border: 2px solid #498659;
+  }
+
+  :focus {
+    outline: 5px solid red;
+  }
+
+  .btn-success {
+    position: relative;
+    z-index: 55; /* setting some z-index for tests */
+  }
+</style>
+
+<body>
+    <div class="container" id="pagecontainer">
+        <section class="col-Md-10 col-md-offset-1">
+            <h1>Tests</h1>
+            <p class="lineheight">
+                <input type="text" data-dummy-input id="dummy-input">
+                <a data-default-open class="initialism default_open btn btn-success" href="#default">Default</a>
+                <a data-tooltip-open class="initialism tooltip_open btn btn-success" href="#tooltip">Tooltip</a>
+                <a data-locked-open class="initialism locked_open btn btn-success" href="#locked">Locked</a>
+                <a data-custom-open class="initialism custom_open btn btn-success" href="#custom">Custom</a>
+            </p>
+            <p>TOP</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus possimus impedit porro accusamus sed repellat laborum eius a. Accusamus soluta expedita atque quisquam consequatur, dolorum sapiente dolore in! Deleniti, id.</p>
+            <p>BOTTOM</p>
+        </section>
+    </div>
+    <div id="default" class="well">
+        <h4>default example</h4>
+        <input type="text" id="inputz">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, est modi quos placeat ex a? Expedita quidem, odio a vel ex. Quisquam voluptatibus, natus quas, iusto distinctio labore nihil tenetur!</p>
+        <button class="custom_open btn btn-default" data-custom-open-from-popup>Next example</button>
+        <button data-default-close class="default_close btn btn-default">Close</button>
+    </div>
+    <div id="tooltip" class="well">
+        <h4>tooltip example</h4>
+        <!-- <button class="tooltip_close btn btn-default" data-tooltip-close>Close</button> -->
+    </div>
+    <div id="locked" class="well">
+        <h4>locked example</h4>
+        <button class="locked_close btn btn-default" data-locked-close>Close</button>
+    </div>
+    <div id="custom" class="well">
+        <h4>custom example</h4>
+        <button class="custom_close btn btn-default" data-custom-close>Close</button>
+        <button class="locked_open btn btn-default" data-locked-open-from-popup>Open locked</button>
+    </div>
+
+    <!-- <div id="dynamic">
+      This is a test popup.
+      <button class="dynamic_close" data-dynamic-close>Button</button>
+      <input id="dynamic-dummy-input" data-dynamic-dummy-input />
+    </div>
+    <button class="dynamic_open" data-dynamic-open>dynamic</button> -->
+</body>
+
+</html>
