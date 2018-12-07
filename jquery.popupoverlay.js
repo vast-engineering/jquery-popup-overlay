@@ -602,7 +602,7 @@
                     $tooltipanchor = $('.' + el.id + opensuffix + '[data-popup-ordinal="' + ordinal + '"]');
                 }
 
-                var linkOffset = $tooltipanchor.offset();
+                var linkOffset = $tooltipanchor.offset() || { left: 0, top: 0 };
 
                 // Horizontal position for tooltip
                 if (options.horizontal == 'right') {
