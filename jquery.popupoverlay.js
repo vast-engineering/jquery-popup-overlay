@@ -513,9 +513,13 @@
                         }
                     }
 
-                    // Re-enable scrolling of background layer
+                    // Re-enable scrolling of background layer, if needed
                     if (options.scrolllock) {
                         setTimeout(function() {
+                            if ($.grep(visiblePopupsArray, function(eid) { return $("#"+eid).data('popupoptions').scrolllock }).length) {
+                                // Some "scolllock=true" popup is currently visible, leave scrolling disabled
+                                return;
+                            }
                             $body.css({
                                 overflow: 'visible',
                                 'margin-right': bodymarginright
@@ -532,9 +536,13 @@
                     $wrapper.hide();
                 }
 
-                // Re-enable scrolling of background layer
+                // Re-enable scrolling of background layer, if needed
                 if (options.scrolllock) {
                     setTimeout(function() {
+                        if ($.grep(visiblePopupsArray, function(eid) { return $("#"+eid).data('popupoptions').scrolllock }).length) {
+                            // Some "scrolllock=true" popup is currently visible, leave scrolling disabled
+                            return;
+                        }
                         $body.css({
                             overflow: 'visible',
                             'margin-right': bodymarginright
