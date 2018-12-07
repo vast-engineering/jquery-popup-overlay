@@ -239,7 +239,7 @@
             if (options.detach) {
                 $el.detach();
             } else {
-                $wrapper.hide();
+                $el.hide();
             }
         },
 
@@ -320,7 +320,7 @@
                 $wrapper.prepend(el);
                 $el.show();
             } else {
-                $wrapper.show();
+                $el.show();
             }
 
             opentimer = setTimeout(function() {
@@ -509,7 +509,7 @@
                         if (options.detach) {
                             $el.detach();
                         } else {
-                            $wrapper.hide();
+                            $el.hide();
                         }
                     }
 
@@ -533,7 +533,7 @@
                 if (options.detach) {
                     $el.detach();
                 } else {
-                    $wrapper.hide();
+                    $el.hide();
                 }
 
                 // Re-enable scrolling of background layer, if needed
