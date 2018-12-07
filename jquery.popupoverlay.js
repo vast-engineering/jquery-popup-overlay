@@ -237,7 +237,7 @@
             }
 
             if (options.detach) {
-                $el.hide().detach();
+                $el.detach();
             } else {
                 $wrapper.hide();
             }
@@ -507,7 +507,7 @@
 
                     if (!($el.data('popup-visible'))) {
                         if (options.detach) {
-                            $el.hide().detach();
+                            $el.detach();
                         } else {
                             $wrapper.hide();
                         }
@@ -531,7 +531,7 @@
                 });
             } else {
                 if (options.detach) {
-                    $el.hide().detach();
+                    $el.detach();
                 } else {
                     $wrapper.hide();
                 }
