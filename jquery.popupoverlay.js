@@ -5,7 +5,7 @@
  * @requires jQuery v1.7.1+
  * @link http://vast-engineering.github.com/jquery-popup-overlay/
  */
-;(function ($) {
+;(function ($) { /* eslint-disable-line */
 
     var $window = $(window);
     var options = {};
@@ -210,12 +210,12 @@
                 options.keepfocus = false;
 
                 // Handler: mouseenter, focusin
-                $(openelement).on('mouseenter', function (event) {
+                $(openelement).on('mouseenter', function () {
                     methods.show(el, $(this).data('popup-ordinal'));
                 });
 
                 // Handler: mouseleave, focusout
-                $(openelement).on('mouseleave', function (event) {
+                $(openelement).on('mouseleave', function () {
                     methods.hide(el);
                 });
 
@@ -503,7 +503,7 @@
             callback(el, lastclicked[el.id], options.onclose);
 
             if (transitionsupport && $el.css('transition-duration') !== '0s') {
-                $el.one('transitionend', function(e) {
+                $el.one('transitionend', function() {
 
                     if (!($el.data('popup-visible'))) {
                         if (options.detach) {
@@ -584,7 +584,6 @@
             var $el = $(el);
             var options = $el.data('popupoptions');
             var $wrapper = $('#' + el.id + '_wrapper');
-            var $background = $('#' + el.id + '_background');
 
             ordinal = ordinal || 0;
 
@@ -609,7 +608,7 @@
                 if (options.horizontal == 'right') {
                     $wrapper.css('left', linkOffset.left + $tooltipanchor.outerWidth() + options.offsetleft);
                 } else if (options.horizontal == 'leftedge') {
-                    $wrapper.css('left', linkOffset.left + $tooltipanchor.outerWidth() - $tooltipanchor.outerWidth() +  options.offsetleft);
+                    $wrapper.css('left', linkOffset.left +  options.offsetleft);
                 } else if (options.horizontal == 'left') {
                     $wrapper.css('right', $window.width() - linkOffset.left  - options.offsetleft);
                 } else if (options.horizontal == 'rightedge') {
@@ -854,4 +853,4 @@
         closetransitionend: null
     };
 
-})(jQuery);
+})(jQuery); /* eslint-disable-line */
