@@ -127,7 +127,7 @@
                 $wrapper.css('cursor', 'pointer');
             }
 
-            if (options.type == 'overlay') {
+            if (options.type == 'overlay' && !options.absolute) {
                 $wrapper.css('overflow','auto');
             }
 
@@ -589,6 +589,7 @@
 
             // Tooltip type
             if (options.type == 'tooltip') {
+                // TODO: this static assignments should probably be moved to init method
                 $wrapper.css({
                     'position': 'absolute'
                 });
@@ -632,6 +633,7 @@
 
             // Overlay type
             } else if (options.type == 'overlay') {
+                // TODO all static assignments in this block should probably be moved to init method
 
                 // Horizontal position for overlay
                 if (options.horizontal) {
@@ -645,6 +647,13 @@
                     $el.css('vertical-align', options.vertical);
                 } else {
                     $el.css('vertical-align', 'middle');
+                }
+
+                if (options.absolute) {
+                    $wrapper.css({
+                        position: 'absolute',
+                        top: window.scrollY
+                    });
                 }
             }
         },
@@ -820,6 +829,7 @@
 
     $.fn.popup.defaults = {
         type: 'overlay',
+        absolute: false,
         autoopen: false,
         background: true,
         backgroundactive: false,
