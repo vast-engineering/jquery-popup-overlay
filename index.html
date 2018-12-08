@@ -34,9 +34,22 @@
         max-width: 100%;
     }
     .well {
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        /* drop-shadow is better than box-shadow as it add a shadow to tooltip arrows arrow as well,
+        however it dramatically affects the performance of transition animation on Android. */
+        /* filter: drop-shadow(0 0 10px rgba(0,0,0,0.3)); */
         display:none;
         margin:1em;
+        max-width: 740px;
+    }
+    .well .popup_close {
+        position: absolute;
+        top: 0;
+        right: 0px;
+        border-radius: 2px;
+        background: none;
+        border: 0;
+        font-size: 25px;
+        padding: 0 10px;
     }
     pre.prettyprint {
         padding: 9px 14px;
@@ -61,15 +74,51 @@
     .page-header {
         border-bottom: none;
     }
+    .page-header .btn-lg {
+        margin-bottom: 10px;
+    }
     .initialism {
         font-weight: bold;
         letter-spacing: 1px;
         font-size: 12px;
     }
 
+    /**
+     * Styles for the `tooltip` option
+     */
+
+    .well--tooltip {
+        min-width: 300px;
+        max-width: 300px;
+        margin: 0;
+    }
+
+    @media (min-width: 500px) {
+        .well--tooltip {
+            max-width: 380px;
+        }
+    }
+
+    /* Tooltip Arrow */
+    .well--tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -14px;
+        width: 0;
+        height: 0;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-top: 14px solid #f5f5f5;
+    }
+
     </style>
 </head>
 <body>
+
+<!-- Page Container -->
+<div id="pagecontainer">
 
 <div class="pagetop">
     <div class="container">
@@ -80,7 +129,7 @@
                 <a href="https://github.com/vast-engineering/jquery-popup-overlay/archive/gh-pages.zip" class="btn btn-primary btn-success btn-lg"><span class="fa-download"></span> Download</a>
                 <a href="https://github.com/vast-engineering/jquery-popup-overlay" class="btn btn-lg btn-default"><span class="fa-github"></span> View project on GitHub</a>
             </p>
-            <p class="text-muted"><a href="https://www.npmjs.com/package/jquery-popup-overlay"><img alt="NPM version" src="https://img.shields.io/npm/v/jquery-popup-overlay.svg?style=flat-square&label=Currently&colorA=transparent&colorB=transparent"></a></p>
+            <p class="text-muted"><a href="https://www.npmjs.com/package/jquery-popup-overlay"><img alt="NPM version" src="https://img.shields.io/npm/v/jquery-popup-overlay.svg?style=flat&colorB=4cae4c"></a></p>
         </div>
     </div>
 </div>
@@ -89,15 +138,29 @@
 
     <section class="col-md-10 col-md-offset-1">
 
+        <br>
+        <div class="alert alert-warning" role="alert">
+            <p><b>Notice</b></p>
+            <p>If you were using RawGit to get the script (<a href="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js">https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js</a>), and things started to break, change the src to get the older and locked version v1.7.14:<br>
+            <code>&lt;script src="<a href="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@1.7.14/jquery.popupoverlay.min.js">https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@1.7.14/jquery.popupoverlay.min.js</a>"&gt;&lt;/script&gt;</code>
+            <p>RawGit is shutting down soon (jsDelivr seems like a good alternative, providing features like code minification and version locking), and our example code in the Usage section on this page used to point to the latest version of the script which might contain breaking changes.</p>
+            <br>
+            <p>If you want to upgrade from 1.x.x to 2.x.x version, the only breaking change in this release is that <code>backgroundactive</code> option is removed. See all changes in the <a href="https://github.com/vast-engineering/jquery-popup-overlay/releases">changelog</a> on GitHub.</p>
+        </div>
+
         <h2>Demo</h2>
 
         <p class="lineheight">
             <a class="initialism basic_open btn btn-success" href="#basic">Basic</a>
+            <a href="#closebutton" class="initialism closebutton_open btn btn-success" id="closebutton_open">Generated Close Button</a>
             <a class="initialism fade_open btn btn-success" href="#fade">Fade</a>
+            <a class="initialism scrolllock_open btn btn-success" href="#scrolllock">Scroll-lock</a>
             <a class="initialism fadeandscale_open btn btn-success" href="#fadeandscale">Fade &amp; scale</a>
-            <button class="initialism slide_open btn btn-success">Slide</button>
-            <button class="initialism standalone_open btn btn-success">Stand alone</button>
-            <a class="initialism active_bg_open btn btn-success" href="#active_bg">Active background</a>
+            <button class="initialism slide_open btn btn-success">Slide-in</button>
+            <button class="initialism standalone_open btn btn-success">Stand-alone</button>
+            <button class="initialism active_background_fixed_open btn btn-success">Active Bg</button>
+            <a class="initialism active_background_absolute_open btn btn-success" href="#active_background_absolute">Active Bg Absolute</a>
+            <button class="initialism inactive_background_open btn btn-success">Inactive Bg</button>
             <a href="#my_tooltip" class="initialism my_tooltip_open btn btn-success" id="my_tooltip_open">Tooltip</a>
             <button class="initialism fall_open btn btn-success">Callback events</button>
             <button class="initialism other_open btn btn-success">&hellip;</button>
@@ -134,24 +197,26 @@
 &lt;/head&gt;
 &lt;body&gt;
 
-  &lt;!-- Add an optional button to open the popup --&gt;
-  &lt;button class="my_popup_open"&gt;Open popup&lt;/button&gt;
+  &lt;!-- Add a page container (optional) --&gt;
+  &lt;div class="my-page-container"&gt;
+    {{ Page Content }}
+    &lt;!-- Add a button to open the popup (optional) --&gt;
+    &lt;button class="my_popup_open"&gt;Open popup&lt;/button&gt;
+  &lt;/div&gt;
 
   &lt;!-- Add content to the popup --&gt;
   &lt;div id="my_popup"&gt;
-
-    ...popup content...
-
-    &lt;!-- Add an optional button to close the popup --&gt;
+    {{ Popup Content }}
+    &lt;!-- Add a button to close the popup (optional) --&gt;
     &lt;button class="my_popup_close"&gt;Close&lt;/button&gt;
-
   &lt;/div&gt;
 
   &lt;!-- Include jQuery --&gt;
   &lt;script src="https://code.jquery.com/jquery-1.8.2.min.js"&gt;&lt;/script&gt;
 
   &lt;!-- Include jQuery Popup Overlay --&gt;
-  &lt;script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js"&gt;
+  &lt;/script&gt;
 
   &lt;script&gt;
     $(document).ready(function() {
@@ -159,6 +224,8 @@
       // Initialize the plugin
       $('#my_popup').popup();
 
+      // Set page container as a default option for all popups (optional, but highly recommended)
+      $.fn.popup.defaults.pagecontainer = '#my-page-container'
     });
   &lt;/script&gt;
 
@@ -166,14 +233,16 @@
 &lt;/html&gt;</code>
 </pre>
 
+        <br>
         <p>It can also be used as a NPM package:</p>
 <pre class="prettyprint"><code>npm install jquery-popup-overlay</code></pre>
 
         <p>And included as a CommonJS module:</p>
 <pre class="prettyprint"><code>var popup = require("jquery-popup-overlay");
 </code></pre>
+        <br>
 
-        <h3>Options</h3>
+        <h2>Options</h2>
 
         <div class="fulltable">
         <table class="table table-bordered table-striped">
@@ -187,36 +256,35 @@
         </thead>
         <tbody>
         <tr>
-            <td>type</td>
-            <td>'overlay'<br />'tooltip'</td>
-            <td>'overlay'</td>
-            <td>Sets popup type to overlay or tooltip.</td>
-        </tr>
-        <tr>
             <td>autoopen</td>
             <td>boolean</td>
             <td>false</td>
             <td>Shows the popup when initialized.</td>
         </tr>
         <tr>
-            <td>scrolllock</td>
+            <td>autozindex</td>
             <td>boolean</td>
             <td>false</td>
-            <td>Disables scrolling of background content while the popup is visible.</td>
+            <td><p>Sets highest z-index of all elements of the page to the popup.</p></td>
         </tr>
         <tr>
             <td>background</td>
             <td>boolean</td>
             <td>true</td>
             <td>Enables background cover.<br />
-                <small  class="text-muted">Disabled for tooltips.</small></td>
+                <small  class="text-muted">Default is <code>false</code> for tooltips.</small></td>
         </tr>
         <tr>
-            <td>backgroundactive</td>
+            <td>blur</td>
             <td>boolean</td>
-            <td>false</td>
-            <td>Disable background cover and keep background elements active.<br />
-                <small  class="text-muted">Implies background, blur and scrolllock to false</small></td>
+            <td>true</td>
+            <td>Closes the popup if a user clicks on a background content or cover, or anywhere outside the popup.</td>
+        </tr>
+        <tr>
+            <td>closeelement</td>
+            <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
+            <td>'.<i>{popup_id}</i>_close'</td>
+            <td>Enables you to define custom element which will close the popup on click. By default, in our case it's set to <code>.my_popup_close</code>.</td>
         </tr>
         <tr>
             <td>color</td>
@@ -225,10 +293,24 @@
             <td>Sets background color.</td>
         </tr>
         <tr>
-            <td>opacity</td>
-            <td>float</td>
-            <td>0.5</td>
-            <td>Sets background opacity.</td>
+            <td>detach</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>
+                <p>Removes popup element from the DOM after closing transition.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>escape</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Closes the popup when <kbd>Escape</kbd> key is pressed.</td>
+        </tr>
+        <tr>
+            <td>focuselement</td>
+            <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
+            <td>'#<i>{popup_id}</i>'</td>
+            <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element <code>#my_popup</code> will recieve the initial focus.</td>
         </tr>
         <tr>
             <td>horizontal</td>
@@ -238,11 +320,10 @@
                 <p class="text-muted"><small>Options `leftedge` and `rightedge` can be used only for tooltips, and will align the tooltip to the left or right edge of the opening element (`openelement`).</small></p></td>
         </tr>
         <tr>
-            <td>vertical</td>
-            <td>'center'<br />'top'<br />'bottom'<br /><span class="text-muted">'topedge'</span><br /><span class="text-muted">'bottomedge'</span></td>
-            <td>'center'</td>
-            <td><p>Sets vertical position.</p>
-                <p class="text-muted"><small>Options `topedge` and `bottomedge` can be used only for tooltips, and will align the tooltip to the top or bottom edge of the opening element (`openelement`).</small></p></td>
+            <td>keepfocus</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Lock keyboard focus inside of popup. Recommended to be enabled.</td>
         </tr>
         <tr>
             <td>offsettop</td>
@@ -257,53 +338,10 @@
             <td><p>Sets left offset to tooltip.</p></td>
         </tr>
         <tr>
-            <td>escape</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>Closes the popup when <kbd>Escape</kbd> key is pressed.</td>
-        </tr>
-        <tr>
-            <td>blur</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>Closes the popup when clicked outside of it.</td>
-        </tr>
-        <tr>
-            <td>setzindex</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>Sets default z-index to the popup (2001) and to the background (2000).</td>
-        </tr>
-        <tr>
-            <td>autozindex</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td><p>Sets highest z-index on the page to the popup.</p></td>
-        </tr>
-        <tr>
-            <td>keepfocus</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>Lock keyboard focus inside of popup. Recommended to be enabled.</td>
-        </tr>
-        <tr>
-            <td>focuselement</td>
-            <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
-            <td>'#<i>{popup_id}</i>'</td>
-            <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element <code>#my_popup</code> will recieve the initial focus.</td>
-        </tr>
-        <tr>
-            <td>focusdelay</td>
-            <td>number</td>
-            <td>50</td>
-            <td>Sets a delay in milliseconds before focusing an element. This is to prevent page scrolling during opening transition, as browsers will try to move the viewport to an element which received the focus.</td>
-        </tr>
-        <tr>
-            <td>pagecontainer</td>
-            <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
-            <td></td>
-            <td><p>Sets a page container (to help screen reader users). Page container should be the element that surrounds all the content on the page (e.g. '.container' in the case of this very page).</p>
-                <p class="text-muted"><small>It's highly recommended that you set the page container to help some screen readers read the modal dialog correctly. Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. You can set `pagecontainer` once per website (e.g. <code>$.fn.popup.defaults.pagecontainer = '.container'</code>).</small></p></td>
+            <td>opacity</td>
+            <td>float</td>
+            <td>0.5</td>
+            <td>Sets background opacity.</td>
         </tr>
         <tr>
             <td>outline</td>
@@ -313,29 +351,38 @@
                 <p class="text-muted"><small>Setting to <code>false</code> is equivalent to <code>#my_popup{outline: none;}</code>.</small></p></td>
         </tr>
         <tr>
-            <td>detach</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td>
-                <p>Removes popup element from the DOM after closing transition.</p>
-            </td>
-        </tr>
-        <tr>
             <td>openelement</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>'.<i>{popup_id}</i>_open'</td>
             <td>Enables you to define custom element which will open the popup on click. By default, in our case it's set to <code>.my_popup_open</code>.</td>
         </tr>
         <tr>
-            <td>closeelement</td>
+            <td>pagecontainer</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
-            <td>'.<i>{popup_id}</i>_close'</td>
-            <td>Enables you to define custom element which will close the popup on click. By default, in our case it's set to <code>.my_popup_close</code>.</td>
+            <td>null</td>
+            <td><p>Sets a page container (to improve iOS and screen-reader experience). Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#pagecontainer</code> on this page).</p>
+                <p class="text-muted"><small>It's highly recommended that you set the page container to help some screen readers read the modal dialog correctly. Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes.</small></p>
+                <p class="text-muted"><small>Setting `pagecontainer` will also enable <code>blur</code> option to work correctly on tooltips and popups without background. See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
+                <p class="text-muted"><small>You can set `pagecontainer` once per website. For example: <br> <code>$.fn.popup.defaults.pagecontainer = '#pagecontainer';</code></small></p>
+                <p class="text-muted"><small>(We might also use this element in the future to lock the scrolling of background content in iOS. <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/57">Issue 57</a>.)</small></p>
+            </td>
+        </tr>
+        <tr>
+            <td>setzindex</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Sets default z-index to the popup (2001) and to the background (2000).</td>
+        </tr>
+        <tr>
+            <td>scrolllock</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Disables scrolling of background content while the popup is visible.</td>
         </tr>
         <tr>
             <td>transition</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;transition)</i></small></td>
-            <td></td>
+            <td>null</td>
             <td>
                 <p>Sets CSS transition when showing and hiding a popup.</p>
                 <p class="text-muted"><small>Use this if you don't need separate transition for background, or different transition for opening and closing the popup, or if you need to transition only selected properties – otherwise set custom transitions directly in CSS.</small></p>
@@ -346,25 +393,38 @@
         <tr>
             <td>tooltipanchor</td>
             <td>object <br /><small class="text-muted"><i>JQuery or DOM object</i></small></td>
-            <td></td>
+            <td>null</td>
             <td>
                 <p>Sets an element to be an anchor for tooltip position.</p>
                 <p class="text-muted"><small>For example, for multiple opening links using the same tooltip on mouseover:</small></p>
 <pre class="prettyprint">
 <code>$('.my_popup_open').on({
-    mouseenter: function(event) {
-        $('#my_popup').popup({
-            tooltipanchor: event.target,
-            autoopen: true,
-            type: 'tooltip'
-        });
-    },
-    mouseleave: function() {
-        $('#my_popup').popup('hide');
-    }
+  mouseenter: function(event) {
+    $('#my_popup').popup({
+      tooltipanchor: event.target,
+      autoopen: true,
+      type: 'tooltip'
+    });
+  },
+  mouseleave: function() {
+    $('#my_popup').popup('hide');
+  }
 });</code>
 </pre>
             </td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>'overlay'<br />'tooltip'</td>
+            <td>'overlay'</td>
+            <td>Sets popup type to overlay or tooltip.</td>
+        </tr>
+        <tr>
+            <td>vertical</td>
+            <td>'center'<br />'top'<br />'bottom'<br /><span class="text-muted">'topedge'</span><br /><span class="text-muted">'bottomedge'</span></td>
+            <td>'center'</td>
+            <td><p>Sets vertical position.</p>
+                <p class="text-muted"><small>Options `topedge` and `bottomedge` can be used only for tooltips, and will align the tooltip to the top or bottom edge of the opening element (`openelement`).</small></p></td>
         </tr>
         <tr>
             <td colspan="4">
@@ -384,7 +444,7 @@
 
 
 
-        <h3>Callback events</h3>
+        <h2>Callback events</h2>
 
         <table class="table table-bordered table-striped">
         <thead>
@@ -435,7 +495,7 @@
         </tbody>
         </table>
 
-        <h3>Defaults</h3>
+        <h2>Defaults</h2>
 
         <table class="table table-bordered table-striped">
         <thead>
@@ -456,7 +516,7 @@ $.fn.popup.defaults.pagecontainer = '.container';
         </table>
 
 
-        <h3>Methods</h3>
+        <h2>Methods</h2>
 
         <table class="table table-bordered table-striped">
         <thead>
@@ -472,8 +532,7 @@ $.fn.popup.defaults.pagecontainer = '.container';
 <pre class="prettyprint">
 <code>$('#my_popup').popup({
   background: false
-});
-</code>
+});</code>
 </pre>
             </td>
         </tr>
@@ -498,23 +557,34 @@ $.fn.popup.defaults.pagecontainer = '.container';
                 <pre class="prettyprint"><code>$('#my_popup').popup('toggle');</code></pre>
             </td>
         </tr>
+        <tr>
+            <td>.popup('reposition')</td>
+            <td>
+                <p>Manually re-positions a popup.</p>
+                <pre class="prettyprint"><code>$('#my_popup').popup('reposition');</code></pre>
+                <p><small>This method is triggered automatically on every <code>show</code>, and on <code>window.resize</code> event for tooltips. Perhaps you might find some use of it.</small></p>
+            </td>
+        </tr>
         </tbody>
         </table>
 
+        <br>
+        <h2>Changelog</h2>
 
-        <p>&nbsp;</p>
-
+        <p>See the <a href="https://github.com/vast-engineering/jquery-popup-overlay/releases">changelog</a> on GitHub. </p>
+        <br><br>
     </section>
 
     <footer class="col-md-10 col-md-offset-1" role="contentinfo">
 
         <iframe src="https://ghbtns.com/github-btn.html?user=vast-engineering&repo=jquery-popup-overlay&type=watch&size=small&count=true"
             allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
-
         <p class="text-muted"><small>Released under the <a href="http://opensource.org/licenses/MIT">MIT</a> license.</small></p>
     </footer>
 
 </div>
+</div>
+<!-- end #pagecontainer -->
 
 
 
@@ -524,7 +594,7 @@ $.fn.popup.defaults.pagecontainer = '.container';
 <!-- Set defaults -->
 <script>
 $(document).ready(function () {
-    $.fn.popup.defaults.pagecontainer = '.container'
+    $.fn.popup.defaults.pagecontainer = '#pagecontainer'
 });
 </script>
 
@@ -541,11 +611,14 @@ $(document).ready(function () {
 
 <!-- Basic -->
 
-<div id="basic" class="well" style="max-width:44em;">
-    <h4>Basic example</h4>
-    <p>Try to change the width and height of browser window, or to rotate your device, and also try to navigate with the <kbd>Tab</kbd> key.</p>
-    <p>You can close the dialog by pressing the <kbd>Esc</kbd> key, or by clicking on the background outside the content area, or by clicking on the Close button.</p>
-    <button class="basic_close fade_open btn btn-default">Next example</button>
+<div id="basic" class="well">
+    <h4>Basic</h4>
+<pre class="prettyprint"><code>$('#basic').popup();</code></pre>
+    <p>Try to change the width and height of browser window, or to rotate your device.</p>
+    <p>Also try to navigate with the <kbd>Tab</kbd> key</p>
+    <p>The dialog can be closed by pressing the <kbd>Esc</kbd> key, or by clicking on the background
+    <br> outside the content area, or by clicking on the Close button.</p>
+    <button class="basic_close closebutton_open btn btn-success">Next example</button>
     <button class="basic_close btn btn-default">Close</button>
 </div>
 
@@ -558,6 +631,29 @@ $(document).ready(function () {
 
 
 
+<!-- Generated close button -->
+
+<div id="closebutton" class="well">
+    <h4>Generated close button</h4>
+    <p><code>closebutton: true</code> option will append markup for the close button (at top right).</p>
+
+<pre class="prettyprint"><code>$('#closebutton').popup({
+  closebutton: true
+});</code></pre>
+    <p>Additionally, custom markup can be provided via <code>closebuttonmarkup</code> option.</p>
+    <button class="fade_open closebutton_close btn btn-success">Next example</button>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    $('#closebutton').popup({
+        closebutton: true
+    });
+});
+</script>
+
+
 
 
 
@@ -567,11 +663,11 @@ $(document).ready(function () {
 <!-- Fade -->
 
 <div id="fade" class="well">
-    <h4>Fade example</h4>
+    <h4>Fade</h4>
+    <p>CSS transitions can be set via options:</p>
 <pre class="prettyprint">
 <code>$('#fade').popup({
-  transition: 'all 0.3s',
-  scrolllock: true // optional
+  transition: 'all 0.3s'
 });</code>
 </pre>
     <p>Or you can set transitions directly in CSS:</p>
@@ -583,8 +679,7 @@ $(document).ready(function () {
 }
 </code>
 </pre>
-    <button class="fade_close fadeandscale_open btn btn-default">Next example</button>
-    <button class="fade_close btn btn-default">Close</button>
+    <button class="fade_close scrolllock_open btn btn-success">Next example</button>
 </div>
 
 <script>
@@ -592,7 +687,7 @@ $(document).ready(function () {
 
     $('#fade').popup({
       transition: 'all 0.3s',
-      scrolllock: true
+      closebutton: true
     });
 
 });
@@ -604,12 +699,38 @@ $(document).ready(function () {
 
 
 
+<!-- Scroll-lock -->
+
+<div id="scrolllock" class="well">
+    <h4>Scrolllock</h4>
+    <p>Scrolling can be locked with <code>scrollock</code> option.</p>
+<pre class="prettyprint">
+<code>$('#scrolllock').popup({
+  scrolllock: true
+});</code>
+</pre>
+    <button class="scrolllock_close fadeandscale_open btn btn-success">Next example</button>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    $('#scrolllock').popup({
+      transition: 'all 0.3s',
+      scrolllock: true,
+      closebutton: true
+    });
+
+});
+</script>
+
+
 
 
 <!-- Fade & scale -->
 
 <div id="fadeandscale" class="well">
-    <h4>Fade &amp; scale example</h4>
+    <h4>Fade &amp; Scale</h4>
 <pre class="prettyprint">
 <code>$('#fadeandscale').popup({
   transition: 'all 0.3s'
@@ -623,8 +744,7 @@ $(document).ready(function () {
   transform: scale(1);
 }</code>
 </pre>
-    <button class="fadeandscale_close slide_open btn btn-default">Next example</button>
-    <button class="fadeandscale_close btn btn-default">Close</button>
+    <button class="fadeandscale_close slide_open btn btn-success">Next example</button>
 </div>
 
 <script>
@@ -632,7 +752,8 @@ $(document).ready(function () {
 
     $('#fadeandscale').popup({
         pagecontainer: '.container',
-        transition: 'all 0.3s'
+        transition: 'all 0.3s',
+        closebutton: true
     });
 
 });
@@ -663,13 +784,15 @@ $(document).ready(function () {
 
 <!-- Slide in -->
 
-<div id="slide" class="well">
-<h4>Slide in example</h4>
+<div id="slide" class="well" style="max-width: 50em;">
+<h4>Slide-in</h4>
+<p>If you are using <code>slide-in</code> or any animation that is getting the popup out of the viewport, use <code>focusdelay</code> that is longer than transition-duration, it will make animations more smooth in Chrome on Android which tries to get the focused element to the viewport and conflicts the animation. </p>
+<p><code>outline</code> controls the outline visibility on the popup. It is optional and added just for demonstration.</p>
 <pre class="prettyprint">
 <code>$('#slide').popup({
-  outline: true, // optional
-  focusdelay: 400, // optional
-  vertical: 'top' //optional
+  vertical: 'top',
+  outline: true,
+  focusdelay: 400 // for smoother slide-in animations on Android
 });
 </code>
 </pre>
@@ -689,19 +812,17 @@ $(document).ready(function () {
 }
 </code>
 </pre>
-    <button class="slide_close standalone_open btn btn-default">Next example</button>
-    <button class="slide_close btn btn-default">Close</button>
+    <button class="slide_close standalone_open btn btn-success">Next example</button>
 </div>
 
 <script>
 $(document).ready(function () {
-
     $('#slide').popup({
-        focusdelay: 400,
+        vertical: 'top',
         outline: true,
-        vertical: 'top'
+        focusdelay: 400,
+        closebutton: true
     });
-
 });
 </script>
 
@@ -742,7 +863,7 @@ $(document).ready(function () {
 <!-- Stand alone -->
 
 <div id="standalone">
-<h4>Stand alone example</h4>
+<h4>Stand-alone</h4>
 <pre class="prettyprint">
 <code>$('#standalone').popup({
   color: 'white',
@@ -761,8 +882,7 @@ $(document).ready(function () {
 }
 </code>
 </pre>
-    <button class="standalone_close active_bg_open btn btn-default">Next example</button>
-    <button class="standalone_close btn btn-default">Close</button>
+    <button class="standalone_close active_background_fixed_open btn btn-success">Next example</button>
 </div>
 
 
@@ -805,23 +925,29 @@ $(document).ready(function () {
 
 
 
+<!-- Active Background -->
 
-
-
-<!-- Active background -->
-
-<div id="active_bg" class="well" style="max-width:44em;">
-    <h4>Active background example</h4>
-    <p>You can click on any element at the background : they still active and won't close the popup.</p>
-    <p>You can close the dialog by pressing the <kbd>Esc</kbd> key, or by clicking on the Close button.</p>
-    <button class="active_bg_close my_tooltip_open btn btn-default">Next example</button>
-    <button class="active_bg_close btn btn-default">Close</button>
+<div id="active_background_fixed" class="well" style="max-width:44em;">
+    <h4>Active background</h4>
+    <p><code>background: false</code> will enable interaction with background content (hover, click, etc.), while the popup is visible, as the background div will not be added to DOM.</p>
+    <p><code>horizontal</code> and <code>horizontal</code> will set the position.</p>
+<pre class="prettyprint">
+<code>$('#fade').popup({
+  background: false,
+  horizontal: 'right',
+  vertical: 'bottom'
+});</code>
+</pre>
+    <button class="active_background_fixed_close active_background_absolute_open btn btn-success">Next Example</button>
 </div>
 
 <script>
 $(document).ready(function () {
-  $('#active_bg').popup({
-    backgroundactive:true
+  $('#active_background_fixed').popup({
+    background: false,
+    closebutton: true,
+    horizontal: 'right',
+    vertical: 'bottom'
   });
 });
 </script>
@@ -829,14 +955,75 @@ $(document).ready(function () {
 
 
 
+
+
+
+<!-- Active background absolute -->
+
+<div id="active_background_absolute" class="well" style="max-width:44em;">
+    <h4>Active background absolute</h4>
+    <p>Use <code>absolute: true</code> if you want to have absolute (not fixed) position of the popup.</p>
+    <p><code>blur:false</code> will keep the popup visible, even after clicking on background content.</p>
+    <p></p>
+<pre class="prettyprint">
+<code>$('#fade').popup({
+  background: false,
+  blur: false,
+  absolute: true
+});</code>
+</pre>
+<button class="active_background_absolute_close inactive_background_open btn btn-success">Next Example</button>
+</div>
+
+<script>
+$(document).ready(function () {
+  $('#active_background_absolute').popup({
+    background: false,
+    blur: false,
+    absolute: true,
+    closebutton: true
+  });
+});
+</script>
+
+<!-- Inactive Background -->
+
+<div id="inactive_background" class="well" style="max-width:44em;">
+    <h4>Inactive background</h4>
+    <p><code>color: 'transparent'</code> will print a transparent background and prevent (initial) interaction with background content, so it will require 2 clicks to interact with background content, in case <code>blur:false</code> is not set.</p>
+<pre class="prettyprint">
+<code>$('#fade').popup({
+  color: 'transparent'
+});</code>
+</pre>
+    <button class="inactive_background_close my_tooltip_open btn btn-success">Next Example</button>
+</div>
+
+<script>
+$(document).ready(function () {
+  $('#inactive_background').popup({
+    color: 'transparent',
+    closebutton: true
+  });
+});
+</script>
+
+
+
 <!-- Tooltip -->
 
-<div id="my_tooltip" class="well">
-    <a href="#" class="my_tooltip_close" style="float:right;padding:0 0.4em;">×</a>
+<div id="my_tooltip" class="well well--tooltip">
     <h4>Tooltip example</h4>
-    <p>Tooltip content will be positioned relative to the opening link.</p>
-    <button class="my_tooltip_close fall_open btn btn-default">Next example</button>
-    <button class="my_tooltip_close btn btn-default">Close</button>
+    <p>By default, tooltip content will be positioned relative to the opening link, else it will fallback to {left: 0, top:0}.</p>
+    <p><code>tooltipanchor</code> can be used to override the default.</p>
+
+<pre class="prettyprint"><code>$('#my_tooltip').popup({
+  type: 'tooltip',
+  vertical: 'top',
+  horizontal: 'center',
+  tooltipanchor: $('#my_tooltip_open')
+});</code></pre>
+    <button class="my_tooltip_close fall_open btn btn-success">Next example</button>
 </div>
 
 <script>
@@ -845,12 +1032,13 @@ $(document).ready(function () {
     $('#my_tooltip').popup({
         type: 'tooltip',
         vertical: 'top',
-        transition: '0.3s all 0.1s',
-        tooltipanchor: $('#my_tooltip_open')
+        horizontal: 'center',
+        tooltipanchor: $('#my_tooltip_open'),
+        closebutton: true
     });
-
 });
 </script>
+
 
 
 
@@ -878,7 +1066,7 @@ $(document).ready(function () {
     });
 </code>
 </pre>
-    <button class="fall_close other_open btn btn-default">Next example</button>
+    <button class="fall_close other_open btn btn-success">Next example</button>
     <button class="fall_close btn btn-default">Close</button>
 </div>
 
@@ -900,7 +1088,8 @@ $(document).ready(function () {
         },
         closetransitionend: function () {
             alert('closetransitionend');
-        }
+        },
+        closebutton: true
     });
 
 });
@@ -942,13 +1131,11 @@ $(document).ready(function () {
 
 
 
-
-
-
 <!-- Other examples -->
 
-<div id="other" class="well" style="max-width:44em; min-width: 30em;">
-    <h4>Other examples:</h4>
+<div id="other" class="well" style="max-width:44em;">
+    <h4>Other examples</h4>
+    <p>See other examples on JSBin:</p>
     <ul>
         <li><a target="_blank" href="https://output.jsbin.com/rugaweq/">Viewport Image</a></li>
     </ul>
@@ -957,7 +1144,7 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function () {
-  $('#other').popup();
+  $('#other').popup({closebutton: true});
 });
 </script>
 
@@ -967,10 +1154,11 @@ $(document).ready(function () {
 
 
 <!-- Google Prettify syntax highlighting -->
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&lang=css"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?autoload=true&lang=css"></script>
 <style>
     pre.prettyprint {padding: 9px 14px;}
 </style>
+
 
 </body>
 </html>
