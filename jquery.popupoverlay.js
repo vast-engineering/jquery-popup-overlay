@@ -205,7 +205,7 @@
             } else {
 
                 // Handler: Show popup when clicked on `open` element
-                $(document).on('click', openelement, function (event) {
+                $(document).on('click.jqp', openelement, function (event) {
                     event.preventDefault();
 
                     var ord = $(this).data('popup-ordinal');
@@ -829,6 +829,19 @@
             }
 
         });
+    };
+
+    // destroy all popups
+    $.fn.popup.destroyall = function () {
+        // TODO: create tests to check if we can use `hide` method (perhaps we'll need to remove transitions)
+        // or we need another way of removing the data when destroying.
+        for(var i=0; i < visiblePopupsArray.length; i++) {
+            $('#' + visiblePopupsArray[i]).popup('hide');
+        }
+        $('.popup_wrapper').remove();
+        $('.popup_background').remove();
+        // visiblePopupsArray = []; // TODO: check if we need this for SPA and popups with fadeOut animation and scrolllock
+        $(document).off('click.jqp');
     };
 
     $.fn.popup.defaults = {
