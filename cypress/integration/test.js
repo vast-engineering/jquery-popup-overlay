@@ -10,6 +10,7 @@
 // - test destroyAll with popups with fadeOut animation and scrolllock
 // - add tests with mixed options
 // - try to improve some tests if possible: test from user perspective instead of testing CSS properties
+// create tests for accessibility and wai-aria
 // - add tests for default option to all non-boolean options?
 // - try to make the same tests in Jest+Puppeteer to see if there will be less issues (although Puppeteer has no UI for debugging)
 

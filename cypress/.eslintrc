@@ -1,11 +1,15 @@
 {
     "env": {
+        "node": true,
         "es6": true,
         "mocha": true
+    },
+    "parserOptions": {
+        "sourceType": "module",
     },
     globals: {
         "Cypress": true,
         "cy": true,
         "expect": true
-    },
+    }
 }

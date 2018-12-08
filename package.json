@@ -10,7 +10,7 @@
     "test": "start-server-and-test start http://localhost:8080 test:cypress",
     "test:cypress": "cypress run",
     "test:watch": "npm start & cypress open",
-    "lint": "eslint . *.js --ignore-pattern 'index.js'"
+    "lint": "eslint . *.js"
   },
   "pre-commit": [
     "lint",
