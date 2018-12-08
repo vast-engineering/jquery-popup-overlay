@@ -19,6 +19,7 @@
     var transitionsupport = null;
     var opentimer;
     var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    var android = /(android)/i.test(navigator.userAgent);
     var focusableElementsString = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
 
     var methods = {
@@ -124,7 +125,8 @@
 
             // Make div clickable in iOS
             if (iOS) {
-                $wrapper.css('cursor', 'pointer');
+                $background = $('#' + el.id + '_background');
+                $background.css('cursor', 'pointer');
             }
 
             if (options.type == 'overlay' && !options.absolute) {
@@ -134,6 +136,7 @@
             $el.css({
                 opacity: 0,
                 visibility: 'hidden',
+                'pointer-events': 'auto', // reset pointer events back to default for a child element
                 display: 'inline-block'
             });
 
@@ -264,6 +267,7 @@
             var options = $el.data('popupoptions');
             var $wrapper = $('#' + el.id + '_wrapper');
             var $background = $('#' + el.id + '_background');
+            var mustLock = false;
 
             // `beforeopen` callback event
             callback(el, ordinal, options.beforeopen);
@@ -323,6 +327,18 @@
                 $el.show();
             }
 
+            if (!options.background) {
+                $wrapper.css({ 'pointer-events': 'none' });
+
+                // Android doesn't want to scroll the popup wrapper (i.e. to react to a swipe event) if it has a combination of
+                // `options.background` set to false, `pointer-events:none` and `position:fixed` on a popup wrapper, plus
+                // `overflow:visible` on body. If a scrollbar appears on the popup wrapper (i.e.popup is not fully in viewport),
+                // we locking the scrolling of background content regardless of custom options.
+                if (android && !options.absolute && !options.scrolllock && !isInViewport(el)) {
+                    mustLock = true;
+                }
+            }
+
             opentimer = setTimeout(function() {
                 $wrapper.css({
                     visibility: 'visible',
@@ -334,7 +350,7 @@
             }, 20); // 20ms required for opening animation to occur in FF
 
             // Disable background layer scrolling when popup is opened
-            if (options.scrolllock) {
+            if (options.scrolllock || mustLock) {
                 $body.css('overflow', 'hidden');
                 if ($body.height() > $window.height()) {
                     $body.css('margin-right', bodymarginright + scrollbarwidth);
@@ -697,6 +713,21 @@
         if (typeof func == 'function') {
             func.call($(el), el, elementclicked);
         }
+    };
+
+    /**
+     * Check if element is fully in viewport
+     *
+     * @param {object} el - popup instance DOM node
+     */
+    var isInViewport = function (el) {
+        var bounding = el.getBoundingClientRect();
+        return (
+            bounding.top >= 0 &&
+            bounding.left >= 0 &&
+            bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
     };
 
     // Hide popup if ESC key is pressed
