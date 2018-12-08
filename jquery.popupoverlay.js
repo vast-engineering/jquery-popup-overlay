@@ -47,7 +47,6 @@
             var $body = $('body');
             var $wrapper;
             var options = $el.data('popupoptions');
-            var css;
 
             bodymarginright = parseInt($body.css('margin-right'), 10);
             transitionsupport = document.body.style.webkitTransition !== undefined ||
@@ -58,12 +57,6 @@
 
             if (options.type == 'tooltip') {
                 options.background = false;
-                options.scrolllock = false;
-            }
-
-            if (options.backgroundactive) {
-                options.background = false;
-                options.blur = false;
                 options.scrolllock = false;
             }
 
@@ -163,22 +156,14 @@
                     verticalAlign: 'middle'
                 });
 
-                css = {
+                $wrapper.css({
                     position: 'fixed',
                     width: '100%',
                     height: '100%',
                     top: 0,
                     left: 0,
                     textAlign: 'center'
-                };
-
-                if(options.backgroundactive){
-                    css.position = 'absolute';
-                    css.height = '0';
-                    css.overflow = 'visible';
-                }
-
-                $wrapper.css(css);
+                });
 
                 // CSS vertical align helper
                 $wrapper.append('<div class="popup_align" />');
@@ -355,19 +340,6 @@
                 if ($body.height() > $window.height()) {
                     $body.css('margin-right', bodymarginright + scrollbarwidth);
                 }
-            }
-
-            if(options.backgroundactive){
-                //calculates the vertical align
-                $el.css({
-                    top:(
-                        $window.height() - (
-                            $el.get(0).offsetHeight +
-                            parseInt($el.css('margin-top'), 10) +
-                            parseInt($el.css('margin-bottom'), 10)
-                        )
-                    )/2 +'px'
-                });
             }
 
             $el.css({
@@ -863,7 +835,6 @@
         absolute: false,
         autoopen: false,
         background: true,
-        backgroundactive: false,
         color: 'black',
         opacity: '0.5',
         horizontal: 'center',
