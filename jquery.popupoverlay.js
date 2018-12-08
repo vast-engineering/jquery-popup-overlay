@@ -119,6 +119,7 @@
             if (iOS) {
                 $background = $('#' + el.id + '_background');
                 $background.css('cursor', 'pointer');
+                $(options.pagecontainer).css('cursor', 'pointer');
             }
 
             if (options.type == 'overlay' && !options.absolute) {
