@@ -54,11 +54,6 @@
                                 document.body.style.OTransition !== undefined ||
                                 document.body.style.transition !== undefined;
 
-            if (options.type == 'tooltip') {
-                options.background = false;
-                options.scrolllock = false;
-            }
-
             if (options.scrolllock) {
                 // Calculate the browser's scrollbar width dynamically
                 var parent;
@@ -801,9 +796,15 @@
         return this.each(function () {
 
             var $el = $(this);
+            var newDefaults = $.extend(true, {}, $.fn.popup.defaults);
+
+            // Set defaults for tooltips dynamically instead of implicitly, so they can be overriden with custom options.
+            if (customoptions && customoptions.type === 'tooltip') {
+                newDefaults.background = false;
+            }
 
             if (typeof customoptions === 'object') {  // e.g. $('#popup').popup({'color':'blue'})
-                var opt = $.extend({}, $.fn.popup.defaults, $el.data('popupoptions'), customoptions);
+                var opt = $.extend({}, newDefaults, $el.data('popupoptions'), customoptions);
                 $el.data('popupoptions', opt);
                 options = $el.data('popupoptions');
 
@@ -811,7 +812,7 @@
 
             } else if (typeof customoptions === 'string') { // e.g. $('#popup').popup('hide')
                 if (!($el.data('popupoptions'))) {
-                    $el.data('popupoptions', $.fn.popup.defaults);
+                    $el.data('popupoptions', newDefaults);
                     options = $el.data('popupoptions');
                 }
 
@@ -819,7 +820,7 @@
 
             } else { // e.g. $('#popup').popup()
                 if (!($el.data('popupoptions'))) {
-                    $el.data('popupoptions', $.fn.popup.defaults);
+                    $el.data('popupoptions', newDefaults);
                     options = $el.data('popupoptions');
                 }
 
