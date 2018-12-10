@@ -119,6 +119,7 @@
 
             if (options.type == 'overlay' && !options.absolute) {
                 $wrapper.css('overflow','auto');
+                $wrapper[0].style.WebkitOverflowScrolling = 'touch'; // for smooth scrolling in overflow:auto divs in iOS
             }
 
             $el.css({
