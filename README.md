@@ -10,7 +10,7 @@ jQuery plugin for responsive and accessible modal windows and tooltips.
 <!-- [![GitHub stars](https://img.shields.io/github/stars/vast-engineering/jquery-popup-overlay.svg?label=Stars&style=flat)](https://github.com/vast-engineering/jquery-popup-overlay) -->
 
 ## Documentation & demo
-[Documentation & demo](http://vast-engineering.github.io/jquery-popup-overlay/)
+[Documentation & demo](https://vast-engineering.github.io/jquery-popup-overlay/)
 
 ## License
 Released under the [MIT license](http://www.opensource.org/licenses/MIT).

@@ -2,7 +2,7 @@
  * jQuery Popup Overlay
  *
  * @requires jQuery v1.7.1+
- * @link http://vast-engineering.github.com/jquery-popup-overlay/
+ * @link https://vast-engineering.github.com/jquery-popup-overlay/
  */
 ;(function ($) { /* eslint-disable-line */
 
