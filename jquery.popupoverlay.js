@@ -17,7 +17,7 @@
     var visiblePopupsArray = [];
     var transitionsupport = null;
     var opentimer;
-    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    var iOS = /(iPad|iPhone|iPod)/.test(navigator.userAgent);
     var android = /(android)/i.test(navigator.userAgent);
     var focusableElementsString = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
 
