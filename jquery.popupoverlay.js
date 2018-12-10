@@ -286,7 +286,7 @@
 
                 // Add z-index to the background
                 if (options.background) {
-                    if (zindexvalues[el.id] > 0) {
+                    if (zindexvalues[el.id] >= 0) {
                         $('#' + el.id + '_background').css({
                             zIndex: (zindexvalues[el.id] + 1)
                         });
@@ -294,7 +294,7 @@
                 }
 
                 // Add z-index to the wrapper
-                if (zindexvalues[el.id] > 0) {
+                if (zindexvalues[el.id] >= 0) {
                     $wrapper.css({
                         zIndex: (zindexvalues[el.id] + 2)
                     });
