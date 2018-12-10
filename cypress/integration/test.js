@@ -1,9 +1,11 @@
 // Cypress end-to-end tests
 
 // Debugging tips:
-// - If some test fails, you can add (); before and after the assertion.
+// - cy.pause() can be placed before and after the assertion.
+// - cy.debug() can be useful... cy.get('.ls-btn').click({ force: true }).debug()
 // - Also, you can click on Before/After state in Cypress UI.
 // - If you want to use a console in Cypress UI dev tools, first click on Inspect Element to get the correct `window` scope.
+
 
 // TODO:
 // - add tests for rightedge and leftedge, for tooltips
@@ -14,16 +16,50 @@
 // - add tests for default option to all non-boolean options?
 // - try to make the same tests in Jest+Puppeteer to see if there will be less issues (although Puppeteer has no UI for debugging)
 
+
+//-----------------------------------------------------------------------------
+// Prepare random options
+
+const randomOptions = {};
+const allOptions = {
+  color: ['blue', 'red'],
+  opacity: [0, 0.5, 1],
+  background: [true, false]
+}
+
+// Get random value from array
+const rand = function (arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Randomize options
+Object.keys(allOptions).forEach(function(key) {
+  const randomValue = rand(allOptions[key]);
+  randomOptions[key] = randomValue; // extend randomOptions object
+});
+
+
+//-----------------------------------------------------------------------------
+// Tests
+
 describe("jQuery Popup Overlay", () => {
   context("Options", () => {
     before(() => {
       cy.visit("/cypress/index.html");
 
-      // jquery ':focus' selector fails when window is not in focus, replace it with our own version.
-      // Although, this still doesn't solve an issue when testing :focus styles and such tests will fail.
-      // If that happens, re-run the tests with window in focus, or without Cypress UI (i.e. headless).
-      // https://github.com/cypress-io/cypress/issues/2176
       cy.window().then(win => {
+        // Extend plugin's defaults with randomOptions
+        // UNCOMMENT THIS LINE FOR TESTS WITH RANDOM PLUGIN OPTIONS:
+        // Object.assign(win.$.fn.popup.defaults, randomOptions);
+
+        // Log plugin defaults to console (for debugging)
+        cy.log('**Defaults:**', JSON.stringify(win.$.fn.popup.defaults));
+        win.console.log('**Defaults:**', JSON.stringify(win.$.fn.popup.defaults));
+
+        // jquery ':focus' selector fails when window is not in focus, replace it with our own version.
+        // Although, this still doesn't solve an issue when testing :focus styles and such tests will fail.
+        // If that happens, re-run the tests with window in focus, or without Cypress UI (i.e. headless).
+        // https://github.com/cypress-io/cypress/issues/2176
         win.jQuery.find.selectors.filters.focus = function(elem) {
           const doc = elem.ownerDocument;
           return elem === doc.activeElement && !!(elem.type || elem.href);
