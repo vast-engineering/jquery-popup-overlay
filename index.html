@@ -54,6 +54,9 @@
     pre.prettyprint {
         padding: 9px 14px;
     }
+    pre {
+      font-size: 12px;
+    }
     .fulltable {
         max-width: 100%;
         overflow: auto;
@@ -146,9 +149,9 @@
         <br>
         <div class="alert alert-warning" role="alert">
             <p><b>Note:</b> If you were using RawGit to get the script:</p>
-            <p><code>&lt;script src="<a href="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js">https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js</a>"&gt;&lt;/script&gt;</code></p>
+            <p><pre><code>&lt;script src="<a href="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js">https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/gh-pages/jquery.popupoverlay.js</a>"&gt;&lt;/script&gt;</code></pre></p>
             <p>...and things started to break, change the <code>src</code> to get the older version v1.7.13:</p>
-            <p><code>&lt;script src="<a href="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@1.7.13/jquery.popupoverlay.min.js">https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@1.7.13/jquery.popupoverlay.min.js</a>"&gt;&lt;/script&gt;</code></p>
+            <p><pre><code>&lt;script src="<a href="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@1.7.13/jquery.popupoverlay.min.js">https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@1.7.13/jquery.popupoverlay.min.js</a>"&gt;&lt;/script&gt;</code></pre></p>
             <br>
             <p>RawGit is shutting down soon (jsDelivr seems like a good alternative, providing features like code minification and version locking), and our example code in the Usage section on this page used to point to the latest version of the script which might contain breaking changes.</p>
             <br>
@@ -203,7 +206,7 @@
 &lt;/head&gt;
 &lt;body&gt;
 
-  &lt;!-- Wrap all page content in a page container (optional, but highly recommended) --&gt;
+  &lt;!-- Wrap all page content in a page container (optional, but recommended<sup>*</sup>) --&gt;
   &lt;div id="page"&gt;
     &lt;header&gt;&lt;/header&gt;
     &lt;main&gt;
@@ -234,7 +237,7 @@
       // Initialize the plugin
       $('#JPO').popup();
 
-      // Set default `pagecontainer` for all popups (optional, but highly recommended)
+      // <sup>*</sup>Set default `pagecontainer` for all popups (optional, but recommended)
       $.fn.popup.defaults.pagecontainer = '#page'
     });
   &lt;/script&gt;
@@ -251,7 +254,7 @@
 <pre class="prettyprint"><code>var popup = require("jquery-popup-overlay");
 </code></pre>
 
-        <h3>Basic usage example on CodePen</h3>
+        <h3>Example on CodePen</h3>
         <p data-height="265" data-theme-id="0" data-slug-hash="gZbmyJ" data-default-tab="js,result" data-user="vladimirs" data-pen-title="jquery-popup-overlay example" class="codepen">See the Pen <a href="https://codepen.io/vladimirs/pen/gZbmyJ/">jquery-popup-overlay example</a> by Vladimirs (<a href="https://codepen.io/vladimirs">@vladimirs</a>) on <a href="https://codepen.io">CodePen</a>.</p>
         <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
@@ -627,7 +630,7 @@ $.fn.popup.defaults.pagecontainer = '#page';
     <footer class="col-md-10 col-md-offset-1" role="contentinfo">
         <p class="text-muted">
           <small>
-            Created by <a href="https://github.com/kopipejst">Ivan Lazarević</a> @ <a href="https://github.com/vast-engineering">Vast Engineering</a>. Maintained by <a href="https://github.com/vast-engineering">Vast Engineering</a> and <a href="https://github.com/vast-engineering/jquery-popup-overlay/graphs/contributors">our contributors</a>.
+            Created by <a href="https://github.com/kopipejst">Ivan Lazarević</a> and <a href="https://github.com/vast-engineering">Vast Engineering</a>. Maintained by <a href="https://github.com/vast-engineering">Vast Engineering</a> and <a href="https://github.com/vast-engineering/jquery-popup-overlay/graphs/contributors">other contributors</a>.
             Modal animations inspired by Codrops' <a href="https://tympanus.net/Development/ModalWindowEffects/">Nifty Modal Window Effects</a>.<br>
             Released under the <a href="http://opensource.org/licenses/MIT">MIT</a> license.
             </small>
