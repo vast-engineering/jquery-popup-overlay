@@ -211,7 +211,7 @@
 &lt;/head&gt;
 &lt;body&gt;
 
-  &lt;!-- Wrap all page content in a page container (optional, but recommended<sup>*</sup>) --&gt;
+  &lt;!-- Wrap all page content in a page container (optional, but recommended for screen readers and iOS<sup>*</sup>) --&gt;
   &lt;div id="page"&gt;
     &lt;header&gt;&lt;/header&gt;
     &lt;main&gt;
@@ -230,10 +230,10 @@
   &lt;/div&gt;
 
   &lt;!-- Include jQuery --&gt;
-  &lt;script src="https://code.jquery.com/jquery-1.8.2.min.js"&gt;&lt;/script&gt;
+  &lt;script src="<a href="https://code.jquery.com/jquery-1.8.2.min.js">https://code.jquery.com/jquery-1.8.2.min.js</a>"&gt;&lt;/script&gt;
 
   &lt;!-- Include jQuery Popup Overlay --&gt;
-  &lt;script src="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js"&gt;
+  &lt;script src="<a href="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js">https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js</a>"&gt;
   &lt;/script&gt;
 
   &lt;script&gt;
@@ -242,7 +242,7 @@
       // Initialize the plugin
       $('#JPO').popup();
 
-      // <sup>*</sup>Set default `pagecontainer` for all popups (optional, but recommended)
+      // Set default `pagecontainer` for all popups (optional, but recommended for screen readers and iOS<sup>*</sup>)
       $.fn.popup.defaults.pagecontainer = '#page'
     });
   &lt;/script&gt;
@@ -408,10 +408,10 @@
             <td>pagecontainer</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>null</td>
-            <td><p>Sets a page container (to improve iOS and screen-reader experience). Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#page</code> on this page).</p>
-                <p><b>It's highly recommended that you set the page container</b> for better iOS and screen-reader experience.</p>
-                <p class="text-muted"><small>Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. Some screen-readers requires this in order to read the modal content properly.</small></p>
-                <p class="text-muted"><small>Setting `pagecontainer` will also enable <code>blur</code> option to work correctly on iOS, on tooltips and popups without background. See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
+            <td><p>Sets a page container to help the plugin do it's work. Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#page</code> on this page).</p>
+                <p><b>It's highly recommended that you set the page container</b> for better screen-reader and iOS<sup>*</sup> experience.</p>
+                <p class="text-muted"><small>Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. Some screen readers requires this in order to read the modal content properly.</small></p>
+                <p class="text-muted"><small>iOS<sup>*</sup>: Setting `pagecontainer` will also enable <code>blur</code> option to work correctly on iOS, on tooltips and popups without background. See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
                 <p class="text-muted"><small>You can set `pagecontainer` once per website. For example: <br> <code>$.fn.popup.defaults.pagecontainer = '#page';</code></small></p>
                 <p class="text-muted"><small>We might also use this element to lock the scrolling of background content in iOS (<a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/57">Issue 57</a>).</small></p>
             </td>
@@ -1050,8 +1050,7 @@ $(document).ready(function () {
   absolute: true,
   background: false,
   keepfocus: false,
-  focuselement: 'closebutton',
-  autozindex: true
+  focuselement: 'closebutton'
 });</code>
 </pre>
 <button class="active_background_absolute_close tooltip_open btn btn-success">Next Example</button>
@@ -1064,7 +1063,6 @@ $(document).ready(function () {
     focuselement: 'closebutton',
     keepfocus: false,
     background: false,
-    autozindex: true,
     closebutton: true
   });
 });
