@@ -366,25 +366,21 @@
             // Remember which element had focus before opening a popup
             $el.data('focusedelementbeforepopup', document.activeElement);
 
-            // Handler: Keep focus inside dialog box
-            if (options.keepfocus) {
-                // Make holder div focusable
-                $el.attr('tabindex', -1);
+            // Make holder div programatically focusable with tabindex:-1 (tabindex:0 is keyboard focusable)
+            $el.attr('tabindex', -1);
 
-                // Focus popup or user specified element.
-                // Initial timeout of 50ms is set to give some time to popup to show after clicking on
-                // `open` element, and after animation is complete to prevent background scrolling.
-                setTimeout(function() {
-                    if (options.focuselement === 'closebutton') {
-                        $('#' + el.id + ' .' + el.id + closesuffix + ':first').focus();
-                    } else if (options.focuselement) {
-                        $(options.focuselement).focus();
-                    } else {
-                        $el.focus();
-                    }
-                }, options.focusdelay);
-
-            }
+            // Focus the popup or user specified element.
+            // Initial timeout of 50ms is set to give some time to popup to show after clicking on
+            // `open` element, and after animation is complete to prevent background scrolling.
+            setTimeout(function() {
+                if (options.focuselement === 'closebutton') { // e.g. focuselement:'closebutton'
+                    $('#' + el.id + ' .' + el.id + closesuffix + ':first').focus();
+                } else if (options.focuselement) { // e.g. focuselement:'#my-close-button'
+                    $(options.focuselement).focus();
+                } else if (options.focuselement === true || options.keepfocus) { // e.g. focuselement:true OR keepfocus:true
+                    $el.focus();
+                }
+            }, options.focusdelay);
 
             // Hide main content from screen readers
             $(options.pagecontainer).attr('aria-hidden', true);
