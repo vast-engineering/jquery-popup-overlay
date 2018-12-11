@@ -745,10 +745,15 @@
     // Keep keyboard focus inside of popup
     $(document).on('keydown', function(event) {
         if(visiblePopupsArray.length && event.which == 9) {
-
             // If tab or shift-tab pressed
             var elementId = visiblePopupsArray[visiblePopupsArray.length - 1];
             var el = document.getElementById(elementId);
+            var options = $(el).data('popupoptions');
+
+            // If the last opened popup doesn't have `keepfocus` option, ignore the rest and don't lock the focus inside of popup.
+            if (!options.keepfocus) {
+                return;
+            }
 
             // Get list of all children elements in given object
             var popupItems = $(el).find('*');
