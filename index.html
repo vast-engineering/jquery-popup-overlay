@@ -108,6 +108,7 @@
     }
 
     /* Tooltip Arrow */
+    .well--tooltip::before,
     .well--tooltip::after {
         content: "";
         position: absolute;
@@ -118,7 +119,11 @@
         height: 0;
         border-left: 14px solid transparent;
         border-right: 14px solid transparent;
-        border-top: 14px solid #f5f5f5;
+        border-top: 14px solid #cccccc;
+    }
+    .well--tooltip::after {
+        border-top-color: #f5f5f5;
+        margin-top:  -1px;
     }
 
     </style>
@@ -316,7 +321,7 @@
         </tr>
         <tr>
             <td>closebuttonmarkup</td>
-            <td>DOM node</td>
+            <td>object <br /><small class="text-muted"><i>jQuery or DOM object</i></small></td>
             <td>null</td>
             <td>Enables you to define custom markup which will be used for a dynamically created button. Use with <code>closebutton</code> option.</td>
         </tr>
@@ -342,9 +347,9 @@
         </tr>
         <tr>
             <td>focuselement</td>
-            <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
+            <td>boolean or keyword or string  <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>'#<i>{popup_id}</i>'</td>
-            <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element <code>#JPO</code> will recieve the initial focus.</td>
+            <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element <code>#JPO</code> will recieve the initial focus. Setting to <code>true</code> will focus the popup even if <code>keepfocus</code> is false. A keyword <code>'closebutton'</code> can be used to target a Close element.</td>
         </tr>
         <tr>
             <td>focusdelay</td>
@@ -436,7 +441,7 @@
         </tr>
         <tr>
             <td>tooltipanchor</td>
-            <td>object <br /><small class="text-muted"><i>JQuery or DOM object</i></small></td>
+            <td>object <br /><small class="text-muted"><i>jQuery or DOM object</i></small></td>
             <td>null</td>
             <td>
                 <p>Sets an element to be an anchor for tooltip position.</p>
@@ -614,7 +619,7 @@ $.fn.popup.defaults.pagecontainer = '#page';
             <td>
                 <p>Manually re-positions a popup.</p>
                 <pre class="prettyprint"><code>$('#JPO').popup('reposition');</code></pre>
-                <p><small>This method is triggered automatically every time a popup i opened, and  on <code>window.resize</code> event for tooltips. Perhaps you might find some use of it for tooltips (popups don't need to be repositioned on window.resize).</small></p>
+                <p><small>This method is triggered automatically every time a tooltip or a popup is opened, and  on <code>window.resize</code> event for tooltips. Perhaps you might find some use of it for tooltips (popups don't need to be repositioned on window.resize).</small></p>
             </td>
         </tr>
         </tbody>
@@ -638,8 +643,7 @@ $.fn.popup.defaults.pagecontainer = '#page';
         <p class="text-muted">
           <small>
             <a href="https://www.npmjs.com/package/jquery-popup-overlay"><img alt="NPM version" src="https://img.shields.io/npm/v/jquery-popup-overlay.svg?style=flat&amp;colorB=4cae4c"></a>
-            <iframe style="vertical-align:middle" src="https://ghbtns.com/github-btn.html?user=vast-engineering&repo=jquery-popup-overlay&type=watch&size=small&count=true"
-                        allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+            <a href="https://github.com/vast-engineering/jquery-popup-overlay"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/vast-engineering/jquery-popup-overlay.svg?style=social"></a>
           </small>
       </p>
     </footer>
@@ -698,7 +702,7 @@ $(document).ready(function () {
 
 <div id="closebutton" class="well">
     <h4>Generated close button</h4>
-    <p><code>closebutton: true</code> option will append markup for the close button (at top right).</p>
+    <p><code>closebutton:true</code> option will append markup for the close button (at top right).</p>
 
 <pre class="prettyprint"><code>$('#closebutton').popup({
   closebutton: true
@@ -794,8 +798,12 @@ $(document).ready(function () {
 
 <div id="fadeandscale" class="well">
     <h4>Fade &amp; Scale</h4>
+    <p><code>escape:false</code> disables hiding on <kbd>Esc</kbd> key.</p>
+    <p><code>blur:false</code> disables hiding on outer click.</p>
 <pre class="prettyprint">
 <code>$('#fadeandscale').popup({
+  escape: false,
+  blur: false,
   transition: 'all 0.3s'
 });</code>
 </pre>
@@ -814,8 +822,9 @@ $(document).ready(function () {
 $(document).ready(function () {
 
     $('#fadeandscale').popup({
-        pagecontainer: '.container',
         transition: 'all 0.3s',
+        blur: false,
+        escape: false,
         closebutton: true
     });
 
@@ -847,15 +856,15 @@ $(document).ready(function () {
 
 <!-- Slide in -->
 
-<div id="slide" class="well" style="max-width: 50em;">
+<div id="slide" class="well" style="max-width: 50em;margin-top: 0;">
 <h4>Slide-in</h4>
 <p>If you are using <code>slide-in</code> or any animation that is getting the popup out of the viewport, use <code>focusdelay</code> that is longer than transition-duration, it will make animations more smooth in Chrome on Android which tries to get the focused element to the viewport and conflicts the animation. </p>
 <p><code>outline</code> controls the outline visibility on the popup. It is optional and added just for demonstration.</p>
 <pre class="prettyprint">
 <code>$('#slide').popup({
-  vertical: 'top',
+  focusdelay: 400, // for smoother slide-in animations on Android
   outline: true,
-  focusdelay: 400 // for smoother slide-in animations on Android
+  vertical: 'top'
 });
 </code>
 </pre>
@@ -992,13 +1001,18 @@ $(document).ready(function () {
 
 <div id="active_background_fixed" class="well" style="max-width:44em;">
     <h4>Active background</h4>
-    <p><code>background: false</code> will enable interaction with background content (hover, click, etc.), while the popup is visible, as the background div will not be added to DOM.</p>
-    <p><code>horizontal</code> and <code>horizontal</code> will set the position.</p>
+    <p><code>background:false</code> will enable interaction with background content (hover, click, etc.), while the popup is visible, as the background div will not be added to DOM.</p>
+    <p><code>horizontal</code> and <code>vertical</code> will set the position.</p>
+    <p><code>keepfocus:false</code> will prevent locking tabbing inside of popup, and leave a focus on the opening element.</p>
+    <p><code>autozindex</code> will keep the popup on top of all other elements on the page.</p>
 <pre class="prettyprint">
-<code>$('#fade').popup({
+<code>$('#active_background_fixed').popup({
   background: false,
   horizontal: 'right',
-  vertical: 'bottom'
+  vertical: 'bottom',
+  keepfocus: false,
+  autozindex: true,
+  blur: false
 });</code>
 </pre>
     <button class="active_background_fixed_close active_background_absolute_open btn btn-success">Next Example</button>
@@ -1010,6 +1024,9 @@ $(document).ready(function () {
     background: false,
     horizontal: 'right',
     vertical: 'bottom',
+    keepfocus: false,
+    autozindex: true,
+    blur: false,
     closebutton: true
   });
 });
@@ -1025,16 +1042,16 @@ $(document).ready(function () {
 
 <div id="active_background_absolute" class="well" style="max-width:44em;">
     <h4>Active background absolute</h4>
-    <p>Use <code>absolute: true</code> if you want to have absolute (not fixed) position of the popup.</p>
-    <p><code>blur:false</code> will keep the popup visible, even after clicking on background content.</p>
+    <p><code>absolute:true</code> keeps the popup in place when scrolling.</p>
+    <p><code>focuselement:'closebutton'</code> will focus the Close element even if <code>keepfocus</code> is false.</p>
     <p></p>
 <pre class="prettyprint">
-<code>$('#fade').popup({
+<code>$('#active_background_absolute').popup({
+  absolute: true,
   background: false,
-  blur: false,
-  horizontal: 'right',
-  vertical: 'bottom',
-  absolute: true
+  keepfocus: false,
+  focuselement: 'closebutton',
+  autozindex: true
 });</code>
 </pre>
 <button class="active_background_absolute_close tooltip_open btn btn-success">Next Example</button>
@@ -1043,11 +1060,11 @@ $(document).ready(function () {
 <script>
 $(document).ready(function () {
   $('#active_background_absolute').popup({
-    background: false,
-    blur: false,
     absolute: true,
-    horizontal: 'right',
-    vertical: 'bottom',
+    focuselement: 'closebutton',
+    keepfocus: false,
+    background: false,
+    autozindex: true,
     closebutton: true
   });
 });
@@ -1057,15 +1074,18 @@ $(document).ready(function () {
 <!-- Tooltip -->
 
 <div id="tooltip" class="well well--tooltip">
-    <h4>Tooltip example</h4>
-    <p>By default, tooltip content will be positioned relative to the opening link, else it will fallback to {left: 0, top:0}.</p>
-    <p><code>tooltipanchor</code> can be used to override the default.</p>
+    <h4>Tooltip</h4>
+    <p><code>type:'tooltip'</code> will use the opening link as an anchor for positioning. If it doesn't exist, it will fallback to top-left edge of the window.
+    An anchor can be explicitly set with <code>tooltipanchor</code> option.</p>
+    <p><code>offsetleft</code> and <code>offsetleft</code> will set the offset.</p>
 
 <pre class="prettyprint"><code>$('#tooltip').popup({
   type: 'tooltip',
+  tooltipanchor: $('#tooltip_open'),
+  offsetleft: 0,
+  offsettop: '-15',
   vertical: 'top',
-  horizontal: 'center',
-  tooltipanchor: $('#tooltip_open')
+  horizontal: 'center'
 });</code></pre>
     <button class="tooltip_close fall_open btn btn-success">Next example</button>
 </div>
@@ -1078,7 +1098,9 @@ $(document).ready(function () {
         vertical: 'top',
         horizontal: 'center',
         tooltipanchor: $('#tooltip_open'),
-        closebutton: true
+        closebutton: true,
+        offsetleft: 0,
+        offsettop: '-15'
     });
 });
 </script>
