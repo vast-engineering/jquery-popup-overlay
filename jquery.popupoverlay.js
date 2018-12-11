@@ -383,7 +383,9 @@
             }, options.focusdelay);
 
             // Hide main content from screen readers
-            $(options.pagecontainer).attr('aria-hidden', true);
+            if (options.keepfocus) {
+                $(options.pagecontainer).attr('aria-hidden', true);
+            }
 
             // Reveal popup content to screen readers
             $el.attr('aria-hidden', false);
