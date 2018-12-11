@@ -35,7 +35,7 @@
     }
     .well {
         /* drop-shadow is better than box-shadow as it add a shadow to tooltip arrows arrow as well,
-        however it dramatically affects the performance of transition animation on Android. */
+        however drop-shadow dramatically affects the performance of transition animation on Android. */
         /* filter: drop-shadow(0 0 10px rgba(0,0,0,0.3)); */
         display:none;
         margin:1em;
@@ -305,13 +305,13 @@
             <td>blur</td>
             <td>boolean</td>
             <td>true</td>
-            <td>Closes the popup if a user clicks on a background content or cover, or anywhere outside the popup.</td>
+            <td>Closes the popup if a user clicks anywhere outside the popup.</td>
         </tr>
         <tr>
             <td>closeelement</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>'.<i>{popup_id}</i>_close'</td>
-            <td>Enables you to define custom element which will close the popup on click. By default, in our case it's set to <code>.JPO_close</code>.</td>
+            <td>Enables you to define custom element which will close the popup on click. In our case it's set to <code>.JPO_close</code>.</td>
         </tr>
         <tr>
             <td>closebutton</td>
@@ -347,13 +347,13 @@
         </tr>
         <tr>
             <td>focuselement</td>
-            <td>boolean or keyword or string  <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
+            <td>boolean or 'closeelement' or string  <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>'#<i>{popup_id}</i>'</td>
-            <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element <code>#JPO</code> will recieve the initial focus. Setting to <code>true</code> will focus the popup even if <code>keepfocus</code> is false. A keyword <code>'closebutton'</code> can be used to target a Close element.</td>
+            <td>Enables you to specify the element which will be focused upon showing the popup. By default, the popup element (in our case <code>#JPO</code>) will recieve the initial focus. Setting to <code>true</code> will focus the popup even if <code>keepfocus</code> is false. A keyword <code>'closebutton'</code> can be used to target a Close element.</td>
         </tr>
         <tr>
             <td>focusdelay</td>
-            <td>number (milliseconds)</td>
+            <td>number <small class="text-muted"><i>(milliseconds)</i></small></td>
             <td>50</td>
             <td>
               <p>Delays the focusing of the <code>focuselement</code>.</p>
@@ -396,19 +396,19 @@
             <td>boolean</td>
             <td>false</td>
             <td><p>Shows a default browser outline on popup element when focused.</p>
-                <p class="text-muted"><small>Setting to <code>false</code> is equivalent to <code>#JPO{outline: none;}</code>.</small></p></td>
+                <p class="text-muted"><small>Setting to <code>false</code> is equivalent to <code>.popup_content {outline:none;}</code>.</small></p></td>
         </tr>
         <tr>
             <td>openelement</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>'.<i>{popup_id}</i>_open'</td>
-            <td>Enables you to define custom element which will open the popup on click. By default, in our case it's set to <code>.JPO_open</code>.</td>
+            <td>Enables you to define custom element which will open the popup on click. In our case it's set to <code>.JPO_open</code>.</td>
         </tr>
         <tr>
             <td>pagecontainer</td>
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>null</td>
-            <td><p>Sets a page container to help the plugin do it's work. Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#page</code> on this page).</p>
+            <td><p>Sets a page container to help the plugin do its work. Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#page</code> on this page).</p>
                 <p><b>It's highly recommended that you set the page container</b> for better screen-reader and iOS<sup>*</sup> experience.</p>
                 <p class="text-muted"><small>Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. Some screen readers requires this in order to read the modal content properly.</small></p>
                 <p class="text-muted"><small>iOS<sup>*</sup>: Setting `pagecontainer` will also enable <code>blur</code> option to work correctly on iOS, on tooltips and popups without background. See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
@@ -737,7 +737,7 @@ $(document).ready(function () {
   transition: 'all 0.3s'
 });</code>
 </pre>
-    <p>Or you can set transitions directly in CSS:</p>
+    <p>Or you can set them directly in CSS:</p>
 <pre class="prettyprint"><code>$('#fade').popup();</code></pre>
 <pre class="prettyprint"><code>#fade,
 #fade_wrapper,
@@ -770,13 +770,14 @@ $(document).ready(function () {
 
 <div id="scrolllock" class="well">
     <h4>Scrolllock</h4>
-    <p>Scrolling can be locked with <code>scrollock</code> option.</p>
+    <p>Scrolling can be locked with <code>scrollock</code> option.<sup>*</sup></p>
 <pre class="prettyprint">
 <code>$('#scrolllock').popup({
   scrolllock: true
 });</code>
 </pre>
-    <button class="scrolllock_close fadeandscale_open btn btn-success">Next example</button>
+    <p><button class="scrolllock_close fadeandscale_open btn btn-success">Next example</button></p>
+    <p><small><sup>*</sup>Doesn't work on iOS (<a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/57">Issue 57</a>).</small></p>
 </div>
 
 <script>
@@ -797,9 +798,9 @@ $(document).ready(function () {
 <!-- Fade & scale -->
 
 <div id="fadeandscale" class="well">
-    <h4>Fade &amp; Scale</h4>
-    <p><code>escape:false</code> disables hiding on <kbd>Esc</kbd> key.</p>
-    <p><code>blur:false</code> disables hiding on outer click.</p>
+    <h4>Fade &amp; Scale Arrest</h4>
+    <p><code>escape:false</code> prevents closing on <kbd>Esc</kbd> key.</p>
+    <p><code>blur:false</code> prevents closing on click outside the popup.</p>
 <pre class="prettyprint">
 <code>$('#fadeandscale').popup({
   escape: false,
@@ -856,7 +857,7 @@ $(document).ready(function () {
 
 <!-- Slide in -->
 
-<div id="slide" class="well" style="max-width: 50em;margin-top: 0;">
+<div id="slide" class="well" style="max-width: 50em; margin-top:0; border-top-left-radius: 0; border-top-right-radius: 0;">
 <h4>Slide-in</h4>
 <p>If you are using <code>slide-in</code> or any animation that is getting the popup out of the viewport, use <code>focusdelay</code> that is longer than transition-duration, it will make animations more smooth in Chrome on Android which tries to get the focused element to the viewport and conflicts the animation. </p>
 <p><code>outline</code> controls the outline visibility on the popup. It is optional and added just for demonstration.</p>
@@ -974,6 +975,7 @@ $(document).ready(function () {
 
 <style>
 #standalone {
+  display: none; /* prevent FOUC */
     -webkit-transform: scale(0.8);
        -moz-transform: scale(0.8);
         -ms-transform: scale(0.8);
@@ -1073,7 +1075,7 @@ $(document).ready(function () {
 
 <div id="tooltip" class="well well--tooltip">
     <h4>Tooltip</h4>
-    <p><code>type:'tooltip'</code> will use the opening link as an anchor for positioning. If it doesn't exist, it will fallback to top-left edge of the window.
+    <p><code>type:'tooltip'</code> will use the opening link as an anchor for positioning.
     An anchor can be explicitly set with <code>tooltipanchor</code> option.</p>
     <p><code>offsetleft</code> and <code>offsetleft</code> will set the offset.</p>
 
