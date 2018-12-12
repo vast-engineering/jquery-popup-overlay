@@ -32,6 +32,7 @@
     "cypress": "^3.1.2",
     "eslint": "^5.9.0",
     "http-server": "^0.11.1",
+    "pre-commit": "^1.2.2",
     "start-server-and-test": "^1.0.1"
   }
 }
