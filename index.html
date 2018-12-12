@@ -417,7 +417,7 @@
             <td><p>Sets a page container to help the plugin do its work. Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#page</code> on this page).</p>
                 <p><b>It's highly recommended that you set the page container</b> for better screen-reader and iOS<sup>*</sup> experience.</p>
                 <p class="text-muted"><small>Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. Some screen readers requires this in order to read the modal content properly.</small></p>
-                <p class="text-muted"><small>iOS<sup>*</sup>: Setting `pagecontainer` will also enable <code>blur</code> option to work correctly on iOS, on tooltips and popups without background. See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
+                <p class="text-muted"><small>iOS<sup>*</sup>: Setting `pagecontainer` will also enable <code>blur:true</code> option to work correctly on iOS if <code>background:false</code> option is set (tooltips have background:false by default). See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
                 <p class="text-muted"><small>You can set `pagecontainer` once per website. For example: <br> <code>$.fn.popup.defaults.pagecontainer = '#page';</code></small></p>
                 <p class="text-muted"><small>We might also use this element to lock the scrolling of background content in iOS (<a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/57">Issue 57</a>).</small></p>
             </td>
@@ -625,7 +625,7 @@ $.fn.popup.defaults.pagecontainer = '#page';
             <td>
                 <p>Manually re-positions a popup.</p>
                 <pre class="prettyprint"><code>$('#JPO').popup('reposition');</code></pre>
-                <p><small>This method is triggered automatically every time a tooltip or a popup is opened, and  on <code>window.resize</code> event for tooltips. Perhaps you might find some use of it for tooltips (popups don't need to be repositioned on window.resize).</small></p>
+                <p><small>This method is triggered automatically every time a tooltip or overlay is opened, and  on <code>window.resize</code> event for tooltips.</small></p>
             </td>
         </tr>
         </tbody>
@@ -642,7 +642,7 @@ $.fn.popup.defaults.pagecontainer = '#page';
         <p class="text-muted">
           <small>
             Created by <a href="https://github.com/kopipejst">Ivan Lazarević</a> and <a href="https://github.com/vast-engineering">Vast Engineering</a>. Maintained by <a href="https://github.com/vast-engineering">Vast Engineering</a> and <a href="https://github.com/vast-engineering/jquery-popup-overlay/graphs/contributors">other contributors</a>.
-            Modal animations inspired by Codrops' <a href="https://tympanus.net/Development/ModalWindowEffects/">Nifty Modal Window Effects</a>.<br>
+            Modal animations inspired by Codrops' <a href="https://tympanus.net/codrops/tag/modal/">Nifty Modal Window Effects</a>.<br>
             Released under the <a href="https://github.com/vast-engineering/jquery-popup-overlay/blob/gh-pages/LICENSE">MIT</a> license.
             </small>
         </p>
@@ -811,6 +811,7 @@ $(document).ready(function () {
 <code>$('#fadeandscale').popup({
   escape: false,
   blur: false,
+  scrolllock: true,
   transition: 'all 0.3s'
 });</code>
 </pre>
@@ -832,6 +833,7 @@ $(document).ready(function () {
         transition: 'all 0.3s',
         blur: false,
         escape: false,
+        scrolllock: true,
         closebutton: true
     });
 
