@@ -294,6 +294,21 @@ describe("jQuery Popup Overlay", () => {
       cy.get("#dynamic").should("be.visible");
     });
 
+    it("blurignore", () => {
+      cy.window().then(win => {
+        win.$("#dynamic").popup({ blurignore: 'h1', blur: true, autoopen: true });
+      });
+      // Clicking on the popup content should not hide it (this click is also required for a bug in Cypress with pointer-events:none)
+      cy.get("#dynamic").click(1, 1);
+      cy.get("#dynamic").should("be.visible");
+      // Clicking on h1 to test `blurignore`
+      cy.get("h1").click({ force: true });
+      cy.get("#dynamic").should("be.visible");
+      // Clicking outside of the popup
+      cy.get("#dynamic_wrapper").click(1, 1, { force: true }); // Cypress doesn't respect pointer-events:none; so we have to force the click
+      cy.get("#dynamic").should("be.hidden");
+    });
+
     it("setzindex true", () => {
       cy.window().then(win => {
         win.$("#dynamic").popup({ setzindex: true, autoopen: true });

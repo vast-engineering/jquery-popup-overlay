@@ -722,7 +722,12 @@
             }
 
             // If clicked outside of popup
-            if ($(el).data('popupoptions') && $(el).data('popupoptions').blur && !$(event.target).closest('#' + elementId).length && event.which !== 2 && $(event.target).is(':visible')) {
+            if ($(el).data('popupoptions')
+                && $(el).data('popupoptions').blur
+                && !$(event.target).closest($(el).data('popupoptions').blurignore).length
+                && !$(event.target).closest('#' + elementId).length
+                && event.which !== 2
+                && $(event.target).is(':visible')) {
 
                 if ($(el).data('popupoptions').background) {
                     // If clicked on popup cover
@@ -861,6 +866,7 @@
         offsetleft: 0,
         escape: true,
         blur: true,
+        blurignore: null,
         setzindex: true,
         autozindex: false,
         scrolllock: false,
