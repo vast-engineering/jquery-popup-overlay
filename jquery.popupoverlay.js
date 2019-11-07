@@ -705,6 +705,12 @@
         }
     });
 
+    var mousedownTarget;
+
+    $(document).on('mousedown', function (event) {
+        mousedownTarget = event.target;
+    });
+
     // Hide popup on click
     $(document).on('click', function (event) {
         if(visiblePopupsArray.length) {
@@ -723,6 +729,7 @@
                 && $(el).data('popupoptions').blur
                 && !$(event.target).closest($(el).data('popupoptions').blurignore).length
                 && !$(event.target).closest('#' + elementId).length
+                && !$(mousedownTarget).closest('#' + elementId).length
                 && event.which !== 2
                 && $(event.target).is(':visible')) {
 
