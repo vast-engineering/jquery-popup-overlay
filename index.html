@@ -402,11 +402,10 @@
             <td>string <small class="text-muted"><i>(CSS&nbsp;selector)</i></small></td>
             <td>null</td>
             <td><p>Sets a page container to help the plugin do its work. Page container should be a direct child of &lt;body&gt;, a top level element that surrounds all content of the page (e.g. <code>#page</code> on this page).</p>
-                <p><b>It's highly recommended that you set the page container</b> for better screen-reader and iOS<sup>*</sup> experience.</p>
+                <p><b>It's recommended that you set the page container</b> for better screen-reader experience.</p>
                 <p class="text-muted"><small>Doing so, when the popup is visible, <code>aria-hidden="true"</code> will be set to the page container and <code>aria-hidden="false"</code> to the popup, and vice-versa when the popup closes. Some screen readers requires this in order to read the modal content properly.</small></p>
                 <p class="text-muted"><small>iOS<sup>*</sup>: Setting `pagecontainer` will also enable <code>blur:true</code> option to work correctly on iOS if <code>background:false</code> option is set (tooltips have background:false by default). See <a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/90">Issue 90</a>. </small></p>
                 <p class="text-muted"><small>You can set `pagecontainer` once per website. For example: <br> <code>$.fn.popup.defaults.pagecontainer = '#page';</code></small></p>
-                <p class="text-muted"><small>We might also use this element to lock the scrolling of background content in iOS (<a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/57">Issue 57</a>).</small></p>
             </td>
         </tr>
         <tr>
@@ -763,14 +762,13 @@ $(document).ready(function () {
 
 <div id="scrolllock" class="well">
     <h4>Scrolllock</h4>
-    <p>Scrolling can be locked with <code>scrollock</code> option.<sup>*</sup></p>
+    <p>Background scrolling can be locked with <code>scrollock</code> option.<sup>*</sup></p>
 <pre class="prettyprint">
 <code>$('#scrolllock').popup({
   scrolllock: true
 });</code>
 </pre>
     <p><button class="scrolllock_close fadeandscale_open btn btn-success">Next example</button></p>
-    <p><small><sup>*</sup>Doesn't work on iOS (<a href="https://github.com/vast-engineering/jquery-popup-overlay/issues/57">Issue 57</a>).</small></p>
 </div>
 
 <script>
