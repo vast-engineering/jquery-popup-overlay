@@ -784,7 +784,7 @@
             } else {
                 if (event.shiftKey) {
                     // Back tab
-                    // If focused on first item and user preses back-tab, go to the last focusable item
+                    // If focused on first item and user presses back-tab, go to the last focusable item
                     if (focusedItemIndex === 0) {
                         focusableItems.get(numberOfFocusableItems - 1).focus();
                         event.preventDefault();
@@ -792,7 +792,7 @@
 
                 } else {
                     // Forward tab
-                    // If focused on the last item and user preses tab, go to the first focusable item
+                    // If focused on the last item and user presses tab, go to the first focusable item
                     if (focusedItemIndex == numberOfFocusableItems - 1) {
                         focusableItems.get(0).focus();
                         event.preventDefault();
